@@ -13,27 +13,23 @@ namespace raytracer
     {
         public:
             Vector3D(double x = 0, double y = 0, double z = 0);
-            ~Vector3D();
 
-            double &GetX() { return _x; }
-            double &GetY() { return _y; }
-            double &GetZ() { return _z; }
+            Vector3D operator+(const Vector3D& other) const { return Vector3D(x + other.x, y + other.y, z + other.z); }
+            Vector3D& operator+=(const Vector3D& other) { x += other.x; y += other.y; z += other.z; return *this; }
+            Vector3D operator-(const Vector3D& other) const { return Vector3D(x - other.x, y - other.y, z - other.z); }
+            Vector3D& operator-=(const Vector3D& other) { x -= other.x; y -= other.y; z -= other.z; return *this; }
+            Vector3D operator*(const Vector3D& other) const { return Vector3D(x * other.x, y * other.y, z * other.z); }
+            Vector3D& operator*=(const Vector3D& other) { x *= other.x; y *= other.y; z *= other.z; return *this; }
+            Vector3D operator/(const Vector3D& other) const { return Vector3D(x / other.x, y / other.y, z / other.z); }
+            Vector3D& operator/=(const Vector3D& other) { x /= other.x; y /= other.y; z /= other.z; return *this; }
 
-            void SetX(double x) { _x = x; }
-            void SetY(double y) { _y = y; }
-            void SetZ(double z) { _z = z; }
+            Vector3D operator*(double scalar) const { return Vector3D(x * scalar, y * scalar, z * scalar); }
+            Vector3D& operator*=(double scalar) { x *= scalar; y *= scalar; z *= scalar; return *this; }
+            Vector3D operator/(double scalar) const { return Vector3D(x / scalar, y / scalar, z / scalar); }
+            Vector3D& operator/=(double scalar) { x /= scalar; y /= scalar; z /= scalar; return *this; }
 
-            Vector3D& operator+(const Vector3D &vec);
-            Vector3D& operator+=(const Vector3D &vec);
-            Vector3D& operator-(const Vector3D &vec);
-            Vector3D& operator-=(const Vector3D &vec);
-            Vector3D& operator*(const Vector3D &val);
-            Vector3D& operator*=(const Vector3D &val);
-            Vector3D& operator=(const Vector3D &vec);
-
-        private:
-            double _x = 0;
-            double _y = 0;
-            double _z = 0;
+            double x = 0;
+            double y = 0;
+            double z = 0;
     };
 }
