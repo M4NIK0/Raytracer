@@ -23,6 +23,7 @@ int main() {
         for (int y = 0; y < 600; ++y) {
             display.drawPixel(x, y, generateNoise());
         }
+        display.displayScreen();
     }
 
     bool loop = true;

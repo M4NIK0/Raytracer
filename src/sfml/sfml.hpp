@@ -9,6 +9,8 @@
 #include <SFML/Graphics.hpp>
 #include "../../include/display.hpp"
 
+#define FPS 60
+
 class SfmlData
 {
     public:

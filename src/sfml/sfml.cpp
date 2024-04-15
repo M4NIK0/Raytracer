@@ -6,13 +6,14 @@
 
 void sfml::_initSfml(SfmlData& data, int width, int height)
 {
-    sf::RenderWindow* window = new sf::RenderWindow(sf::VideoMode(width, height), "Minecraft RTX");
+    sf::RenderWindow* window = new sf::RenderWindow(sf::VideoMode(width, height), "Minecraft RTX", sf::Style::Titlebar | sf::Style::Close);
     if (!window) {
         _endSfml(data);
         throw IDisplayError("Error creating window");
     }
 
     data.setWindow(window);
+    data.getWindow()->setFramerateLimit(FPS);
 }
 
 void sfml::_endSfml(SfmlData& data)
@@ -88,7 +89,6 @@ void sfml::endWindow()
 void sfml::drawPixel(int x, int y, raytracer::Color color)
 {
     _drawPixel(_data, x, y, color);
-    displayScreen();
 }
 
 void sfml::displayScreen()
