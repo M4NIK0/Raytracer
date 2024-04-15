@@ -1,19 +1,19 @@
 #include <iostream>
+#include "Render/Camera.hpp"
 #include "Primitives/Objects/Sphere.hpp"
 
 int main()
 {
-    raytracer::Point3D point(5, 5, 5);
-    raytracer::Point3D point2(10, 10, 10);
-    point2 = point;
+    raytracer::Rectangle3D screen(raytracer::Point3D(0, 0, 0), raytracer::Vector3D(1, 0, 0), raytracer::Vector3D(0, 1, 0));
+    raytracer::Camera camera(raytracer::Point3D(0.5, 0.5, 1), screen, 50, 50);
 
-    std::cout << "Point: " << point << std::endl;
-    std::cout << "Point2: " << point2 << std::endl;
+    raytracer::Sphere sphere(raytracer::Point3D(0.5, 0.5, -2), 1);
 
-    raytracer::Sphere sphere(point, 1);
-    std::cout << "Sphere: " << sphere.position << " " << sphere.radius << std::endl;
-    raytracer::Ray3D ray(raytracer::Point3D(0, 0, 0), raytracer::Vector3D(1, 0, 1));
-    std::cout << "Ray: " << ray.origin << " " << ray.direction << std::endl;
-    std::cout << "Sphere hits: " << sphere.hits(ray) << std::endl;
-    return 0;
+    for (int y = 0; y < 50; y++) {
+        for (int x = 0; x < 50; x++) {
+            raytracer::Ray3D ray = camera.getRay(x, y);
+            std::cout << sphere.hits(ray);
+        }
+        std::cout << std::endl;
+    }
 }
