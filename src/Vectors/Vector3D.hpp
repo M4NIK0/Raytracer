@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include <cmath>
+
 namespace raytracer
 {
     class Vector3D
@@ -27,6 +29,10 @@ namespace raytracer
             Vector3D& operator*=(double scalar) { x *= scalar; y *= scalar; z *= scalar; return *this; }
             Vector3D operator/(double scalar) const { return Vector3D(x / scalar, y / scalar, z / scalar); }
             Vector3D& operator/=(double scalar) { x /= scalar; y /= scalar; z /= scalar; return *this; }
+
+            double length() const { return std::sqrt(x*x + y*y + z*z); }
+
+            double dot(const Vector3D& other) const { return x * other.x + y * other.y + z * other.z; }
 
             double x = 0;
             double y = 0;
