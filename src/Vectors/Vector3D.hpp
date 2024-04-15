@@ -27,8 +27,8 @@ namespace raytracer
             Vector3D& operator+=(const Vector3D &vec);
             Vector3D& operator-(const Vector3D &vec);
             Vector3D& operator-=(const Vector3D &vec);
-            Vector3D& operator*(const double &val);
-            Vector3D& operator*=(const double &val);
+            Vector3D& operator*(const Vector3D &val);
+            Vector3D& operator*=(const Vector3D &val);
             Vector3D& operator=(const Vector3D &vec);
 
         private:
