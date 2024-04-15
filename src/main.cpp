@@ -1,15 +1,10 @@
 #include <iostream>
-#include "Vectors/Vector3D.hpp"
+#include "Primitives/Objects/Sphere.hpp"
 
 int main()
 {
-    raytracer::Vector3D vec1(1, 2, 3);
-    raytracer::Vector3D vec2(4, 5, 6);
-
-    raytracer::Vector3D vec3 = vec1 + vec2;
-
-    std::cout << "vec3.x: " << vec3.x << std::endl;
-    std::cout << "vec3.y: " << vec3.y << std::endl;
-    std::cout << "vec3.z: " << vec3.z << std::endl;
+    raytracer::Sphere sphere(1, raytracer::Point3D(5, 5, 5));
+    raytracer::Ray3D ray(raytracer::Point3D(0, 0, 0), raytracer::Vector3D(1, 1, 1));
+    std::cout << sphere.hits(ray) << std::endl;
     return 0;
 }
