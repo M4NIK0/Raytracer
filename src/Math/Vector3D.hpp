@@ -8,13 +8,14 @@
 #pragma once
 
 #include <cmath>
+#include <iostream>
 
 namespace raytracer
 {
     class Vector3D
     {
         public:
-            Vector3D(double x = 0, double y = 0, double z = 0);
+            Vector3D(double x = 0, double y = 0, double z = 0) : x(x), y(y), z(z) {}
 
             Vector3D operator+(const Vector3D& other) const { return Vector3D(x + other.x, y + other.y, z + other.z); }
             Vector3D& operator+=(const Vector3D& other) { x += other.x; y += other.y; z += other.z; return *this; }
@@ -37,5 +38,7 @@ namespace raytracer
             double x = 0;
             double y = 0;
             double z = 0;
+
+            friend std::ostream& operator<<(std::ostream& os, const Vector3D& v) { os << "Vector3D(" << v.x << ", " << v.y << ", " << v.z << ")"; return os;}
     };
 }
