@@ -47,6 +47,34 @@ void sfml::_drawPixel(SfmlData& data, int x, int y, raytracer::Color color)
     data.getWindow()->draw(pixel);
 }
 
+void sfml::_updateScreen(SfmlData& data)
+{
+    if (!data.getWindow()) {
+        _endSfml(data);
+        throw IDisplayError("Error updating screen, no window found");
+    }
+
+    data.getWindow()->display();
+}
+
+int sfml::_awaitInput(SfmlData& data)
+{
+    if (!data.getWindow()) {
+        _endSfml(data);
+        throw IDisplayError("Error awaiting input, no window found");
+    }
+
+    sf::Event event;
+    while (data.getWindow()->pollEvent(event)) {
+        if (event.type == sf::Event::Closed) {
+            data.getWindow()->close();
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
 void sfml::initWindow()
 {
     _initSfml(_data, 800, 600);
@@ -60,6 +88,12 @@ void sfml::endWindow()
 void sfml::drawPixel(int x, int y, raytracer::Color color)
 {
     _drawPixel(_data, x, y, color);
+    displayScreen();
+}
+
+void sfml::displayScreen()
+{
+    _updateScreen(_data);
 }
 
 void sfml::clearWindow()
@@ -67,3 +101,7 @@ void sfml::clearWindow()
     _clearScreen(_data);
 }
 
+int sfml::getEvent()
+{
+    return _awaitInput(_data);
+}
