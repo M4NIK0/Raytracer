@@ -13,4 +13,8 @@ add_executable(raytracer src/main.cpp
         src/Primitives/IPrimitive.hpp
         src/Primitives/Objects/Sphere.cpp
         src/Primitives/Objects/Sphere.hpp
+        src/Render/Camera.cpp
+        src/Render/Camera.hpp
+        src/Math/Rectangle3D.cpp
+        src/Math/Rectangle3D.hpp
 )
