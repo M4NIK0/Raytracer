@@ -27,6 +27,11 @@ namespace raytracer
             Point3D origin;
             Vector3D direction;
 
-            Color color = {0, 0, 0};
+            Color getColor();
+
+            Color objectColor = {0, 0, 0};
+            std::vector<Color> colors;
+            std::vector<double> colorAmounts;
+            std::vector<Point3D> hitPositions;
     };
 }
