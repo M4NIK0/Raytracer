@@ -7,6 +7,7 @@
 
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <memory>
 
 #define FPS 60
 
@@ -25,7 +26,7 @@ namespace raytracer
     public:
         virtual ~IDisplay() = default;
 
-        virtual void initWindow() = 0;
+        virtual void initWindow(int width, int height) = 0;
         virtual void endWindow() = 0;
         virtual void drawPixel(int x, int y, Color color) = 0;
         virtual void displayScreen() = 0;
@@ -46,21 +47,11 @@ namespace raytracer
     };
 }
 
-class SfmlData
-{
-    public:
-        sf::RenderWindow* getWindow() { return _window; }
-        void setWindow(sf::RenderWindow* window) { _window = window; }
-
-    private:
-    sf::RenderWindow* _window;
-};
-
 class sfml : public raytracer::IDisplay {
     public:
         ~sfml() override = default;
 
-        void initWindow() override;
+        void initWindow(int width = 800, int height = 600) override;
         void endWindow() override;
         void drawPixel(int x, int y, raytracer::Color color) override;
         void displayScreen() override;
@@ -68,15 +59,10 @@ class sfml : public raytracer::IDisplay {
         int getEvent() override;
 
     private:
-        SfmlData _data;
-
-        static void _initSfml(SfmlData& data, int width = 800, int height = 600);
-        static void _endSfml(SfmlData& data);
-        static void _clearScreen(SfmlData& data);
-        static void _drawPixel(SfmlData& data, int x, int y, raytracer::Color color);
-        static void _updateScreen(SfmlData& data);
-        static int _awaitInput(SfmlData& data);
-
+        std::unique_ptr<sf::RenderWindow> _window;
+        sf::Image _image;
+        sf::Texture _texture;
+        sf::Sprite _sprite;
 };
 
 #endif //RAYTRACER_SFML_HPP

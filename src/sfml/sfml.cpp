@@ -4,104 +4,43 @@
 
 #include "sfml.hpp"
 
-void sfml::_initSfml(SfmlData& data, int width, int height)
+void sfml::initWindow(int width, int height)
 {
-    sf::RenderWindow* window = new sf::RenderWindow(sf::VideoMode(width, height), "Minecraft RTX", sf::Style::Titlebar | sf::Style::Close);
-    if (!window) {
-        _endSfml(data);
-        throw IDisplayError("Error creating window");
-    }
-
-    data.setWindow(window);
-    data.getWindow()->setFramerateLimit(FPS);
-}
-
-void sfml::_endSfml(SfmlData& data)
-{
-    if (data.getWindow()) {
-        data.getWindow()->close();
-    }
-
-    data.setWindow(nullptr);
-}
-
-void sfml::_clearScreen(SfmlData& data)
-{
-    if (!data.getWindow()) {
-        _endSfml(data);
-        throw IDisplayError("Error clearing Window, no window found");
-    }
-
-    data.getWindow()->clear(sf::Color::Black);
-}
-
-void sfml::_drawPixel(SfmlData& data, int x, int y, raytracer::Color color)
-{
-    if (!data.getWindow()) {
-        _endSfml(data);
-        throw IDisplayError("Error drawing pixel, no window found");
-    }
-
-    sf::RectangleShape pixel(sf::Vector2f(1, 1));
-    pixel.setPosition(x, y);
-    pixel.setFillColor(sf::Color(color.r, color.g, color.b));
-    data.getWindow()->draw(pixel);
-}
-
-void sfml::_updateScreen(SfmlData& data)
-{
-    if (!data.getWindow()) {
-        _endSfml(data);
-        throw IDisplayError("Error updating screen, no window found");
-    }
-
-    data.getWindow()->display();
-}
-
-int sfml::_awaitInput(SfmlData& data)
-{
-    if (!data.getWindow()) {
-        _endSfml(data);
-        throw IDisplayError("Error awaiting input, no window found");
-    }
-
-    sf::Event event;
-    while (data.getWindow()->pollEvent(event)) {
-        if (event.type == sf::Event::Closed) {
-            data.getWindow()->close();
-            return 1;
-        }
-    }
-
-    return 0;
-}
-
-void sfml::initWindow()
-{
-    _initSfml(_data, 800, 600);
+    _window = std::make_unique<sf::RenderWindow>(sf::VideoMode(width, height), "Minecraft RTX");
+    _window->setFramerateLimit(FPS);
+    _image.create(width, height, sf::Color::Black);
 }
 
 void sfml::endWindow()
 {
-    _endSfml(_data);
+    _window->close();
 }
 
 void sfml::drawPixel(int x, int y, raytracer::Color color)
 {
-    _drawPixel(_data, x, y, color);
+    _image.setPixel(x, y, sf::Color(color.r, color.g, color.b));
 }
 
 void sfml::displayScreen()
 {
-    _updateScreen(_data);
+    _texture.loadFromImage(_image);
+    _sprite.setTexture(_texture);
+    _window->draw(_sprite);
+    _window->display();
 }
 
 void sfml::clearWindow()
 {
-    _clearScreen(_data);
+    _window->clear();
 }
 
 int sfml::getEvent()
 {
-    return _awaitInput(_data);
+    sf::Event event;
+    while (_window->pollEvent(event))
+    {
+        if (event.type == sf::Event::Closed)
+            return 1;
+    }
+    return 0;
 }

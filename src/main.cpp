@@ -27,10 +27,11 @@ int main() {
     // Initialize the window
     display.initWindow();
 
+    std::cout << "Rendering..." << std::endl;
     // Generate noise for each pixel
     for (int x = 0; x < 600; ++x) {
         for (int y = 0; y < 600; ++y) {
-            raytracer::Color color = generateNoise();
+            raytracer::Color color(0, 0, 0);
             if (sphere.hits(camera.getRay(x, y))) {
                 color = raytracer::Color(255, 255, 255);
             } else if (sphere2.hits(camera.getRay(x, y))) {
@@ -45,12 +46,15 @@ int main() {
         }
     }
     display.displayScreen();
+    std::cout << "Done rendering." << std::endl;
 
     bool loop = true;
     while (loop)
     {
         if (display.getEvent() == 1)
             loop = false;
+        display.clearWindow();
+        display.displayScreen();
     }
 
     // End the window
