@@ -10,8 +10,8 @@ add_executable(raytracer src/main.cpp
         src/Math/Vector3D.cpp
         src/Math/Point3D.cpp
         src/Math/Point3D.hpp
-        src/Math/Ray3D.cpp
-        src/Math/Ray3D.hpp
+        src/Render/Ray3D.cpp
+        src/Render/Ray3D.hpp
         src/Primitives/IPrimitive.hpp
         src/Primitives/Objects/Sphere.cpp
         src/Primitives/Objects/Sphere.hpp

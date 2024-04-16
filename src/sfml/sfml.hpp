@@ -20,6 +20,18 @@ namespace raytracer
             int r;
             int g;
             int b;
+
+            Color operator+(const Color& other) {
+                return Color(r + other.r, g + other.g, b + other.b);
+            }
+
+            Color operator*(const Color& other) {
+                return Color(r * other.r, g * other.g, b * other.b);
+            }
+
+            Color operator*(double scalar) {
+                return Color(r * scalar, g * scalar, b * scalar);
+            }
     };
 
     class IDisplay {

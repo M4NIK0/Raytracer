@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "../Math/Ray3D.hpp"
+#include "../Render/Ray3D.hpp"
 #include "../sfml/sfml.hpp"
 
 namespace raytracer
@@ -23,5 +23,6 @@ namespace raytracer
             virtual Ray3D hitReflectedRay(const Ray3D &ray) = 0;
             virtual void move(Vector3D vec) = 0;
             virtual Color getColor() = 0;
+            virtual double getReflexionIndice(const Ray3D &ray) = 0;
     };
 }

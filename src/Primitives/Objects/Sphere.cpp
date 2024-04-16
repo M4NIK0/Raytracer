@@ -60,7 +60,7 @@ raytracer::Point3D raytracer::Sphere::hitPosition(const raytracer::Ray3D &ray)
 
 raytracer::Vector3D raytracer::Sphere::hitNormal(const raytracer::Ray3D &ray)
 {
-    return {};
+    return (hitPosition(ray) - position);
 }
 
 raytracer::Ray3D raytracer::Sphere::hitReflectedRay(const raytracer::Ray3D &ray)

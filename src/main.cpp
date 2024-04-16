@@ -16,23 +16,20 @@ int main()
     std::vector<std::unique_ptr<raytracer::IPrimitive>> objects;
 
     renderer.addObject(std::make_unique<raytracer::Sphere>(raytracer::Point3D(0.5, 3, -10), 1, raytracer::Color(255, 0, 0)));
-//    renderer.addObject(std::make_unique<raytracer::Sphere>(raytracer::Point3D(253, 1, -10), 250, raytracer::Color(0, 255, 0)));
-//    renderer.addObject(std::make_unique<raytracer::Sphere>(raytracer::Point3D(0.6, -1, -10), 1, raytracer::Color(0, 0, 255)));
-//    renderer.addObject(std::make_unique<raytracer::Sphere>(raytracer::Point3D(-4, -3, -10), 1, raytracer::Color(255, 255, 0)));
-    renderer.addObject(std::make_unique<raytracer::Sphere>(raytracer::Point3D(0.5, 3, -10), 1, raytracer::Color(255, 0, 0)));
     renderer.addObject(std::make_unique<raytracer::Sphere>(raytracer::Point3D(1.5, 3, -10), 1, raytracer::Color(255, 255, 0)));
+    renderer.addObject(std::make_unique<raytracer::Sphere>(raytracer::Point3D(1, 7, -10), 4, raytracer::Color(0, 255, 255)));
 
     sfml display;
 
     // Initialize the window
     display.initWindow();
 
-
-
     bool loop = true;
     while (loop)
     {
         display.clearWindow();
+
+        renderer.objects[0]->move(raytracer::Vector3D(0.05, 0, 0));
 
         for (int x = 0; x < 600; x++)
         {
