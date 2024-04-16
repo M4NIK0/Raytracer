@@ -1,4 +1,6 @@
 #include <iostream>
+#include "Render/Camera.hpp"
+#include "Primitives/Objects/Sphere.hpp"
 #include <random>
 
 #include "sfml/sfml.hpp"
