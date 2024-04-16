@@ -21,7 +21,7 @@ add_executable(raytracer src/main.cpp
         src/Math/Rectangle3D.cpp
         src/Math/Rectangle3D.hpp
         src/sfml/sfml.cpp
-        src/sfml/sfml.hpp)
+        src/sfml/sfml.hpp
 )
 
 # Link SFML

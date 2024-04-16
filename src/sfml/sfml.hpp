@@ -7,9 +7,44 @@
 
 #pragma once
 #include <SFML/Graphics.hpp>
-#include "../../include/display.hpp"
 
 #define FPS 60
+
+namespace raytracer
+{
+    class Color {
+        public:
+            Color(int r, int g, int b) : r(r), g(g), b(b) {}
+
+            int r;
+            int g;
+            int b;
+    };
+
+    class IDisplay {
+    public:
+        virtual ~IDisplay() = default;
+
+        virtual void initWindow() = 0;
+        virtual void endWindow() = 0;
+        virtual void drawPixel(int x, int y, Color color) = 0;
+        virtual void displayScreen() = 0;
+        virtual void clearWindow() = 0;
+        virtual int getEvent() = 0;
+
+        class IDisplayError : public std::exception {
+        public:
+            explicit IDisplayError(const std::string& message) : _message(message) {}
+
+            const char* what() const noexcept override {
+                return _message.c_str();
+            }
+
+        private:
+            std::string _message;
+        };
+    };
+}
 
 class SfmlData
 {
