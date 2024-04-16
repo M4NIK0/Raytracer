@@ -90,3 +90,8 @@ raytracer::Ray3D raytracer::Sphere::hitReflectedRay(const raytracer::Ray3D &ray)
         }
     }
 }
+
+void raytracer::Sphere::move(raytracer::Vector3D vec)
+{
+    position = position + vec;
+}

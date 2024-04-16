@@ -1,6 +1,6 @@
 /*
 ** EPITECH PROJECT, 2024
-** Sphere.hpp
+** Cube.hpp
 ** File description:
 ** raytracer
 */
@@ -11,21 +11,22 @@
 
 namespace raytracer
 {
-    class Sphere : public IPrimitive
+    class Cube : public IPrimitive
     {
         public:
-            Sphere(raytracer::Point3D pos, double r, Color color) : radius(r), position(pos), color(color) {}
-            ~Sphere();
+            Cube();
+            ~Cube();
 
-            bool hits(const Ray3D &ray) override;
+            bool hits(const raytracer::Ray3D &ray) override;
             Point3D hitPosition(const Ray3D &ray) override;
             Vector3D hitNormal(const Ray3D &ray) override;
             Ray3D hitReflectedRay(const Ray3D &ray) override;
             void move(Vector3D vec) override;
             Color getColor() override { return color; }
 
-            double radius;
-            Point3D position;
+        private:
+            Point3D _center;
+            double _size;
             Color color;
     };
 }

@@ -31,6 +31,7 @@ void sfml::displayScreen()
 
 void sfml::clearWindow()
 {
+    _image.create(_image.getSize().x, _image.getSize().y, sf::Color::Black);
     _window->clear();
 }
 
