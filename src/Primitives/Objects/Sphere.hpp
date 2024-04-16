@@ -23,7 +23,7 @@ namespace raytracer
             Ray3D hitReflectedRay(const Ray3D &ray) override;
             void move(Vector3D vec) override;
             Color getColor() override { return color; }
-            double getReflexionIndice(const Ray3D &ray) override { return 0.1; }
+            double getReflexionIndice(const Ray3D &ray) override { return 0.5; }
 
             double radius;
             Point3D position;

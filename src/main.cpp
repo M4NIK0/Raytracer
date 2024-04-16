@@ -18,6 +18,7 @@ int main()
     renderer.addObject(std::make_unique<raytracer::Sphere>(raytracer::Point3D(4, 3, -10), 1, raytracer::Color(255, 0, 0)));
     renderer.addObject(std::make_unique<raytracer::Sphere>(raytracer::Point3D(1.5, 3, -10), 1, raytracer::Color(255, 255, 0)));
     renderer.addObject(std::make_unique<raytracer::Sphere>(raytracer::Point3D(1, 7, -10), 4, raytracer::Color(0, 255, 255)));
+    renderer.addObject(std::make_unique<raytracer::Sphere>(raytracer::Point3D(1, -1000, -10), 1000, raytracer::Color(255, 255, 255)));
 
     sfml display;
 
