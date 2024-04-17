@@ -23,11 +23,8 @@ void sfml::drawPixel(int x, int y, raytracer::Color color)
 
 void sfml::displayScreen()
 {
-    double sprite_scale_x = (double)_window->getSize().x / (double)_image.getSize().x;
-    double sprite_scale_y = (double)_window->getSize().y / (double)_image.getSize().y;
     _texture.loadFromImage(_image);
     _sprite.setTexture(_texture);
-    _sprite.setScale(sprite_scale_x, sprite_scale_y);
     _window->draw(_sprite);
     _window->display();
 }
