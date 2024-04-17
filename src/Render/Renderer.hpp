@@ -32,6 +32,8 @@ namespace raytracer
             static RenderRay getSurfaceLight(const Point3D hit_point, const std::shared_ptr<IPrimitive> &object,
                                              const std::vector<std::shared_ptr<IPrimitive>> &objects,
                                              const std::vector<std::shared_ptr<ILight>> &lights, int rays, int bounces);
+
+            static RenderRay getRandomRay(const Point3D &origin, const std::shared_ptr<IPrimitive> &object);
         private:
             Camera _camera;
             Ray3D _currentRay;

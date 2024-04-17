@@ -8,6 +8,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <memory>
+#include <valarray>
 
 #define FPS 60
 
@@ -41,6 +42,14 @@ namespace raytracer
                 r = r < 0 ? 0 : r;
                 g = g < 0 ? 0 : g;
                 b = b < 0 ? 0 : b;
+            }
+
+            void normalize()
+            {
+                double size = sqrt(r * r + g * g + b * b);
+                (r /= size) * 255;
+                (g /= size) * 255;
+                (b /= size) * 255;
             }
     };
 
