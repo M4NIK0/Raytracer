@@ -8,8 +8,9 @@
 #include "Light/ILight.hpp"
 #include "Light/Objects/PointLight.hpp"
 
-#define WIDTH 300
-#define HEIGHT 300
+#define SIZE 20
+#define WIDTH SIZE
+#define HEIGHT SIZE
 
 int main()
 {
@@ -31,6 +32,7 @@ int main()
 
     sfml display;
 
+    display.initImage(WIDTH, HEIGHT);
     // Initialize the window
     display.initWindow(1200, 1200);
 
