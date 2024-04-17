@@ -69,7 +69,7 @@ raytracer::RenderRay raytracer::Renderer::getReflexionsLight(const raytracer::Ra
                                                              const std::vector<std::shared_ptr<IPrimitive>> &objects,
                                                              int bounces)
 {
-    return RenderRay(ray);
+    return raytracer::RenderRay();
 }
 
 raytracer::RenderRay
@@ -77,39 +77,31 @@ raytracer::Renderer::getSurfaceLight(const Point3D hit_point, const std::shared_
                                      const std::vector<std::shared_ptr<IPrimitive>> &objects,
                                      const std::vector<std::shared_ptr<ILight>> &lights, int rays, int bounces)
 {
+    RenderRay ray = getDirectLight(hit_point, object, objects, lights);
+    return ray;
+}
+
+raytracer::RenderRay
+raytracer::Renderer::getDiffuseLight(const raytracer::Point3D hit_point, const std::shared_ptr<IPrimitive> &object,
+                                     const std::vector<std::shared_ptr<IPrimitive>> &objects,
+                                     const std::vector<std::shared_ptr<ILight>> &lights, int rays, int bounces)
+{
+    return raytracer::RenderRay();
+}
+
+raytracer::RenderRay
+raytracer::Renderer::getDirectLight(const raytracer::Point3D hit_point, const std::shared_ptr<IPrimitive> &object,
+                                    const std::vector<std::shared_ptr<IPrimitive>> &objects,
+                                    const std::vector<std::shared_ptr<ILight>> &lights)
+{
+    // Get all direct light rays
     std::vector<RenderRay> directLightRays;
 
     RenderRay ray = RenderRay(Ray3D(Point3D(0, 0, 0), Vector3D(0, 0, 0)));
 
-//    std::vector<RenderRay> reflexionLightRays;
-//    if (bounces > 0)
-//    {
-//        RenderRay diffuseLightRay(Point3D(0, 0, 0), Vector3D(0, 0, 0));
-//        for (int i = 0; i < rays; ++i)
-//        {
-//            RenderRay randomRay = getRandomRay(hit_point, object);
-//            for (auto &obj: objects)
-//            {
-//                if (obj == object)
-//                    continue;
-//                if (obj->hits(randomRay.getRay()))
-//                {
-//                    RenderRay hitRay = getSurfaceLight(obj->hitPosition(randomRay.getRay()), obj, objects, lights, rays, bounces - 1);
-//                    diffuseLightRay.color = hitRay.color + diffuseLightRay.color * (1 / Point3D::distance(hit_point, obj->hitPosition(randomRay.getRay())));
-//                    diffuseLightRay.intensity += hitRay.intensity;
-//                    break;
-//                }
-//            }
-//        }
-//        diffuseLightRay.color = Color(diffuseLightRay.color.r / rays, diffuseLightRay.color.g / rays, diffuseLightRay.color.b / rays);
-//        diffuseLightRay.intensity /= rays;
-//
-//        ray.color = ray.color + diffuseLightRay.color * object->getColor() * 0.2;
-//        ray.intensity += diffuseLightRay.intensity;
-//    }
-
     for (auto &light: lights)
     {
+        // Get light ray
         RenderRay lightRay = light->getLightRay(hit_point);
         bool hit = false;
         for (auto &obj: objects)
@@ -117,6 +109,8 @@ raytracer::Renderer::getSurfaceLight(const Point3D hit_point, const std::shared_
             // check if not self collide on surface turned towards light
             if (obj == object && object->getNormalFromPoint(hit_point).dot(lightRay.getRay().direction) > 0)
                 continue;
+
+            // Check if object between light and hit point
             if (obj->hits(lightRay.getRay()))
             {
                 hit = true;
@@ -132,18 +126,22 @@ raytracer::Renderer::getSurfaceLight(const Point3D hit_point, const std::shared_
         }
     }
 
+    // If no direct light, return black
     if (directLightRays.empty())
     {
         return ray;
     }
 
+    // Mix all direct light rays
     for (auto lightRay : directLightRays)
     {
         ray.color = ray.color + lightRay.color * Color(object->getColor().r / 255.0, object->getColor().g / 255.0, object->getColor().b / 255.0) * lightRay.intensity * lightRay.intensity * object->getNormalFromPoint(hit_point).normalize().dot(lightRay.getRay().direction.normalize());
         ray.intensity = ray.intensity + lightRay.intensity;
     }
 
+    // Clamp color
     ray.color.cap();
+
     return ray;
 }
 
