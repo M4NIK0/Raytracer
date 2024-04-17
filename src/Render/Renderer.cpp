@@ -87,7 +87,7 @@ raytracer::Renderer::getSurfaceLight(const Point3D hit_point, const std::shared_
         for (auto &obj: objects)
         {
             // check if not self collide on surface turned to light
-            if (obj == object && object->hitNormal(Ray3D(hit_point, light->getPosition() - hit_point)).dot(light->getPosition() - hit_point) >= 0)
+            if (obj == object && object->getNormalFromPoint(hit_point).dot(lightRay.getRay().direction) > 0)
                 continue;
             if (obj->hits(lightRay.getRay()))
             {

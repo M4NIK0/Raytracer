@@ -20,6 +20,7 @@ namespace raytracer
             bool hits(const Ray3D &ray) override;
             Point3D hitPosition(const Ray3D &ray) override;
             Vector3D hitNormal(const Ray3D &ray) override;
+            Vector3D getNormalFromPoint(const Point3D &point) override;
             Ray3D hitReflectedRay(const Ray3D &ray) override;
             void move(Vector3D vec) override;
             Color getColor() override { return color; }
