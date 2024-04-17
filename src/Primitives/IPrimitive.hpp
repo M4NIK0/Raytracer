@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "../Render/Ray3D.hpp"
+#include "../Math/Ray3D.hpp"
 #include "../sfml/sfml.hpp"
 
 namespace raytracer

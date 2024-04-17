@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "Ray3D.hpp"
+#include "../Math/Ray3D.hpp"
 #include "../Math/Rectangle3D.hpp"
 
 namespace raytracer

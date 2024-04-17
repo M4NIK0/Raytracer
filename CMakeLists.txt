@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.28)
 project(raytracer)
 
 set(CMAKE_CXX_STANDARD 17)
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic -Werror -O3")
+#set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wextra -pedantic -Werror -g3 -O0 -fsanitize=address,leak,undefined -fno-omit-frame-pointer")
 
 # Find SFML
 find_package(SFML 2.5 COMPONENTS graphics window system REQUIRED)
@@ -10,8 +12,8 @@ add_executable(raytracer src/main.cpp
         src/Math/Vector3D.cpp
         src/Math/Point3D.cpp
         src/Math/Point3D.hpp
-        src/Render/Ray3D.cpp
-        src/Render/Ray3D.hpp
+        src/Math/Ray3D.cpp
+        src/Math/Ray3D.hpp
         src/Primitives/IPrimitive.hpp
         src/Primitives/Objects/Sphere.cpp
         src/Primitives/Objects/Sphere.hpp
@@ -25,6 +27,11 @@ add_executable(raytracer src/main.cpp
         src/Primitives/Objects/Cube.hpp
         src/Render/Renderer.cpp
         src/Render/Renderer.hpp
+        src/Light/ILight.hpp
+        src/Light/Objects/PointLight.cpp
+        src/Light/Objects/PointLight.hpp
+        src/Render/RenderRay.cpp
+        src/Render/RenderRay.hpp
 )
 
 # Link SFML
