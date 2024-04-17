@@ -7,8 +7,8 @@
 
 #pragma once
 
-#include "../Math/Point3D.hpp"
-#include "../Math/Vector3D.hpp"
+#include "Point3D.hpp"
+#include "Vector3D.hpp"
 #include "../sfml/sfml.hpp"
 
 namespace raytracer
@@ -27,11 +27,5 @@ namespace raytracer
             Point3D origin;
             Vector3D direction;
 
-            Color getColor();
-
-            Color objectColor = {0, 0, 0};
-            std::vector<Color> colors;
-            std::vector<double> colorAmounts;
-            std::vector<Point3D> hitPositions;
     };
 }

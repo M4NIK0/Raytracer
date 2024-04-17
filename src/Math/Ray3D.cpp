@@ -16,8 +16,3 @@ raytracer::Ray3D &raytracer::Ray3D::operator=(const raytracer::Ray3D &other){
 
     return *this;
 }
-
-raytracer::Color raytracer::Ray3D::getColor()
-{
-    return objectColor;
-}
