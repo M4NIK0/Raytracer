@@ -30,7 +30,7 @@ int main()
     renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(255, 0, 0), raytracer::Point3D(0, 0, -35), 500));
     renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(0, 0, 255), raytracer::Point3D(-35, 0, -35), 500));
 
-    renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(255, 255, 255), raytracer::Point3D(0, -50, -25), 700));
+    renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(255, 255, 255), raytracer::Point3D(0, -50, -25), 1000));
 
     sfml display;
 
@@ -59,10 +59,10 @@ int main()
         }
         display.displayScreen();
 
-        if (frame % 100 == 0)
+        if (frame % 1 == 0)
         {
-            width++;
-            height++;
+            width *= 1.5;
+            height *= 1.5;
             display.initImage(width, height);
             camera = raytracer::Camera(raytracer::Point3D(0.5, 0.5, 1), screen, width, height);
             renderer.camera = camera;

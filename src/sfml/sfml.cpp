@@ -30,6 +30,8 @@ void sfml::displayScreen()
 
     _sprite.setScale(_window->getSize().x / (_image.getSize().x * 1.0f), _window->getSize().y / (_image.getSize().y * 1.0f));
 
+    _window->setTitle("Blender 4.1 - " + std::to_string(_image.getSize().x) + "x" + std::to_string(_image.getSize().y));
+
     _window->draw(_sprite);
     _window->display();
 }
