@@ -35,7 +35,7 @@ raytracer::Color raytracer::Renderer::traceRay(int x, int y)
 
     _sortHitObjectsByContactDistance();
 
-    RenderRay directLightRay = getSurfaceLight(_hitObjects[0]->hitPosition(_currentRay), _hitObjects[0], objects, _lights, 100, 2);
+    RenderRay directLightRay = getSurfaceLight(_hitObjects[0]->hitPosition(_currentRay), _hitObjects[0], objects, _lights, 20, 2);
     return directLightRay.color;
 }
 
@@ -78,35 +78,35 @@ raytracer::Renderer::getSurfaceLight(const Point3D hit_point, const std::shared_
                                      const std::vector<std::shared_ptr<ILight>> &lights, int rays, int bounces)
 {
     std::vector<RenderRay> directLightRays;
-    std::vector<RenderRay> reflexionLightRays;
 
     RenderRay ray = RenderRay(Ray3D(Point3D(0, 0, 0), Vector3D(0, 0, 0)));
 
-    if (bounces > 0)
-    {
-        RenderRay diffuseLightRay(Point3D(0, 0, 0), Vector3D(0, 0, 0));
-        for (int i = 0; i < rays; ++i)
-        {
-            RenderRay randomRay = getRandomRay(hit_point, object);
-            for (auto &obj: objects)
-            {
-                if (obj == object)
-                    continue;
-                if (obj->hits(randomRay.getRay()))
-                {
-                    RenderRay hitRay = getSurfaceLight(obj->hitPosition(randomRay.getRay()), obj, objects, lights, rays, bounces - 1);
-                    diffuseLightRay.color = hitRay.color + diffuseLightRay.color * (1 / Point3D::distance(hit_point, obj->hitPosition(randomRay.getRay())));
-                    diffuseLightRay.intensity += hitRay.intensity;
-                    break;
-                }
-            }
-        }
-        diffuseLightRay.color = Color(diffuseLightRay.color.r / rays, diffuseLightRay.color.g / rays, diffuseLightRay.color.b / rays);
-        diffuseLightRay.intensity /= rays;
-
-        ray.color = ray.color + diffuseLightRay.color * object->getColor() * 0.1;
-        ray.intensity += diffuseLightRay.intensity;
-    }
+//    std::vector<RenderRay> reflexionLightRays;
+//    if (bounces > 0)
+//    {
+//        RenderRay diffuseLightRay(Point3D(0, 0, 0), Vector3D(0, 0, 0));
+//        for (int i = 0; i < rays; ++i)
+//        {
+//            RenderRay randomRay = getRandomRay(hit_point, object);
+//            for (auto &obj: objects)
+//            {
+//                if (obj == object)
+//                    continue;
+//                if (obj->hits(randomRay.getRay()))
+//                {
+//                    RenderRay hitRay = getSurfaceLight(obj->hitPosition(randomRay.getRay()), obj, objects, lights, rays, bounces - 1);
+//                    diffuseLightRay.color = hitRay.color + diffuseLightRay.color * (1 / Point3D::distance(hit_point, obj->hitPosition(randomRay.getRay())));
+//                    diffuseLightRay.intensity += hitRay.intensity;
+//                    break;
+//                }
+//            }
+//        }
+//        diffuseLightRay.color = Color(diffuseLightRay.color.r / rays, diffuseLightRay.color.g / rays, diffuseLightRay.color.b / rays);
+//        diffuseLightRay.intensity /= rays;
+//
+//        ray.color = ray.color + diffuseLightRay.color * object->getColor() * 0.2;
+//        ray.intensity += diffuseLightRay.intensity;
+//    }
 
     for (auto &light: lights)
     {

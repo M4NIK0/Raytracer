@@ -6,7 +6,7 @@
 
 void sfml::initWindow(int width, int height)
 {
-    _window = std::make_unique<sf::RenderWindow>(sf::VideoMode(width, height), "Minecraft RTX");
+    _window = std::make_unique<sf::RenderWindow>(sf::VideoMode(width, height), "Blender 4.1", sf::Style::Titlebar | sf::Style::Close);
     _window->setFramerateLimit(FPS);
     _image.create(width, height, sf::Color::Black);
 }
@@ -25,6 +25,8 @@ void sfml::displayScreen()
 {
     _texture.loadFromImage(_image);
     _sprite.setTexture(_texture);
+    //resize sprite to fill window using image
+    _sprite.setScale(_window->getSize().x / _image.getSize().x, _window->getSize().y / _image.getSize().y);
     _window->draw(_sprite);
     _window->display();
 }
