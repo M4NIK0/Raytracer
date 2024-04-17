@@ -25,8 +25,8 @@ int main()
 //    renderer.addObject(std::make_shared<raytracer::Sphere>(raytracer::Point3D(1, 2, -10), 4, raytracer::Color(0, 255, 255)));
     renderer.addObject(std::make_shared<raytracer::Sphere>(raytracer::Point3D(1, -1000, -10), 1000, raytracer::Color(255, 255, 255)));
 
-    renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(255, 255, 255), raytracer::Point3D(4, 6, -10), 10));
-    renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(255, 255, 255), raytracer::Point3D(4, 10, -10), 10));
+    renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(0, 0, 255), raytracer::Point3D(4, 6, -10), 10));
+    renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(255, 0, 0), raytracer::Point3D(4, 10, -10), 10));
 
     sfml display;
 
