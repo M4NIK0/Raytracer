@@ -8,7 +8,6 @@ void sfml::initWindow(int width, int height)
 {
     _window = std::make_unique<sf::RenderWindow>(sf::VideoMode(width, height), "Blender 4.1", sf::Style::Titlebar | sf::Style::Close);
     _window->setFramerateLimit(FPS);
-    _image.create(width, height, sf::Color::Black);
 }
 
 void sfml::endWindow()
@@ -46,4 +45,9 @@ int sfml::getEvent()
             return 1;
     }
     return 0;
+}
+
+void sfml::initImage(int width, int height)
+{
+    _image.create(width, height, sf::Color::Black);
 }

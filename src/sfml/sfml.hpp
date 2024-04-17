@@ -63,6 +63,7 @@ namespace raytracer
         virtual void displayScreen() = 0;
         virtual void clearWindow() = 0;
         virtual int getEvent() = 0;
+        virtual void initImage(int width, int height) = 0;
 
         class IDisplayError : public std::exception {
         public:
@@ -88,6 +89,7 @@ class sfml : public raytracer::IDisplay {
         void displayScreen() override;
         void clearWindow() override;
         int getEvent() override;
+        void initImage(int width, int height) override;
 
     private:
         std::unique_ptr<sf::RenderWindow> _window;
