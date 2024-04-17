@@ -47,9 +47,9 @@ namespace raytracer
             void normalize()
             {
                 double size = sqrt(r * r + g * g + b * b);
-                (r /= size) * 255;
-                (g /= size) * 255;
-                (b /= size) * 255;
+                r = (r / size) * 255;
+                g = (g / size) * 255;
+                b = (b / size) * 255;
             }
     };
 

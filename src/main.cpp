@@ -8,8 +8,8 @@
 #include "Light/ILight.hpp"
 #include "Light/Objects/PointLight.hpp"
 
-#define WIDTH 600
-#define HEIGHT 600
+#define WIDTH 150
+#define HEIGHT 150
 
 int main()
 {
@@ -21,11 +21,13 @@ int main()
     std::vector<std::unique_ptr<raytracer::IPrimitive>> objects;
 
     renderer.addObject(std::make_shared<raytracer::Sphere>(raytracer::Point3D(-1, 3, -10), 1, raytracer::Color(255, 0, 0)));
-//    renderer.addObject(std::make_shared<raytracer::Sphere>(raytracer::Point3D(2, 3, -10), 1, raytracer::Color(255, 255, 0)));
+    renderer.addObject(std::make_shared<raytracer::Sphere>(raytracer::Point3D(2, 3, -10), 1, raytracer::Color(255, 255, 0)));
     renderer.addObject(std::make_shared<raytracer::Sphere>(raytracer::Point3D(1, 10005, -10), 10000, raytracer::Color(255, 255, 255)));
 
     renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(255, 255, 255), raytracer::Point3D(4, -20, -10), 600));
-//    renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(255, 127, 127), raytracer::Point3D(25, -10, -10), 700));
+    renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(255, 127, 127), raytracer::Point3D(25, -10, -10), 700));
+
+    renderer.addObject(std::make_shared<raytracer::Sphere>(raytracer::Point3D(0, 35, -35), 5, raytracer::Color(255, 255, 255)));
 
     sfml display;
 

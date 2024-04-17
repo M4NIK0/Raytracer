@@ -28,10 +28,17 @@ namespace raytracer
             void renderImage();
             std::vector<std::shared_ptr<IPrimitive>> objects;
 
-            static RenderRay getReflexionsLight(const Ray3D &ray, const std::vector<std::shared_ptr<IPrimitive>> &objects, int bounces);
-            static RenderRay getSurfaceLight(const Point3D hit_point, const std::shared_ptr<IPrimitive> &object,
+            RenderRay getReflexionsLight(const Ray3D &ray, const std::vector<std::shared_ptr<IPrimitive>> &objects, int bounces);
+            RenderRay getSurfaceLight(const Point3D hit_point, const std::shared_ptr<IPrimitive> &object,
                                              const std::vector<std::shared_ptr<IPrimitive>> &objects,
                                              const std::vector<std::shared_ptr<ILight>> &lights, int rays, int bounces);
+
+            RenderRay getDirectLight(const Point3D hit_point, const std::shared_ptr<IPrimitive> &object,
+                                     const std::vector<std::shared_ptr<IPrimitive>> &objects,
+                                     const std::vector<std::shared_ptr<ILight>> &lights);
+            RenderRay getDiffuseLight(const Point3D hit_point, const std::shared_ptr<IPrimitive> &object,
+                                      const std::vector<std::shared_ptr<IPrimitive>> &objects,
+                                      const std::vector<std::shared_ptr<ILight>> &lights, int rays, int bounces);
 
             static RenderRay getRandomRay(const Point3D &origin, const std::shared_ptr<IPrimitive> &object);
         private:
@@ -44,6 +51,8 @@ namespace raytracer
             int maxDiffuseBounces = 2;
 
             int diffuseReflexionRays = 20;
+
+            double cameraExposure = 2;
 
             void _sortHitObjectsByContactDistance();
     };
