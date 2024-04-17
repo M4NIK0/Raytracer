@@ -18,7 +18,7 @@ namespace raytracer
     class Renderer
     {
         public:
-            Renderer(Camera camera) : _camera(camera) {}
+            Renderer(Camera camera) : camera(camera) {}
             ~Renderer();
 
             void addObject(std::shared_ptr<IPrimitive> object);
@@ -41,8 +41,8 @@ namespace raytracer
                                       const std::vector<std::shared_ptr<ILight>> &lights, int rays, int bounces);
 
             static RenderRay getRandomRay(const Point3D &origin, const std::shared_ptr<IPrimitive> &object);
+            Camera camera;
         private:
-            Camera _camera;
             Ray3D _currentRay;
             std::vector<std::shared_ptr<IPrimitive>> _hitObjects;
             std::vector<std::shared_ptr<ILight>> _lights;

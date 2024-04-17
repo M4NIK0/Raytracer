@@ -17,7 +17,7 @@ void raytracer::Renderer::addObject(std::shared_ptr<IPrimitive> object)
 
 raytracer::Color raytracer::Renderer::traceRay(int x, int y)
 {
-    _currentRay = _camera.getRay(x, y);
+    _currentRay = camera.getRay(x, y);
     _hitObjects.clear();
 
     for (auto &object: objects)

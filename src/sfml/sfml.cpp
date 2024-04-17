@@ -2,6 +2,7 @@
 // Created by Eth22 on 4/15/24.
 //
 
+#include <iostream>
 #include "sfml.hpp"
 
 void sfml::initWindow(int width, int height)
@@ -23,9 +24,12 @@ void sfml::drawPixel(int x, int y, raytracer::Color color)
 void sfml::displayScreen()
 {
     _texture.loadFromImage(_image);
+
+    _sprite = sf::Sprite();
     _sprite.setTexture(_texture);
-    //resize sprite to fill window using image
-    _sprite.setScale(_window->getSize().x / _image.getSize().x, _window->getSize().y / _image.getSize().y);
+
+    _sprite.setScale(_window->getSize().x / (_image.getSize().x * 1.0f), _window->getSize().y / (_image.getSize().y * 1.0f));
+
     _window->draw(_sprite);
     _window->display();
 }

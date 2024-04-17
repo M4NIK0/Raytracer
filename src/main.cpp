@@ -8,14 +8,16 @@
 #include "Light/ILight.hpp"
 #include "Light/Objects/PointLight.hpp"
 
-#define SIZE 150
+#define SIZE 2
 #define WIDTH SIZE
 #define HEIGHT SIZE
 
 int main()
 {
+    int width = WIDTH;
+    int height = HEIGHT;
     raytracer::Rectangle3D screen(raytracer::Point3D(0, 0, 0), raytracer::Vector3D(1, 0, 0), raytracer::Vector3D(0, 1, 0));
-    raytracer::Camera camera(raytracer::Point3D(0.5, 0.5, 1), screen, WIDTH, HEIGHT);
+    raytracer::Camera camera(raytracer::Point3D(0.5, 0.5, 1), screen, width, height);
 
     raytracer::Renderer renderer(camera);
 
@@ -32,18 +34,19 @@ int main()
 
     sfml display;
 
-    display.initImage(WIDTH, HEIGHT);
+    display.initImage(width, height);
     // Initialize the window
     display.initWindow(1200, 1200);
 
+    int frame = 0;
     bool loop = true;
     while (loop)
     {
         display.clearWindow();
 
-        for (int x = 0; x < WIDTH; x++)
+        for (int x = 0; x < width; x++)
         {
-            for (int y = 0; y < HEIGHT; y++)
+            for (int y = 0; y < height; y++)
             {
                 raytracer::Color color = renderer.traceRay(x, y);
                 display.drawPixel(x, y, color);
@@ -55,7 +58,16 @@ int main()
             loop = false;
         }
         display.displayScreen();
-        std::cout << "loop" << std::endl;
+
+        if (frame % 100 == 0)
+        {
+            width++;
+            height++;
+            display.initImage(width, height);
+            camera = raytracer::Camera(raytracer::Point3D(0.5, 0.5, 1), screen, width, height);
+            renderer.camera = camera;
+        }
+        frame++;
     }
 
     // End the window
