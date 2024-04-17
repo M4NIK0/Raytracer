@@ -111,7 +111,7 @@ raytracer::Renderer::getSurfaceLight(const Point3D hit_point, const std::shared_
 
     for (auto lightRay : directLightRays)
     {
-        ray.color = ray.color + lightRay.color * object->getColor() * lightRay.intensity;
+        ray.color = ray.color + lightRay.color * Color(object->getColor().r / 255.0, object->getColor().g / 255.0, object->getColor().b / 255.0) * lightRay.intensity;
     }
 
     // cap color between 0 and 255
