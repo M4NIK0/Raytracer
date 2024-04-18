@@ -23,12 +23,12 @@ int main()
 
     std::vector<std::unique_ptr<raytracer::IPrimitive>> objects;
 
-    renderer.addObject(std::make_shared<raytracer::Sphere>(raytracer::Point3D(0, 0, -25), 5, raytracer::Color(255, 255, 255)));
+    renderer.addObject(std::make_shared<raytracer::Sphere>(raytracer::Point3D(0, 2, -35), 5, raytracer::Color(255, 255, 255)));
     renderer.addObject(std::make_shared<raytracer::Sphere>(raytracer::Point3D(0, 1010, 0), 1000, raytracer::Color(255, 255, 255)));
 
-    renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(0, 255, 0), raytracer::Point3D(35, 0, -35), 500));
-    renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(255, 0, 0), raytracer::Point3D(0, 0, -35), 500));
-    renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(0, 0, 255), raytracer::Point3D(-35, 0, -35), 500));
+    renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(0, 255, 0), raytracer::Point3D(35, 0, -35), 5000));
+    renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(255, 0, 0), raytracer::Point3D(0, -25, -35), 5000));
+    renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(0, 0, 255), raytracer::Point3D(-35, 0, -35), 5000));
 
     renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(255, 255, 255), raytracer::Point3D(0, -50, -25), 1000));
 
@@ -38,17 +38,35 @@ int main()
     // Initialize the window
     display.initWindow(1200, 1200);
 
+    std::vector<std::vector<raytracer::Color>> color_matrix;
+
     int frame = 0;
     bool loop = true;
     while (loop)
     {
+        double max_pixel_size = 0;
         display.clearWindow();
+
+        color_matrix.clear();
+
+        for (int x = 0; x < width; x++)
+        {
+            color_matrix.push_back(std::vector<raytracer::Color>());
+            for (int y = 0; y < height; y++)
+            {
+                raytracer::Color color = renderer.traceRay(x, y);
+                color_matrix[x].push_back(color);
+                if (color.length() > max_pixel_size)
+                    max_pixel_size = color.length();
+            }
+        }
 
         for (int x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
             {
-                raytracer::Color color = renderer.traceRay(x, y);
+                raytracer::Color color = color_matrix[x][y];
+                color = color * (255.0 / max_pixel_size);
                 display.drawPixel(x, y, color);
             }
         }

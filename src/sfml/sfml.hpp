@@ -22,6 +22,10 @@ namespace raytracer
             int g;
             int b;
 
+            double length() {
+                return sqrt(r * r + g * g + b * b);
+            }
+
             Color operator+(const Color& other) {
                 return Color(r + other.r, g + other.g, b + other.b);
             }

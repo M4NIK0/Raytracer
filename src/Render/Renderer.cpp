@@ -36,7 +36,13 @@ raytracer::Color raytracer::Renderer::traceRay(int x, int y)
     _sortHitObjectsByContactDistance();
 
     RenderRay directLightRay = getSurfaceLight(_hitObjects[0]->hitPosition(_currentRay), _hitObjects[0], objects, _lights, 20, 2);
-    return directLightRay.color;
+    RenderRay reflexionsLightRay = getReflexionsLight(_currentRay, objects, 2);
+    RenderRay diffuseLightRay = getDiffuseLight(_hitObjects[0]->hitPosition(_currentRay), _hitObjects[0], objects, _lights, 20, 2);
+
+
+    Color final_color = directLightRay.getColor() + reflexionsLightRay.getColor() + diffuseLightRay.getColor();
+
+    return final_color;
 }
 
 void raytracer::Renderer::renderImage()
