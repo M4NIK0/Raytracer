@@ -24,7 +24,7 @@ namespace raytracer
             void addObject(std::shared_ptr<IPrimitive> object);
             void addLight(std::shared_ptr<ILight> light);
 
-            raytracer::Color traceRay(int x, int y);
+            raytracer::RenderRay traceRay(int x, int y);
             void renderImage();
             std::vector<std::shared_ptr<IPrimitive>> objects;
 
@@ -41,6 +41,7 @@ namespace raytracer
                                       const std::vector<std::shared_ptr<ILight>> &lights, int rays, int bounces);
 
             static RenderRay getRandomRay(const Point3D &origin, const std::shared_ptr<IPrimitive> &object);
+            static Color getColorFromLight(const RenderRay &ray, double max_intensity);
             Camera camera;
         private:
             Ray3D _currentRay;

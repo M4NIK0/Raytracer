@@ -15,7 +15,7 @@ void raytracer::Renderer::addObject(std::shared_ptr<IPrimitive> object)
     objects.push_back(object);
 }
 
-raytracer::Color raytracer::Renderer::traceRay(int x, int y)
+raytracer::RenderRay raytracer::Renderer::traceRay(int x, int y)
 {
     _currentRay = camera.getRay(x, y);
     _hitObjects.clear();
@@ -30,19 +30,19 @@ raytracer::Color raytracer::Renderer::traceRay(int x, int y)
 
     if (_hitObjects.empty())
     {
-        return Color(0, 0, 0);
+        return RenderRay(Ray3D(Point3D(0, 0, 0), Vector3D(0, 0, 0)));
     }
 
     _sortHitObjectsByContactDistance();
 
-    RenderRay directLightRay = getSurfaceLight(_hitObjects[0]->hitPosition(_currentRay), _hitObjects[0], objects, _lights, 20, 2);
+    RenderRay directLightRay = getSurfaceLight(_hitObjects[0]->hitPosition(_currentRay), _hitObjects[0], objects,
+                                               _lights, 20, 2);
     RenderRay reflexionsLightRay = getReflexionsLight(_currentRay, objects, 2);
-    RenderRay diffuseLightRay = getDiffuseLight(_hitObjects[0]->hitPosition(_currentRay), _hitObjects[0], objects, _lights, 20, 2);
+    RenderRay diffuseLightRay = getDiffuseLight(_hitObjects[0]->hitPosition(_currentRay), _hitObjects[0], objects,
+                                                _lights, 20, 2);
 
-
-    Color final_color = directLightRay.getColor() + reflexionsLightRay.getColor() + diffuseLightRay.getColor();
-
-    return final_color;
+    RenderRay finalRay = directLightRay + reflexionsLightRay + diffuseLightRay;
+    return finalRay;
 }
 
 void raytracer::Renderer::renderImage()
@@ -87,14 +87,23 @@ raytracer::Renderer::getSurfaceLight(const Point3D hit_point, const std::shared_
     return ray;
 }
 
+// Compute diffuse light recursively using random rays and getDirectLight
 raytracer::RenderRay
 raytracer::Renderer::getDiffuseLight(const raytracer::Point3D hit_point, const std::shared_ptr<IPrimitive> &object,
                                      const std::vector<std::shared_ptr<IPrimitive>> &objects,
                                      const std::vector<std::shared_ptr<ILight>> &lights, int rays, int bounces)
 {
-    return raytracer::RenderRay();
+    raytracer::RenderRay diffuseLightRay;
+    for (int i = 0; i < rays; ++i)
+    {
+        raytracer::Ray3D randomRay = getRandomRay(hit_point, object);
+        raytracer::RenderRay randomLightRay = traceRay(randomRay.origin.x, randomRay.origin.y);
+        diffuseLightRay = diffuseLightRay + randomLightRay;
+    }
+    diffuseLightRay.color = diffuseLightRay.color * (1.0 / rays);
+    diffuseLightRay.intensity = diffuseLightRay.intensity * (1.0 / rays);
+    return diffuseLightRay;
 }
-
 raytracer::RenderRay
 raytracer::Renderer::getDirectLight(const raytracer::Point3D hit_point, const std::shared_ptr<IPrimitive> &object,
                                     const std::vector<std::shared_ptr<IPrimitive>> &objects,
@@ -139,14 +148,14 @@ raytracer::Renderer::getDirectLight(const raytracer::Point3D hit_point, const st
     }
 
     // Mix all direct light rays
-    for (auto lightRay : directLightRays)
+    for (auto lightRay: directLightRays)
     {
-        ray.color = ray.color + lightRay.color * Color(object->getColor().r / 255.0, object->getColor().g / 255.0, object->getColor().b / 255.0) * lightRay.intensity * lightRay.intensity * object->getNormalFromPoint(hit_point).normalize().dot(lightRay.getRay().direction.normalize());
+        ray.color = ray.color + lightRay.color * Color(object->getColor().r / 255.0, object->getColor().g / 255.0,
+                                                       object->getColor().b / 255.0) * lightRay.intensity *
+                                lightRay.intensity * object->getNormalFromPoint(hit_point).normalize().dot(
+                lightRay.getRay().direction.normalize());
         ray.intensity = ray.intensity + lightRay.intensity;
     }
-
-    // Clamp color
-    ray.color.cap();
 
     return ray;
 }
@@ -154,9 +163,9 @@ raytracer::Renderer::getDirectLight(const raytracer::Point3D hit_point, const st
 raytracer::RenderRay
 raytracer::Renderer::getRandomRay(const raytracer::Point3D &origin, const std::shared_ptr<IPrimitive> &object)
 {
-    double x = (double)rand() / RAND_MAX;
-    double y = (double)rand() / RAND_MAX;
-    double z = (double)rand() / RAND_MAX;
+    double x = (double) rand() / RAND_MAX;
+    double y = (double) rand() / RAND_MAX;
+    double z = (double) rand() / RAND_MAX;
 
     Vector3D randomDirection = Vector3D(x, y, z).normalize();
 
@@ -166,4 +175,12 @@ raytracer::Renderer::getRandomRay(const raytracer::Point3D &origin, const std::s
     }
 
     return RenderRay(Ray3D(origin, randomDirection));
+}
+
+raytracer::Color raytracer::Renderer::getColorFromLight(const raytracer::RenderRay &ray, double max_intensity)
+{
+    raytracer::Color color = ray.color;
+    color = color * (1 / max_intensity);
+    color.cap(); // Ensure the color values are within the range 0-255
+    return color;
 }

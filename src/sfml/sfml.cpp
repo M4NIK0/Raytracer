@@ -49,6 +49,8 @@ int sfml::getEvent()
     {
         if (event.type == sf::Event::Closed)
             return 1;
+        if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Z)
+            return 2;
     }
     return 0;
 }
