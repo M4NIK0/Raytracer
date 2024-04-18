@@ -93,16 +93,18 @@ raytracer::Renderer::getDiffuseLight(const Point3D hit_point, const std::shared_
                                      const std::vector<std::shared_ptr<IPrimitive>> &objects,
                                      const std::vector<std::shared_ptr<ILight>> &lights, int rays, int bounces)
 {
-    return RenderRay();
+    return RenderRay(Ray3D(Point3D(0, 0, 0), Vector3D(0, 0, 0)));
     if (bounces <= 0)
     {
         return RenderRay(Ray3D(Point3D(0, 0, 0), Vector3D(0, 0, 0)));
     }
 
     std::vector<RenderRay> diffuseLightRays;
+    Vector3D normal = object->getNormalFromPoint(hit_point);
 
     for (int i = 0; i < rays; ++i)
     {
+        // Generate a random ray uniformly distributed over the hemisphere around the normal
         RenderRay randomRay = getRandomRay(hit_point, object);
 
         for (auto &obj: objects)
@@ -123,15 +125,18 @@ raytracer::Renderer::getDiffuseLight(const Point3D hit_point, const std::shared_
         _sortHitObjectsByContactDistance();
 
         Point3D hitPoint = _hitObjects[0]->hitPosition(randomRay.getRay());
-        double distanceFactor = 1 / (Point3D::distance(hit_point, hitPoint) * Point3D::distance(hit_point, hitPoint));
 
         RenderRay directLightRay = getDirectLight(hitPoint, _hitObjects[0], objects, lights);
         RenderRay reflexionsLightRay = getReflexionsLight(randomRay.getRay(), objects, bounces - 1);
         RenderRay diffuseLightRay = getDiffuseLight(hitPoint, _hitObjects[0], objects, lights, rays, bounces - 1);
 
-        directLightRay.color = directLightRay.color * distanceFactor;
-        reflexionsLightRay.color = reflexionsLightRay.color * distanceFactor;
-        diffuseLightRay.color = diffuseLightRay.color * distanceFactor;
+        // Use a different method to attenuate the light intensity based on distance
+        double distance = Point3D::distance(hit_point, hitPoint);
+        double attenuation = 1 / (1 + 0.1 * distance);  // Linear attenuation
+
+        directLightRay.color = directLightRay.color * attenuation;
+        reflexionsLightRay.color = reflexionsLightRay.color * attenuation;
+        diffuseLightRay.color = diffuseLightRay.color * attenuation;
 
         RenderRay finalRay = directLightRay + reflexionsLightRay + diffuseLightRay;
 
