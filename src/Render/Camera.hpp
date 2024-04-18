@@ -24,6 +24,8 @@ namespace raytracer
 
             int width;
             int height;
+
+            void move(Vector3D direction);
         private:
             Rectangle3D _screen;
     };

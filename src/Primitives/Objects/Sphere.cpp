@@ -100,5 +100,7 @@ void raytracer::Sphere::move(raytracer::Vector3D vec)
 
 raytracer::Vector3D raytracer::Sphere::getNormalFromPoint(const raytracer::Point3D &point)
 {
-    return (point - position);
+    Vector3D normal = (point - position).normalize();
+
+    return normal;
 }

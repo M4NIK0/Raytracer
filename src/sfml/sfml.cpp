@@ -49,9 +49,25 @@ int sfml::getEvent()
     {
         if (event.type == sf::Event::Closed)
             return 1;
-        if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Z)
-            return 2;
     }
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
+        return 3;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+        return 2;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
+        return 4;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+        return 5;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+        return 7;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl))
+        return 6;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::X))
+        return 8;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::C))
+        return 9;
+
     return 0;
 }
 

@@ -17,3 +17,9 @@ raytracer::Ray3D raytracer::Camera::getRay(int x, int y)
     Vector3D direction = point - origin;
     return Ray3D(origin, direction);
 }
+
+void raytracer::Camera::move(raytracer::Vector3D direction)
+{
+    origin = origin + direction;
+    _screen.move(direction);
+}
