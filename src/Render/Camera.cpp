@@ -21,12 +21,54 @@ raytracer::Ray3D raytracer::Camera::getRay(int x, int y)
 
 void raytracer::Camera::move(raytracer::Vector3D direction)
 {
+    // Convert the rotation angles from degrees to radians
+    double thetaX = _rotation.x * M_PI / 180.0;
+    double thetaY = _rotation.y * M_PI / 180.0;
+    double thetaZ = _rotation.z * M_PI / 180.0;
+
+    Matrix rotationX(3, 3);
+    rotationX = std::vector<std::vector<double>>{
+        {1, 0, 0},
+        {0, cos(thetaX), -sin(thetaX)},
+        {0, sin(thetaX), cos(thetaX)}
+    };
+
+    Matrix rotationY(3, 3);
+    rotationY = std::vector<std::vector<double>>{
+        {cos(thetaY), 0, sin(thetaY)},
+        {0, 1, 0},
+        {-sin(thetaY), 0, cos(thetaY)}
+    };
+
+    Matrix rotationZ(3, 3);
+    rotationZ = std::vector<std::vector<double>>{
+        {cos(thetaZ), -sin(thetaZ), 0},
+        {sin(thetaZ), cos(thetaZ), 0},
+        {0, 0, 1}
+    };
+
+    Matrix directionMatrix(3, 1);
+    directionMatrix = std::vector<std::vector<double>>{
+        {direction.x},
+        {direction.y},
+        {direction.z}
+    };
+
+    // rotate direction vector
+    Matrix directionResult = rotationX * directionMatrix;
+    directionResult = rotationY * directionResult;
+    directionResult = rotationZ * directionResult;
+
+    direction = Vector3D(directionResult.get(0, 0), directionResult.get(1, 0), directionResult.get(2, 0));
+
+    // move the camera
     origin = origin + direction;
     _screen.move(direction);
 }
 
 void raytracer::Camera::rotate(raytracer::Vector3D direction)
 {
+    _rotation = direction + _rotation;
     // Convert the rotation angles from degrees to radians
     double thetaX = direction.x * M_PI / 180.0;
     double thetaY = direction.y * M_PI / 180.0;
