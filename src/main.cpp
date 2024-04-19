@@ -45,7 +45,6 @@ int main()
     renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(0, 255, 0), raytracer::Point3D(0, -200, 0), 200000));
     renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(255, 0, 0), raytracer::Point3D(50, -200, 0), 200000));
     renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(0, 0, 255), raytracer::Point3D(-50, -200, 0), 200000));
-//    renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(255, 255, 255), raytracer::Point3D(50, -200, -35), 10000000));
 
     sfml display;
 
@@ -205,8 +204,71 @@ int main()
             color_matrix.clear();
         }
 
+        if (event == 8)
+        {
+            camera.rotate(raytracer::Vector3D(0, 0, 1));
+            color_matrix.clear();
+            images_amount = 0;
+            renderer.camera = camera;
+            width = 16;
+            height = 16;
+            display.initImage(width, height);
+            images_amount = 0;
+            camera.width = width;
+            camera.height = height;
+            renderer.camera = camera;
+            color_matrix.clear();
+        }
 
-        if (frame % (width / 2) == 0 && width < 256 && height < 256)
+        if (event == 9)
+        {
+            camera.rotate(raytracer::Vector3D(0, 0, -1));
+            color_matrix.clear();
+            images_amount = 0;
+            renderer.camera = camera;
+            width = 16;
+            height = 16;
+            display.initImage(width, height);
+            images_amount = 0;
+            camera.width = width;
+            camera.height = height;
+            renderer.camera = camera;
+            color_matrix.clear();
+        }
+
+        if (event == 10)
+        {
+            camera.rotate(raytracer::Vector3D(0, 1, 0));
+            color_matrix.clear();
+            images_amount = 0;
+            renderer.camera = camera;
+            width = 16;
+            height = 16;
+            display.initImage(width, height);
+            images_amount = 0;
+            camera.width = width;
+            camera.height = height;
+            renderer.camera = camera;
+            color_matrix.clear();
+        }
+
+        if (event == 11)
+        {
+            camera.rotate(raytracer::Vector3D(0, -1, 0));
+            color_matrix.clear();
+            images_amount = 0;
+            renderer.camera = camera;
+            width = 16;
+            height = 16;
+            display.initImage(width, height);
+            images_amount = 0;
+            camera.width = width;
+            camera.height = height;
+            renderer.camera = camera;
+            color_matrix.clear();
+        }
+
+        if (frame % (width / 2) == 0 && width < 81 && height < 81)
         {
             width *= 1.5;
             height *= 1.5;
