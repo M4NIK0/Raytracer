@@ -40,19 +40,12 @@ raytracer::RenderRay raytracer::Renderer::traceRay(int x, int y)
     _sortHitObjectsByContactDistance();
 
     RenderRay directLightRay = RenderRay(Ray3D(Point3D(0, 0, 0), Vector3D(0, 0, 0)));
-    if (!_hitObjects[0]->isGlass())
-    {
-        directLightRay = getDirectLight(_hitObjects[0]->hitPosition(_currentRay), _hitObjects[0], objects, _lights);
-    }
+    directLightRay = getDirectLight(_hitObjects[0]->hitPosition(_currentRay), _hitObjects[0], objects, _lights);
     RenderRay reflexionsLightRay = getReflexionsLight(_currentRay, objects, _hitObjects[0], 2);
     RenderRay diffuseLightRay = getDiffuseLight(_hitObjects[0]->hitPosition(_currentRay), _hitObjects[0], objects,
                                                 _lights, 100, 2);
     RenderRay refractionsLightRay = getRefractionsLight(_hitObjects[0]->hitPosition(_currentRay), _currentRay, objects, 2, _hitObjects[0]);
 
-//    std::cout << "Direct light: " << directLightRay.intensity << std::endl;
-    std::cout << "Reflexions light: " << reflexionsLightRay.intensity << std::endl;
-    std::cout << "Diffuse light: " << diffuseLightRay.intensity << std::endl << std::endl;
-    std::cout << "Refractions light: " << refractionsLightRay.intensity << std::endl << std::endl;
     RenderRay finalRay = directLightRay + reflexionsLightRay + diffuseLightRay + refractionsLightRay;
 
     return finalRay;

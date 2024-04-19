@@ -27,10 +27,10 @@ int main()
 
     std::vector<std::unique_ptr<raytracer::IPrimitive>> objects;
 
-    auto obj1 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(-5, 5, -35), 5, raytracer::Color(255, 0, 255));
-    auto obj2 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(5, 9, -35), 3, raytracer::Color(255, 255, 255));
+    auto obj1 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(-5, 5, -35), 5, raytracer::Color(0, 0, 0));
+    auto obj2 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(3, 5, -35), 3, raytracer::Color(0, 0, 0));
     auto obj3 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0, 5010.5, 0), 5000, raytracer::Color(255, 255, 255));
-    auto obj4 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0, 5, -600), 500, raytracer::Color(255, 128, 128));
+    auto obj4 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0, 5, -550), 500, raytracer::Color(255, 128, 128));
     auto obj5 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(-5, 5, -45), 0.5, raytracer::Color(255, 256, 256));
 
     obj1->setGlassState(true);
@@ -45,7 +45,6 @@ int main()
     renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(0, 255, 0), raytracer::Point3D(0, -200, 0), 200000));
     renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(255, 0, 0), raytracer::Point3D(50, -200, 0), 200000));
     renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(0, 0, 255), raytracer::Point3D(-50, -200, 0), 200000));
-//    renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(255, 255, 255), raytracer::Point3D(50, -200, -35), 10000000));
 
     sfml display;
 
@@ -205,8 +204,71 @@ int main()
             color_matrix.clear();
         }
 
+        if (event == 8)
+        {
+            camera.rotate(raytracer::Vector3D(0, 0, 1));
+            color_matrix.clear();
+            images_amount = 0;
+            renderer.camera = camera;
+            width = 16;
+            height = 16;
+            display.initImage(width, height);
+            images_amount = 0;
+            camera.width = width;
+            camera.height = height;
+            renderer.camera = camera;
+            color_matrix.clear();
+        }
 
-        if (frame % (width / 2) == 0 && width < 256 && height < 256)
+        if (event == 9)
+        {
+            camera.rotate(raytracer::Vector3D(0, 0, -1));
+            color_matrix.clear();
+            images_amount = 0;
+            renderer.camera = camera;
+            width = 16;
+            height = 16;
+            display.initImage(width, height);
+            images_amount = 0;
+            camera.width = width;
+            camera.height = height;
+            renderer.camera = camera;
+            color_matrix.clear();
+        }
+
+        if (event == 10)
+        {
+            camera.rotate(raytracer::Vector3D(0, 1, 0));
+            color_matrix.clear();
+            images_amount = 0;
+            renderer.camera = camera;
+            width = 16;
+            height = 16;
+            display.initImage(width, height);
+            images_amount = 0;
+            camera.width = width;
+            camera.height = height;
+            renderer.camera = camera;
+            color_matrix.clear();
+        }
+
+        if (event == 11)
+        {
+            camera.rotate(raytracer::Vector3D(0, -1, 0));
+            color_matrix.clear();
+            images_amount = 0;
+            renderer.camera = camera;
+            width = 16;
+            height = 16;
+            display.initImage(width, height);
+            images_amount = 0;
+            camera.width = width;
+            camera.height = height;
+            renderer.camera = camera;
+            color_matrix.clear();
+        }
+
+        if (frame % (width / 2) == 0 && width < 81 && height < 81)
         {
             width *= 1.5;
             height *= 1.5;

@@ -67,6 +67,10 @@ int sfml::getEvent()
         return 8;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::C))
         return 9;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+        return 10;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+        return 11;
 
     return 0;
 }
