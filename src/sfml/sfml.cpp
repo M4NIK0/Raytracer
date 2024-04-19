@@ -2,13 +2,13 @@
 // Created by Eth22 on 4/15/24.
 //
 
+#include <iostream>
 #include "sfml.hpp"
 
 void sfml::initWindow(int width, int height)
 {
-    _window = std::make_unique<sf::RenderWindow>(sf::VideoMode(width, height), "Minecraft RTX");
+    _window = std::make_unique<sf::RenderWindow>(sf::VideoMode(width, height), "Blender 4.1", sf::Style::Titlebar | sf::Style::Close);
     _window->setFramerateLimit(FPS);
-    _image.create(width, height, sf::Color::Black);
 }
 
 void sfml::endWindow()
@@ -24,13 +24,21 @@ void sfml::drawPixel(int x, int y, raytracer::Color color)
 void sfml::displayScreen()
 {
     _texture.loadFromImage(_image);
+
+    _sprite = sf::Sprite();
     _sprite.setTexture(_texture);
+
+    _sprite.setScale(_window->getSize().x / (_image.getSize().x * 1.0f), _window->getSize().y / (_image.getSize().y * 1.0f));
+
+    _window->setTitle("Blender 4.1 - " + std::to_string(_image.getSize().x) + "x" + std::to_string(_image.getSize().y));
+
     _window->draw(_sprite);
     _window->display();
 }
 
 void sfml::clearWindow()
 {
+    _image.create(_image.getSize().x, _image.getSize().y, sf::Color::Black);
     _window->clear();
 }
 
@@ -42,5 +50,32 @@ int sfml::getEvent()
         if (event.type == sf::Event::Closed)
             return 1;
     }
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
+        return 3;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+        return 2;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Q))
+        return 4;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+        return 5;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+        return 7;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl))
+        return 6;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::X))
+        return 8;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::C))
+        return 9;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+        return 10;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+        return 11;
+
     return 0;
+}
+
+void sfml::initImage(int width, int height)
+{
+    _image.create(width, height, sf::Color::Black);
 }

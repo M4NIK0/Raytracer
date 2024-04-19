@@ -35,6 +35,8 @@ namespace raytracer
 
             double dot(const Vector3D& other) const { return x * other.x + y * other.y + z * other.z; }
 
+            Vector3D normalize();
+
             double x = 0;
             double y = 0;
             double z = 0;

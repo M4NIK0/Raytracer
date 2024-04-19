@@ -19,6 +19,8 @@ namespace raytracer
             ~Rectangle3D();
 
             Point3D pointAt(double u, double v) const;
+            void move(Vector3D direction);
+            void rotate(Vector3D direction);
 
             Point3D origin;
             Vector3D bottom_side;

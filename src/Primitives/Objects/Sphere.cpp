@@ -60,7 +60,7 @@ raytracer::Point3D raytracer::Sphere::hitPosition(const raytracer::Ray3D &ray)
 
 raytracer::Vector3D raytracer::Sphere::hitNormal(const raytracer::Ray3D &ray)
 {
-    return {};
+    return (hitPosition(ray) - position);
 }
 
 raytracer::Ray3D raytracer::Sphere::hitReflectedRay(const raytracer::Ray3D &ray)
@@ -79,14 +79,28 @@ raytracer::Ray3D raytracer::Sphere::hitReflectedRay(const raytracer::Ray3D &ray)
 
         if (root1 > 0) {
             Point3D hitPos = ray.origin + ray.direction * root1;
-            Vector3D normal = hitPos - position;
-            return Ray3D(hitPos, ray.direction - normal * 2.0 * normal.dot(ray.direction));
+            Vector3D normal = (hitPos - position).normalize();
+            Vector3D reflectedDirection = ray.direction - normal * 2.0 * ray.direction.dot(normal);
+            return Ray3D(hitPos, reflectedDirection);
         } else if (root2 > 0) {
             Point3D hitPos = ray.origin + ray.direction * root2;
-            Vector3D normal = hitPos - position;
-            return Ray3D(hitPos, ray.direction - normal * 2.0 * normal.dot(ray.direction));
+            Vector3D normal = (hitPos - position).normalize();
+            Vector3D reflectedDirection = ray.direction - normal * 2.0 * ray.direction.dot(normal);
+            return Ray3D(hitPos, reflectedDirection);
         } else {
             return {};
         }
     }
+}
+
+void raytracer::Sphere::move(raytracer::Vector3D vec)
+{
+    position = position + vec;
+}
+
+raytracer::Vector3D raytracer::Sphere::getNormalFromPoint(const raytracer::Point3D &point)
+{
+    Vector3D normal = (point - position).normalize();
+
+    return normal;
 }

@@ -8,6 +8,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <memory>
+#include <valarray>
 
 #define FPS 60
 
@@ -15,11 +16,45 @@ namespace raytracer
 {
     class Color {
         public:
-            Color(int r, int g, int b) : r(r), g(g), b(b) {}
+            Color(unsigned  long long int r, unsigned  long long int  g, unsigned  long long int  b) : r(r), g(g), b(b) {}
 
-            int r;
-            int g;
-            int b;
+            double r;
+            double g;
+            double b;
+
+            double length() {
+                return sqrt(r * r + g * g + b * b);
+            }
+
+            Color operator+(const Color& other) {
+                return Color(r + other.r, g + other.g, b + other.b);
+            }
+
+            Color operator*(const Color& other) {
+                return Color(r * other.r, g * other.g, b * other.b);
+            }
+
+            Color operator*(double scalar) {
+                return Color(r * scalar, g * scalar, b * scalar);
+            }
+
+            void cap() {
+                r = r > 255 ? 255 : r;
+                g = g > 255 ? 255 : g;
+                b = b > 255 ? 255 : b;
+
+                r = r < 0 ? 0 : r;
+                g = g < 0 ? 0 : g;
+                b = b < 0 ? 0 : b;
+            }
+
+            void normalize()
+            {
+                double size = sqrt(r * r + g * g + b * b);
+                r = (r / size);
+                g = (g / size);
+                b = (b / size);
+            }
     };
 
     class IDisplay {
@@ -32,6 +67,7 @@ namespace raytracer
         virtual void displayScreen() = 0;
         virtual void clearWindow() = 0;
         virtual int getEvent() = 0;
+        virtual void initImage(int width, int height) = 0;
 
         class IDisplayError : public std::exception {
         public:
@@ -57,6 +93,7 @@ class sfml : public raytracer::IDisplay {
         void displayScreen() override;
         void clearWindow() override;
         int getEvent() override;
+        void initImage(int width, int height) override;
 
     private:
         std::unique_ptr<sf::RenderWindow> _window;

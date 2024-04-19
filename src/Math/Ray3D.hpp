@@ -9,6 +9,7 @@
 
 #include "Point3D.hpp"
 #include "Vector3D.hpp"
+#include "../sfml/sfml.hpp"
 
 namespace raytracer
 {
@@ -25,5 +26,6 @@ namespace raytracer
 
             Point3D origin;
             Vector3D direction;
+
     };
 }
