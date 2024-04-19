@@ -26,13 +26,15 @@ namespace raytracer
             Color getColor() override { return color; }
             bool isGlass() override { return _isGlass; }
             void setColor(Color color) override { this->color = color; }
-            double getReflexionIndice(const Ray3D &ray) override { return 0.5; }
+            double getReflexionIndice(const Ray3D &ray) override { return _reflexionIndex; }
             double getRefractionxionIndice(const Ray3D &ray) override { return 1.5; }
             void setGlassState(bool state) override { _isGlass = state; }
+            void setReflexionIndice(double reflexionIndice) override { _reflexionIndex = reflexionIndice; }
 
             double radius;
             Point3D position;
             Color color;
             bool _isGlass = false;
+            double _reflexionIndex = 0;
     };
 }
