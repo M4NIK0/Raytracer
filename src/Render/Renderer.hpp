@@ -28,7 +28,8 @@ namespace raytracer
             void renderImage();
             std::vector<std::shared_ptr<IPrimitive>> objects;
 
-            RenderRay getReflexionsLight(const Ray3D &ray, const std::vector<std::shared_ptr<IPrimitive>> &objects, int bounces);
+            RenderRay getReflexionsLight(const Ray3D &ray, const std::vector<std::shared_ptr<IPrimitive>> &objects,
+                                         std::shared_ptr<IPrimitive> object, int bounces);
             RenderRay getSurfaceLight(const Point3D hit_point, const std::shared_ptr<IPrimitive> object,
                                       const std::vector<std::shared_ptr<IPrimitive>> &objects,
                                       const std::vector<std::shared_ptr<ILight>> &lights, int rays, int bounces);

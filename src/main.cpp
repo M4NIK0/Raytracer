@@ -8,7 +8,7 @@
 #include "Light/ILight.hpp"
 #include "Light/Objects/PointLight.hpp"
 
-#define SIZE 512
+#define SIZE 12
 #define WIDTH SIZE
 #define HEIGHT SIZE
 
@@ -28,9 +28,10 @@ int main()
     std::vector<std::unique_ptr<raytracer::IPrimitive>> objects;
 
     auto obj1 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(-5, 5, -35), 5, raytracer::Color(255, 0, 255));
-    auto obj2 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(5, 9, -20), 3, raytracer::Color(255, 255, 255));
+    auto obj2 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(5, 9, -35), 3, raytracer::Color(255, 255, 255));
     auto obj3 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0, 5010.5, 0), 5000, raytracer::Color(255, 255, 255));
     auto obj4 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0, 5, -600), 500, raytracer::Color(255, 128, 128));
+    auto obj5 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(-5, 5, -45), 0.5, raytracer::Color(255, 256, 256));
 
     obj1->setGlassState(true);
     obj2->setGlassState(true);
@@ -39,6 +40,7 @@ int main()
     renderer.addObject(obj2);
     renderer.addObject(obj3);
     renderer.addObject(obj4);
+    renderer.addObject(obj5);
 
     renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(0, 255, 0), raytracer::Point3D(0, -200, 0), 200000));
     renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(255, 0, 0), raytracer::Point3D(50, -200, 0), 200000));
@@ -204,7 +206,7 @@ int main()
         }
 
 
-        if (frame % (width / 2) == 0 && width < 75 && height < 75)
+        if (frame % (width / 2) == 0 && width < 256 && height < 256)
         {
             width *= 1.5;
             height *= 1.5;

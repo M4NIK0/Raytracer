@@ -44,7 +44,7 @@ raytracer::RenderRay raytracer::Renderer::traceRay(int x, int y)
     {
         directLightRay = getDirectLight(_hitObjects[0]->hitPosition(_currentRay), _hitObjects[0], objects, _lights);
     }
-    RenderRay reflexionsLightRay = getReflexionsLight(_currentRay, objects, 2);
+    RenderRay reflexionsLightRay = getReflexionsLight(_currentRay, objects, _hitObjects[0], 2);
     RenderRay diffuseLightRay = getDiffuseLight(_hitObjects[0]->hitPosition(_currentRay), _hitObjects[0], objects,
                                                 _lights, 100, 2);
     RenderRay refractionsLightRay = getRefractionsLight(_hitObjects[0]->hitPosition(_currentRay), _currentRay, objects, 2, _hitObjects[0]);
@@ -84,11 +84,62 @@ void raytracer::Renderer::addLight(std::shared_ptr<ILight> light)
     _lights.push_back(light);
 }
 
-raytracer::RenderRay raytracer::Renderer::getReflexionsLight(const raytracer::Ray3D &ray,
-                                                             const std::vector<std::shared_ptr<IPrimitive>> &objects,
-                                                             int bounces)
+raytracer::RenderRay
+raytracer::Renderer::getReflexionsLight(const Ray3D &ray, const std::vector<std::shared_ptr<IPrimitive>> &objects,
+                                        std::shared_ptr<IPrimitive> object, int bounces)
 {
-    return raytracer::RenderRay();
+    if (object->getReflexionIndice(ray) == 0.0)
+    {
+        return RenderRay(Ray3D(Point3D(0, 0, 0), Vector3D(0, 0, 0)));
+    }
+
+    if (bounces <= 0)
+    {
+        return RenderRay(Ray3D(Point3D(0, 0, 0), Vector3D(0, 0, 0)));
+    }
+
+    if (!object)
+    {
+        return RenderRay(Ray3D(Point3D(0, 0, 0), Vector3D(0, 0, 0)));
+    }
+
+    Point3D hitPoint = object->hitPosition(ray);
+    Vector3D normal = object->getNormalFromPoint(hitPoint);
+    normal.normalize();
+
+    Ray3D reflectedRay = object->hitReflectedRay(ray);
+
+    _hitObjects.clear();
+
+    for (auto &obj: objects)
+    {
+        if (obj == object)
+            continue;
+        if (obj->hits(reflectedRay))
+        {
+            _hitObjects.push_back(obj);
+        }
+    }
+
+    if (_hitObjects.empty())
+    {
+        return RenderRay(Ray3D(Point3D(0, 0, 0), Vector3D(0, 0, 0)));
+    }
+
+    _sortHitObjectsByContactDistance();
+
+    RenderRay directLightRay = getDirectLight(_hitObjects[0]->hitPosition(reflectedRay), _hitObjects[0], objects, _lights);
+    RenderRay reflexionsLightRay = getReflexionsLight(reflectedRay, objects, _hitObjects[0], bounces - 1);
+    RenderRay diffuseLightRay = getDiffuseLight(_hitObjects[0]->hitPosition(reflectedRay), _hitObjects[0], objects,
+                                                _lights, 100, 2);
+    RenderRay refractionsLightRay = getRefractionsLight(_hitObjects[0]->hitPosition(reflectedRay), reflectedRay, objects, 2, _hitObjects[0]);
+
+    RenderRay finalRay = directLightRay + reflexionsLightRay + diffuseLightRay + refractionsLightRay;
+
+    finalRay.color = finalRay.color * object->getReflexionIndice(ray);
+    finalRay.intensity = finalRay.intensity * object->getReflexionIndice(ray);
+
+    return finalRay;
 }
 
 raytracer::RenderRay
@@ -314,5 +365,11 @@ raytracer::RenderRay raytracer::Renderer::getRefractionsLight(Point3D hitPoint, 
     Point3D outsideHitPoint = _hitObjects[0]->hitPosition(refracted.getRay());
 
     RenderRay directLightRay = getDirectLight(outsideHitPoint, _hitObjects[0], objects, _lights);
-    return directLightRay;
+    RenderRay reflexionsLightRay = getReflexionsLight(refracted.getRay(), objects, _hitObjects[0], bounces - 1);
+    RenderRay diffuseLightRay = getDiffuseLight(outsideHitPoint, _hitObjects[0], objects, _lights, 100, 2);
+    RenderRay refractionsLightRay = getRefractionsLight(outsideHitPoint, refracted.getRay(), objects, 2, _hitObjects[0]);
+
+    RenderRay finalRay = directLightRay + reflexionsLightRay + diffuseLightRay + refractionsLightRay;
+
+    return finalRay;
 }
