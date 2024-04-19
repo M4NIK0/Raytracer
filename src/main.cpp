@@ -27,10 +27,10 @@ int main()
 
     std::vector<std::unique_ptr<raytracer::IPrimitive>> objects;
 
-    auto obj1 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(-5, 5, -35), 5, raytracer::Color(255, 0, 255));
-    auto obj2 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(5, 9, -35), 3, raytracer::Color(255, 255, 255));
+    auto obj1 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(-5, 5, -35), 5, raytracer::Color(0, 0, 0));
+    auto obj2 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(3, 5, -35), 3, raytracer::Color(0, 0, 0));
     auto obj3 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0, 5010.5, 0), 5000, raytracer::Color(255, 255, 255));
-    auto obj4 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0, 5, -600), 500, raytracer::Color(255, 128, 128));
+    auto obj4 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0, 5, -550), 500, raytracer::Color(255, 128, 128));
     auto obj5 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(-5, 5, -45), 0.5, raytracer::Color(255, 256, 256));
 
     obj1->setGlassState(true);
