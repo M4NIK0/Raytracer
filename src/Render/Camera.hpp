@@ -26,7 +26,9 @@ namespace raytracer
             int height;
 
             void move(Vector3D direction);
+            void rotate(Vector3D direction);
         private:
             Rectangle3D _screen;
+            Vector3D _rotation;
     };
 }

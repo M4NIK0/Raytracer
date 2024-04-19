@@ -20,6 +20,11 @@ raytracer::Ray3D raytracer::Camera::getRay(int x, int y)
 
 void raytracer::Camera::move(raytracer::Vector3D direction)
 {
-    origin = origin + direction;
+
+}
+
+void raytracer::Camera::rotate(raytracer::Vector3D direction)
+{
     _screen.move(direction);
+    _rotation = _rotation + direction;
 }

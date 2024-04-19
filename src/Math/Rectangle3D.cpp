@@ -16,5 +16,7 @@ raytracer::Point3D raytracer::Rectangle3D::pointAt(double u, double v) const
 
 void raytracer::Rectangle3D::move(raytracer::Vector3D direction)
 {
+    // move cam taking into account the rotation
     origin = origin + direction;
+    bottom_side = bottom_side + direction;
 }
