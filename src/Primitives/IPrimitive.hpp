@@ -24,6 +24,10 @@ namespace raytracer
             virtual Ray3D hitReflectedRay(const Ray3D &ray) = 0;
             virtual void move(Vector3D vec) = 0;
             virtual Color getColor() = 0;
+            virtual bool isGlass() = 0;
+            virtual void setGlassState(bool state) = 0;
+            virtual double getRefractionxionIndice(const Ray3D &ray) = 0;
+            virtual void setColor(Color color) = 0;
             virtual double getReflexionIndice(const Ray3D &ray) = 0;
     };
 }

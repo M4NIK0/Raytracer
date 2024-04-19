@@ -16,11 +16,11 @@ namespace raytracer
 {
     class Color {
         public:
-            Color(int r, int g, int b) : r(r), g(g), b(b) {}
+            Color(unsigned  long long int r, unsigned  long long int  g, unsigned  long long int  b) : r(r), g(g), b(b) {}
 
-            int r;
-            int g;
-            int b;
+            double r;
+            double g;
+            double b;
 
             double length() {
                 return sqrt(r * r + g * g + b * b);
@@ -51,9 +51,9 @@ namespace raytracer
             void normalize()
             {
                 double size = sqrt(r * r + g * g + b * b);
-                r = (r / size) * 255;
-                g = (g / size) * 255;
-                b = (b / size) * 255;
+                r = (r / size);
+                g = (g / size);
+                b = (b / size);
             }
     };
 

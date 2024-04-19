@@ -39,6 +39,9 @@ namespace raytracer
             RenderRay getDiffuseLight(const Point3D hit_point, const std::shared_ptr<IPrimitive> object,
                                       const std::vector<std::shared_ptr<IPrimitive>> &objects,
                                       const std::vector<std::shared_ptr<ILight>> &lights, int rays, int bounces);
+            RenderRay getRefractionsLight(Point3D hitPoint, const Ray3D &ray,
+                                          const std::vector<std::shared_ptr<IPrimitive>> &objects, int bounces,
+                                          std::shared_ptr<IPrimitive> object);
 
             static RenderRay getRandomRay(const Point3D &origin, const std::shared_ptr<IPrimitive> &object);
             static Color getColorFromLight(const RenderRay &ray, double max_intensity);

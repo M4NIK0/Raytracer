@@ -8,7 +8,7 @@
 #include "Light/ILight.hpp"
 #include "Light/Objects/PointLight.hpp"
 
-#define SIZE 128
+#define SIZE 512
 #define WIDTH SIZE
 #define HEIGHT SIZE
 
@@ -22,18 +22,27 @@ int main()
                                   raytracer::Vector3D(0, 1, 0));
     raytracer::Camera camera(raytracer::Point3D(0.5, 0.5, 1), screen, width, height);
 
+    camera.move(raytracer::Vector3D(-5, 5, -20));
     raytracer::Renderer renderer(camera);
 
     std::vector<std::unique_ptr<raytracer::IPrimitive>> objects;
 
-    renderer.addObject(std::make_shared<raytracer::Sphere>(raytracer::Point3D(-5, 5, -35), 5, raytracer::Color(255, 0, 255)));
-    renderer.addObject(std::make_shared<raytracer::Sphere>(raytracer::Point3D(5, 7, -20), 3, raytracer::Color(255, 255, 255)));
-    renderer.addObject(
-            std::make_shared<raytracer::Sphere>(raytracer::Point3D(0, 5010.5, 0), 5000, raytracer::Color(255, 255, 255)));
+    auto obj1 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(-5, 5, -35), 5, raytracer::Color(255, 0, 255));
+    auto obj2 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(5, 9, -20), 3, raytracer::Color(255, 255, 255));
+    auto obj3 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0, 5010.5, 0), 5000, raytracer::Color(255, 255, 255));
+    auto obj4 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0, 5, -600), 500, raytracer::Color(255, 128, 128));
 
-    renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(0, 255, 0), raytracer::Point3D(0, -200, -35), 100000));
-    renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(255, 0, 0), raytracer::Point3D(50, -200, -35), 100000));
-    renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(0, 0, 255), raytracer::Point3D(-50, -200, -35), 100000));
+    obj1->setGlassState(true);
+    obj2->setGlassState(true);
+
+    renderer.addObject(obj1);
+    renderer.addObject(obj2);
+    renderer.addObject(obj3);
+    renderer.addObject(obj4);
+
+    renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(0, 255, 0), raytracer::Point3D(0, -200, 0), 200000));
+    renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(255, 0, 0), raytracer::Point3D(50, -200, 0), 200000));
+    renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(0, 0, 255), raytracer::Point3D(-50, -200, 0), 200000));
 //    renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(255, 255, 255), raytracer::Point3D(50, -200, -35), 10000000));
 
     sfml display;
@@ -41,6 +50,7 @@ int main()
     display.initImage(width, height);
     // Initialize the window
     display.initWindow(1200, 1200);
+
 
     std::vector<std::vector<std::vector<raytracer::RenderRay>>> color_matrix;
     int images_amount = 0;
@@ -194,7 +204,7 @@ int main()
         }
 
 
-        if (frame % (width / 2) == 0 && width < 512 && height < 512)
+        if (frame % (width / 2) == 0 && width < 75 && height < 75)
         {
             width *= 1.5;
             height *= 1.5;
