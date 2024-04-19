@@ -56,6 +56,13 @@ void raytracer::Camera::rotate(raytracer::Vector3D direction)
         {0, 0, 1}
     };
 
+    // get the center of the rectangle
+    Point3D center = _screen.origin + _screen.bottom_side * 0.5 + _screen.left_side * 0.5;
+
+    // get the vector between the camera origin and the center of the rectangle
+    Vector3D originToCenter = center - origin;
+
+    // rotate vectors around center
     Matrix bottomMatrix(3, 1);
     bottomMatrix = std::vector<std::vector<double>>{
         {bottomVector.x},
@@ -70,7 +77,6 @@ void raytracer::Camera::rotate(raytracer::Vector3D direction)
         {leftVector.z}
     };
 
-    // rotate vectors around origin
     Matrix bottomResult = rotationX * bottomMatrix;
     bottomResult = rotationY * bottomResult;
     bottomResult = rotationZ * bottomResult;
@@ -82,13 +88,7 @@ void raytracer::Camera::rotate(raytracer::Vector3D direction)
     _screen.bottom_side = Vector3D(bottomResult.get(0, 0), bottomResult.get(1, 0), bottomResult.get(2, 0));
     _screen.left_side = Vector3D(leftResult.get(0, 0), leftResult.get(1, 0), leftResult.get(2, 0));
 
-    // get the center of the rectangle
-    Point3D center = _screen.origin + _screen.bottom_side * 0.5 + _screen.left_side * 0.5;
-
-    // get the vector between the camera origin and the center of the rectangle
-    Vector3D originToCenter = center - origin;
-
-    // rotate this vector
+    // rotate originToCenter vector
     Matrix originToCenterMatrix(3, 1);
     originToCenterMatrix = std::vector<std::vector<double>>{
         {originToCenter.x},
