@@ -21,7 +21,7 @@ namespace raytracer
             virtual Color getColor() = 0;
             virtual double getIntensity() = 0;
 
-            virtual Ray3D getLightRay(const Point3D &hitPoint) = 0;
+            virtual std::vector<Ray3D> getLightRays(const Point3D &hitPoint) = 0;
             virtual double getIntensityFromDistance(double distance) = 0;
             virtual Point3D getPosition() = 0;
 

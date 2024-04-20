@@ -217,28 +217,33 @@ raytracer::Renderer::getDirectLight(const Point3D hit_point, const std::shared_p
 
     for (auto &light: lights)
     {
-        // Get light ray
-        RenderRay lightRay = light->getLightRay(hit_point);
-        bool hit = false;
-        for (auto &obj: objects)
-        {
-            // check if not self collide on surface turned towards light
-            if (obj == object && object->getNormalFromPoint(hit_point).dot(lightRay.getRay().direction) > 0)
-                continue;
+        // Get light rays
+        std::vector<Ray3D> lightRays = light->getLightRays(hit_point);
 
-            // Check if object between light and hit point
-            if (obj->hits(lightRay.getRay()))
-            {
-                hit = true;
-                break;
-            }
-        }
-        // Light if no object between light and hit point
-        if (!hit)
+        for (auto &lightRay: lightRays)
         {
-            lightRay.color = light->getColor();
-            lightRay.intensity = light->getIntensityFromDistance(Point3D::distance(hit_point, light->getPosition()));
-            directLightRays.push_back(lightRay);
+            bool hit = false;
+            for (auto &obj: objects)
+            {
+                // check if not self collide on surface turned towards light
+                if (obj == object && object->getNormalFromPoint(hit_point).dot(lightRay.direction) > 0)
+                    continue;
+
+                // Check if object between light and hit point
+                if (obj->hits(lightRay))
+                {
+                    hit = true;
+                    break;
+                }
+            }
+            // Light if no object between light and hit point
+            if (!hit)
+            {
+                RenderRay directLightRay = RenderRay(lightRay);
+                directLightRay.color = light->getColor();
+                directLightRay.intensity = light->getIntensityFromDistance(Point3D::distance(hit_point, light->getPosition()));
+                directLightRays.push_back(directLightRay);
+            }
         }
     }
 
