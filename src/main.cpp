@@ -8,7 +8,7 @@
 #include "Light/ILight.hpp"
 #include "Light/Objects/PointLight.hpp"
 
-#define SIZE 12
+#define SIZE 512
 #define WIDTH SIZE
 #define HEIGHT SIZE
 
@@ -35,6 +35,12 @@ int main()
 
     obj1->setGlassState(true);
     obj2->setGlassState(true);
+
+    obj1->setReflexionIndice(0.1);
+    obj2->setReflexionIndice(0.1);
+
+    obj1->setRefractionIndice(1.5);
+    obj2->setRefractionIndice(1.5);
 
     renderer.addObject(obj1);
     renderer.addObject(obj2);
@@ -268,7 +274,7 @@ int main()
             color_matrix.clear();
         }
 
-        if (frame % (width / 2) == 0 && width < 81 && height < 81)
+        if (frame % (width / 2) == 0 && width < 1024)
         {
             width *= 1.5;
             height *= 1.5;

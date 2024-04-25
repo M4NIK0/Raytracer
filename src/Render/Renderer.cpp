@@ -39,11 +39,13 @@ raytracer::RenderRay raytracer::Renderer::traceRay(int x, int y)
 
     _sortHitObjectsByContactDistance();
 
-    RenderRay directLightRay = RenderRay(Ray3D(Point3D(0, 0, 0), Vector3D(0, 0, 0)));
-    directLightRay = getDirectLight(_hitObjects[0]->hitPosition(_currentRay), _hitObjects[0], objects, _lights);
-    RenderRay reflexionsLightRay = getReflexionsLight(_currentRay, objects, _hitObjects[0], 2);
-    RenderRay diffuseLightRay = getDiffuseLight(_hitObjects[0]->hitPosition(_currentRay), _hitObjects[0], objects,
-                                                _lights, 100, 2);
+    RenderRay directLightRay = getDirectLight(_hitObjects[0]->hitPosition(_currentRay), _hitObjects[0], objects, _lights);
+    RenderRay reflexionsLightRay = RenderRay(Ray3D(Point3D(0, 0, 0), Vector3D(0, 0, 0)));
+    if (!_hitObjects[0]->isGlass())
+    {
+        reflexionsLightRay = getReflexionsLight(_currentRay, objects, _hitObjects[0], 2);
+    }
+    RenderRay diffuseLightRay = getDiffuseLight(_hitObjects[0]->hitPosition(_currentRay), _hitObjects[0], objects, _lights, 100, 2);
     RenderRay refractionsLightRay = getRefractionsLight(_hitObjects[0]->hitPosition(_currentRay), _currentRay, objects, 2, _hitObjects[0]);
 
     RenderRay finalRay = directLightRay + reflexionsLightRay + diffuseLightRay + refractionsLightRay;
@@ -122,9 +124,8 @@ raytracer::Renderer::getReflexionsLight(const Ray3D &ray, const std::vector<std:
     _sortHitObjectsByContactDistance();
 
     RenderRay directLightRay = getDirectLight(_hitObjects[0]->hitPosition(reflectedRay), _hitObjects[0], objects, _lights);
-    RenderRay reflexionsLightRay = getReflexionsLight(reflectedRay, objects, _hitObjects[0], bounces - 1);
-    RenderRay diffuseLightRay = getDiffuseLight(_hitObjects[0]->hitPosition(reflectedRay), _hitObjects[0], objects,
-                                                _lights, 100, 2);
+    RenderRay reflexionsLightRay = getReflexionsLight(reflectedRay, objects, _hitObjects[0], bounces);
+    RenderRay diffuseLightRay = getDiffuseLight(_hitObjects[0]->hitPosition(reflectedRay), _hitObjects[0], objects,_lights, 100, 2);
     RenderRay refractionsLightRay = getRefractionsLight(_hitObjects[0]->hitPosition(reflectedRay), reflectedRay, objects, 2, _hitObjects[0]);
 
     RenderRay finalRay = directLightRay + reflexionsLightRay + diffuseLightRay + refractionsLightRay;
