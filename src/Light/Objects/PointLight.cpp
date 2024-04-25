@@ -9,10 +9,10 @@
 
 raytracer::PointLight::~PointLight() = default;
 
-raytracer::Ray3D raytracer::PointLight::getLightRay(const raytracer::Point3D &hitPoint)
+std::vector<raytracer::Ray3D> raytracer::PointLight::getLightRays(const Point3D &hitPoint)
 {
     raytracer::Vector3D direction = _position - hitPoint;
-    return raytracer::Ray3D(hitPoint, direction.normalize());
+    return {raytracer::Ray3D(hitPoint, direction.normalize())};
 }
 
 raytracer::Color raytracer::PointLight::getColor()

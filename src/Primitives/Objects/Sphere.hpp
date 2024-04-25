@@ -14,7 +14,7 @@ namespace raytracer
     class Sphere : public IPrimitive
     {
         public:
-            Sphere(raytracer::Point3D pos, double r, Color color) : radius(r), position(pos), color(color) {}
+            Sphere(raytracer::Point3D pos, double r, Color color) : radius(r), position(pos), _color(color) {_color.normalize();}
             ~Sphere();
 
             bool hits(const Ray3D &ray) override;
@@ -23,18 +23,20 @@ namespace raytracer
             Vector3D getNormalFromPoint(const Point3D &point) override;
             Ray3D hitReflectedRay(const Ray3D &ray) override;
             void move(Vector3D vec) override;
-            Color getColor() override { return color; }
+            Color getColor() override { return _color; }
             bool isGlass() override { return _isGlass; }
-            void setColor(Color color) override { this->color = color; }
+            void setColor(Color color) override { this->_color = color; }
             double getReflexionIndice(const Ray3D &ray) override { return _reflexionIndex; }
-            double getRefractionxionIndice(const Ray3D &ray) override { return 1.5; }
+            double getRefractionxionIndice(const Ray3D &ray) override { return _refractionIndex; }
             void setGlassState(bool state) override { _isGlass = state; }
-            void setReflexionIndice(double reflexionIndice) override { _reflexionIndex = reflexionIndice; }
+            void setReflexionIndice(double indice) override { _reflexionIndex = indice; }
+            void setRefractionIndice(double indice) override { _refractionIndex = indice; }
 
             double radius;
             Point3D position;
-            Color color;
+            Color _color;
             bool _isGlass = false;
-            double _reflexionIndex = 0;
+            double _reflexionIndex = 0.0;
+            double _refractionIndex = 0.0;
     };
 }

@@ -8,7 +8,7 @@
 #include "Light/ILight.hpp"
 #include "Light/Objects/PointLight.hpp"
 
-#define SIZE 256
+#define SIZE 512
 #define WIDTH SIZE
 #define HEIGHT SIZE
 
@@ -27,15 +27,19 @@ int main()
 
     std::vector<std::unique_ptr<raytracer::IPrimitive>> objects;
 
-    auto obj1 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(-5, 5, -35), 5, raytracer::Color(0, 0, 0));
+    auto obj1 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(-5, 5, -35), 5, raytracer::Color(255, 255, 255));
     auto obj2 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(3, 5, -35), 3, raytracer::Color(255, 255, 255));
     auto obj3 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0, 5010.5, 0), 5000, raytracer::Color(255, 255, 255));
     auto obj4 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0, 5, -550), 500, raytracer::Color(255, 128, 128));
     auto obj5 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(-5, 5, -45), 0.5, raytracer::Color(255, 256, 256));
 
     obj1->setGlassState(true);
-    obj1->setReflexionIndice(0.1);
-//    obj2->setGlassState(true);
+
+    obj1->setReflexionIndice(0);
+    obj2->setReflexionIndice(1);
+
+    obj1->setRefractionIndice(1.5);
+    obj2->setRefractionIndice(1.5);
 
     renderer.addObject(obj1);
     renderer.addObject(obj2);
@@ -57,7 +61,6 @@ int main()
     std::vector<std::vector<std::vector<raytracer::RenderRay>>> color_matrix;
     int images_amount = 0;
 
-
     int frame = 0;
     bool loop = true;
     while (loop)
@@ -78,8 +81,12 @@ int main()
             {
                 raytracer::RenderRay ray = renderer.traceRay(x, y);
                 color_matrix[images_amount - 1][x].push_back(ray);
-                if (ray.intensity > max_intensity)
-                    max_intensity = ray.intensity;
+                if (ray.getColor().r > max_intensity)
+                    max_intensity = ray.getColor().r;
+                if (ray.getColor().g > max_intensity)
+                    max_intensity = ray.getColor().g;
+                if (ray.getColor().b > max_intensity)
+                    max_intensity = ray.getColor().b;
             }
         }
 
@@ -269,7 +276,7 @@ int main()
             color_matrix.clear();
         }
 
-        if (width < 1024 && height < 1024)
+        if (frame % (width / 2) == 0 && width < 1024)
         {
             width *= 1.5;
             height *= 1.5;

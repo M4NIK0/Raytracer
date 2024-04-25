@@ -29,6 +29,7 @@ namespace raytracer
             virtual double getRefractionxionIndice(const Ray3D &ray) = 0;
             virtual void setColor(Color color) = 0;
             virtual double getReflexionIndice(const Ray3D &ray) = 0;
-            virtual void setReflexionIndice(double reflexionIndice) = 0;
+            virtual void setReflexionIndice(double indice) = 0;
+            virtual void setRefractionIndice(double indice) = 0;
     };
 }

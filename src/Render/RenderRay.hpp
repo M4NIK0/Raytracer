@@ -27,7 +27,6 @@ namespace raytracer
                 origin = other.origin;
                 direction = other.direction;
                 color = other.color;
-                intensity = other.intensity;
                 return *this;
             }
 
@@ -41,13 +40,11 @@ namespace raytracer
             RenderRay &operator+(const RenderRay &other)
             {
                 color = color + other.color;
-                intensity + other.intensity;
                 return *this;
             }
 
             Ray3D getRay() { return Ray3D(origin, direction); }
 
             Color color = {0, 0, 0};
-            double intensity = 0;
     };
 }

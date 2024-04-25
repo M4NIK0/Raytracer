@@ -13,5 +13,5 @@ raytracer::RenderRay::~RenderRay() = default;
 
 raytracer::Color raytracer::RenderRay::getColor()
 {
-    return color * intensity;
+    return color;
 }

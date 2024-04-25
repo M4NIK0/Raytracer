@@ -14,10 +14,10 @@ namespace raytracer
     class PointLight : public ILight
     {
         public:
-            PointLight(Color color, Point3D position, double intensity = 1) : _color(color), _position(position), _intensity(intensity) {};
+            PointLight(Color color, Point3D position, double intensity = 1) : _color(color), _position(position), _intensity(intensity) {_color.normalize();};
             ~PointLight();
 
-            Ray3D getLightRay(const Point3D &hitPoint) override;
+            std::vector<Ray3D> getLightRays(const Point3D &hitPoint) override;
 
             Color getColor() override;
 
