@@ -40,16 +40,11 @@ raytracer::RenderRay raytracer::Renderer::traceRay(int x, int y)
     _sortHitObjectsByContactDistance();
 
     RenderRay directLightRay = getDirectLight(_hitObjects[0]->hitPosition(_currentRay), _hitObjects[0], objects, _lights);
-    RenderRay reflexionsLightRay = RenderRay(Ray3D(Point3D(0, 0, 0), Vector3D(0, 0, 0)));
-    if (!_hitObjects[0]->isGlass())
-    {
-        reflexionsLightRay = getReflexionsLight(_currentRay, objects, _hitObjects[0], 2);
-    }
+    RenderRay reflexionsLightRay = getReflexionsLight(_currentRay, objects, _hitObjects[0], 2);
     RenderRay diffuseLightRay = getDiffuseLight(_hitObjects[0]->hitPosition(_currentRay), _hitObjects[0], objects, _lights, 100, 2);
     RenderRay refractionsLightRay = getRefractionsLight(_hitObjects[0]->hitPosition(_currentRay), _currentRay, objects, 2, _hitObjects[0]);
 
     RenderRay finalRay = directLightRay + reflexionsLightRay + diffuseLightRay + refractionsLightRay;
-
     return finalRay;
 }
 
@@ -124,14 +119,13 @@ raytracer::Renderer::getReflexionsLight(const Ray3D &ray, const std::vector<std:
     _sortHitObjectsByContactDistance();
 
     RenderRay directLightRay = getDirectLight(_hitObjects[0]->hitPosition(reflectedRay), _hitObjects[0], objects, _lights);
-    RenderRay reflexionsLightRay = getReflexionsLight(reflectedRay, objects, _hitObjects[0], bounces);
+    RenderRay reflexionsLightRay = getReflexionsLight(reflectedRay, objects, _hitObjects[0], (bounces - 1));
     RenderRay diffuseLightRay = getDiffuseLight(_hitObjects[0]->hitPosition(reflectedRay), _hitObjects[0], objects,_lights, 100, 2);
     RenderRay refractionsLightRay = getRefractionsLight(_hitObjects[0]->hitPosition(reflectedRay), reflectedRay, objects, 2, _hitObjects[0]);
 
     RenderRay finalRay = directLightRay + reflexionsLightRay + diffuseLightRay + refractionsLightRay;
 
     finalRay.color = finalRay.color * object->getReflexionIndice(ray);
-    finalRay.intensity = finalRay.intensity * object->getReflexionIndice(ray);
 
     return finalRay;
 }
@@ -151,59 +145,6 @@ raytracer::Renderer::getDiffuseLight(const Point3D hit_point, const std::shared_
                                      const std::vector<std::shared_ptr<ILight>> &lights, int rays, int bounces)
 {
     return RenderRay(Ray3D(Point3D(0, 0, 0), Vector3D(0, 0, 0)));
-    std::vector<RenderRay> diffuseLightRays;
-    for (int i = 0; i < rays; i++)
-    {
-        RenderRay ray = getRandomRay(hit_point, object);
-        _hitObjects.clear();
-        for (auto &obj: objects)
-        {
-            if (obj == object)
-                continue;
-            if (obj->hits(ray.getRay()))
-            {
-                _hitObjects.push_back(obj);
-                break;
-            }
-        }
-
-        if (_hitObjects.empty())
-        {
-            continue;
-        }
-
-        _sortHitObjectsByContactDistance();
-
-        std::shared_ptr<IPrimitive> hit_Object = _hitObjects[0];
-        diffuseLightRays.push_back(getDirectLight(hit_point, hit_Object, objects, lights));
-    }
-
-    if (diffuseLightRays.empty())
-    {
-        return RenderRay(Ray3D(Point3D(0, 0, 0), Vector3D(0, 0, 0)));
-    }
-
-    RenderRay ray = RenderRay(Ray3D(Point3D(0, 0, 0), Vector3D(0, 0, 0)));
-    double totalIntensity = 0.0;
-
-    for (auto &diffuseLightRay: diffuseLightRays)
-    {
-        totalIntensity += diffuseLightRay.intensity;
-    }
-
-    Color totalColor(0, 0, 0);
-
-    for (auto &diffuseLightRay: diffuseLightRays)
-    {
-        totalColor = totalColor + diffuseLightRay.color * object->getColor() * diffuseLightRay.intensity *
-                                    object->getNormalFromPoint(hit_point).normalize().dot(diffuseLightRay.getRay().direction.normalize());
-    }
-
-    ray.color = totalColor;
-
-    ray.intensity = totalIntensity / static_cast<double>(rays);  // Average the intensity over all rays
-
-    return ray;
 }
 
 raytracer::RenderRay
@@ -241,8 +182,8 @@ raytracer::Renderer::getDirectLight(const Point3D hit_point, const std::shared_p
             if (!hit)
             {
                 RenderRay directLightRay = RenderRay(lightRay);
-                directLightRay.color = light->getColor();
-                directLightRay.intensity = light->getIntensityFromDistance(Point3D::distance(hit_point, light->getPosition()));
+                Vector3D normal = object->getNormalFromPoint(hit_point);
+                directLightRay.color = light->getColor() * light->getIntensityFromDistance(Point3D::distance(hit_point, light->getPosition())) * normal.dot(lightRay.direction);
                 directLightRays.push_back(directLightRay);
             }
         }
@@ -257,12 +198,10 @@ raytracer::Renderer::getDirectLight(const Point3D hit_point, const std::shared_p
     // Mix all direct light rays
     for (auto lightRay: directLightRays)
     {
-        ray.color = ray.color + lightRay.color * object->getColor() * lightRay.intensity *
-                                lightRay.intensity * object->getNormalFromPoint(hit_point).normalize().dot(
-                lightRay.getRay().direction.normalize());
-        ray.intensity = ray.intensity + lightRay.intensity;
+        ray.color = ray.color + lightRay.color;
     }
 
+    ray.color = ray.color * object->getColor() * (1 - object->getReflexionIndice(ray));
     return ray;
 }
 
@@ -295,8 +234,7 @@ raytracer::Renderer::getRandomRay(const raytracer::Point3D &origin, const std::s
 raytracer::Color raytracer::Renderer::getColorFromLight(const raytracer::RenderRay &ray, double max_intensity)
 {
     raytracer::Color color = ray.color;
-    color = color * (1 / max_intensity);
-    color.cap(); // Ensure the color values are within the range 0-255
+    color = color * (1.0 / max_intensity) * 255.0;
     return color;
 }
 

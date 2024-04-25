@@ -16,7 +16,7 @@ namespace raytracer
 {
     class Color {
         public:
-            Color(unsigned  long long int r, unsigned  long long int  g, unsigned  long long int  b) : r(r), g(g), b(b) {}
+            Color(double r, double g, double b) : r(r), g(g), b(b) {}
 
             double r;
             double g;
