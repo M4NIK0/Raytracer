@@ -124,7 +124,7 @@ raytracer::Renderer::getReflexionsLight(const Ray3D &ray, const std::vector<std:
 
     RenderRay directLightRay = getDirectLight(_hitObjects[0]->hitPosition(reflectedRay), _hitObjects[0], objects, _lights);
     RenderRay reflexionsLightRay = getReflexionsLight(reflectedRay, objects, _hitObjects[0], (bounces - 1));
-    RenderRay diffuseLightRay = getDiffuseLight(_hitObjects[0]->hitPosition(reflectedRay), _hitObjects[0], objects,_lights, 100, 2);
+    RenderRay diffuseLightRay = getDiffuseLight(_hitObjects[0]->hitPosition(reflectedRay), _hitObjects[0], objects,_lights, 100, (bounces - 1));
     RenderRay refractionsLightRay = getRefractionsLight(_hitObjects[0]->hitPosition(reflectedRay), reflectedRay, objects, (bounces - 1), _hitObjects[0]);
 
     RenderRay finalRay = directLightRay + reflexionsLightRay + diffuseLightRay + refractionsLightRay;
@@ -351,9 +351,9 @@ raytracer::RenderRay raytracer::Renderer::getRefractionsLight(Point3D hitPoint, 
     Point3D outsideHitPoint = _hitObjects[0]->hitPosition(refracted.getRay());
 
     RenderRay directLightRay = getDirectLight(outsideHitPoint, _hitObjects[0], objects, _lights);
-    RenderRay reflexionsLightRay = getReflexionsLight(refracted.getRay(), objects, _hitObjects[0], bounces - 1);
-    RenderRay diffuseLightRay = getDiffuseLight(outsideHitPoint, _hitObjects[0], objects, _lights, 100, 2);
-    RenderRay refractionsLightRay = getRefractionsLight(outsideHitPoint, refracted.getRay(), objects, 2, _hitObjects[0]);
+    RenderRay reflexionsLightRay = getReflexionsLight(refracted.getRay(), objects, _hitObjects[0], bounces);
+    RenderRay diffuseLightRay = getDiffuseLight(outsideHitPoint, _hitObjects[0], objects, _lights, 100, bounces);
+    RenderRay refractionsLightRay = getRefractionsLight(outsideHitPoint, refracted.getRay(), objects, bounces, _hitObjects[0]);
 
     RenderRay finalRay = directLightRay + reflexionsLightRay + diffuseLightRay + refractionsLightRay;
 

@@ -36,7 +36,7 @@ int main()
 //    obj1->setGlassState(true);
 
 //    obj1->setReflexionIndice(0.1);
-//    obj2->setReflexionIndice(1);
+    obj2->setReflexionIndice(1);
 //    obj3->setReflexionIndice(0.5);
 
 //    obj1->setRefractionIndice(1.5);
