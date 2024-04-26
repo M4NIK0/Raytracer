@@ -44,7 +44,7 @@ namespace raytracer
                                           const std::vector<std::shared_ptr<IPrimitive>> &objects, int bounces,
                                           std::shared_ptr<IPrimitive> object);
 
-            static RenderRay getRandomRay(const Point3D &origin, const std::shared_ptr<IPrimitive> &object);
+            static RenderRay getRandomRay(const Point3D &origin, const std::shared_ptr<IPrimitive> object);
             static Color getColorFromLight(const RenderRay &ray, double max_intensity);
             Camera camera;
         private:

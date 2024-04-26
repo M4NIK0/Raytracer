@@ -8,7 +8,7 @@
 #include "Light/ILight.hpp"
 #include "Light/Objects/PointLight.hpp"
 
-#define SIZE 512
+#define SIZE 16
 #define WIDTH SIZE
 #define HEIGHT SIZE
 
@@ -33,13 +33,14 @@ int main()
     auto obj4 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0, 5, -550), 500, raytracer::Color(255, 128, 128));
     auto obj5 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(-5, 5, -45), 0.5, raytracer::Color(255, 256, 256));
 
-    obj1->setGlassState(true);
+//    obj1->setGlassState(true);
 
-    obj1->setReflexionIndice(0);
-    obj2->setReflexionIndice(1);
+//    obj1->setReflexionIndice(0.1);
+//    obj2->setReflexionIndice(1);
+//    obj3->setReflexionIndice(0.5);
 
-    obj1->setRefractionIndice(1.5);
-    obj2->setRefractionIndice(1.5);
+//    obj1->setRefractionIndice(1.5);
+//    obj2->setRefractionIndice(1.5);
 
     renderer.addObject(obj1);
     renderer.addObject(obj2);
@@ -47,9 +48,9 @@ int main()
     renderer.addObject(obj4);
     renderer.addObject(obj5);
 
-    renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(0, 255, 0), raytracer::Point3D(0, -200, 0), 200000));
-    renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(255, 0, 0), raytracer::Point3D(50, -200, 0), 200000));
-    renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(0, 0, 255), raytracer::Point3D(-50, -200, 0), 200000));
+    renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(0, 255, 0), raytracer::Point3D(0, -200, 0), 2000000));
+    renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(255, 0, 0), raytracer::Point3D(50, -200, 0), 2000000));
+    renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(0, 0, 255), raytracer::Point3D(-50, -200, 0), 2000000));
 
     sfml display;
 
