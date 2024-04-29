@@ -19,7 +19,7 @@
 #define CHUNK_SIZE_X WIDTH / CHUNKS_X
 #define CHUNK_SIZE_Y HEIGHT / CHUNKS_Y
 
-#define MAX_SAMPLES 20
+#define MAX_SAMPLES 5
 
 #include <chrono>
 
