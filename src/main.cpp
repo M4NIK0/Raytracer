@@ -8,17 +8,18 @@
 #include "Light/ILight.hpp"
 #include "Light/Objects/PointLight.hpp"
 
-#define SIZE 256
+#define SIZE 64
 #define WIDTH SIZE
 #define HEIGHT SIZE
 
-#define CHUNKS_X 16
-#define CHUNKS_Y 16
+#define CHUNKS 16
+#define CHUNKS_X CHUNKS
+#define CHUNKS_Y CHUNKS
 
 #define CHUNK_SIZE_X WIDTH / CHUNKS_X
 #define CHUNK_SIZE_Y HEIGHT / CHUNKS_Y
 
-#define MAX_SAMPLES 10
+#define MAX_SAMPLES 20
 
 #include <chrono>
 
@@ -35,16 +36,17 @@ int main()
 
     std::vector<std::unique_ptr<raytracer::IPrimitive>> objects;
 
-    auto obj1 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(-5, 5, -35), 5, raytracer::Color(0, 255, 255));
+    auto obj1 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(-5, 5, -35), 5, raytracer::Color(255, 255, 255));
     auto obj2 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(3, 5, -35), 3, raytracer::Color(255, 255, 255));
     auto obj3 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0, 5010.5, 0), 5000, raytracer::Color(255, 255, 255));
     auto obj4 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0, 5, -550), 500, raytracer::Color(255, 255, 255));
     auto obj5 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(-5, 5, -45), 0.5, raytracer::Color(255, 256, 256));
 
-//    obj1->setGlassState(true);
+    obj1->setGlassState(true);
+//    obj2->setGlassState(true);
 
 //    obj1->setReflexionIndice(0.1);
-    obj2->setReflexionIndice(1);
+//    obj2->setReflexionIndice(1);
 //    obj3->setReflexionIndice(0.5);
 
     obj1->setRefractionIndice(1.5);
@@ -56,16 +58,15 @@ int main()
     renderer.addObject(obj4);
     renderer.addObject(obj5);
 
-    renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(0, 255, 0), raytracer::Point3D(0, -200, 0), 2000000));
-    renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(255, 0, 0), raytracer::Point3D(50, -200, 0), 2000000));
-    renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(0, 0, 255), raytracer::Point3D(-50, -200, 0), 2000000));
+    renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(0, 255, 0), raytracer::Point3D(0, -200, 0), 1));
+    renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(255, 0, 0), raytracer::Point3D(50, -50, 0), 1000));
+    renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(0, 0, 255), raytracer::Point3D(-50, -200, 0), 10000));
 
     sfml display;
 
     display.initImage(width, height);
     // Initialize the window
     display.initWindow(1200, 1200);
-
 
     std::vector<std::vector<std::vector<raytracer::RenderRay>>> color_matrix;
     int images_amount = 0;
@@ -86,8 +87,6 @@ int main()
             }
         }
     }
-    while (loop)
-    {
         std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
         double max_intensity = 0;
         display.clearWindow();
@@ -96,9 +95,9 @@ int main()
 
 //        renderer.objects[0]->move(raytracer::Vector3D(0.1, 0, 0));
 
-        for (int chunk_x = 0; chunk_x < CHUNK_SIZE_X; chunk_x++)
+        for (int chunk_x = 0; chunk_x < CHUNKS_X; chunk_x++)
         {
-            for (int chunk_y = 0; chunk_y < CHUNK_SIZE_Y; chunk_y++)
+            for (int chunk_y = 0; chunk_y < CHUNKS_Y; chunk_y++)
             {
                 for (int i = 0; i < MAX_SAMPLES; i++)
                 {
@@ -118,24 +117,29 @@ int main()
                     }
                 }
 
-                for (int x = 0; x < CHUNK_SIZE_X; x++)
+                for (int x = 0; x < WIDTH; x++)
                 {
-                    for (int y = 0; y < CHUNK_SIZE_Y; y++)
+                    for (int y = 0; y < HEIGHT; y++)
                     {
                         raytracer::Color color(0, 0, 0);
                         for (int i = 0; i < MAX_SAMPLES; i++)
                         {
-                            color = color + color_matrix[i][x + (chunk_x * CHUNK_SIZE_X)][y + (chunk_y * CHUNK_SIZE_Y)].getColor();
+                            color = color + color_matrix[i][x][y].getColor();
                         }
                         color = color * (1.0 / MAX_SAMPLES);
                         color = color * (255 / max_intensity);
                         color.cap();
-                        display.drawPixel(x + (chunk_x * CHUNK_SIZE_X), y + (chunk_y * CHUNK_SIZE_Y), color);
+                        display.drawPixel(x, y, color);
                     }
                 }
 
                 display.displayScreen();
             }
+        }
+
+        while (1)
+        {
+            std::cout << "Frame: " << frame << std::endl;
         }
 
         int event = display.getEvent();
@@ -305,7 +309,6 @@ int main()
             renderer.camera = camera;
             color_matrix.clear();
         }
-    }
 
     // End the window
     display.endWindow();

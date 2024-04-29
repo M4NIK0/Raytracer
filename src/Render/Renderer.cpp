@@ -39,10 +39,21 @@ raytracer::RenderRay raytracer::Renderer::traceRay(int x, int y)
 
     _sortHitObjectsByContactDistance();
 
-    RenderRay directLightRay = getDirectLight(_hitObjects[0]->hitPosition(_currentRay), _hitObjects[0], objects, _lights);
+
+    RenderRay directLightRay = RenderRay();
     RenderRay reflexionsLightRay = getReflexionsLight(_currentRay, objects, _hitObjects[0], 2);
-    RenderRay diffuseLightRay = getDiffuseLight(_hitObjects[0]->hitPosition(_currentRay), _hitObjects[0], objects, _lights, 10, 2);
-    RenderRay refractionsLightRay = getRefractionsLight(_hitObjects[0]->hitPosition(_currentRay), _currentRay, objects, 2, _hitObjects[0]);
+    RenderRay diffuseLightRay = RenderRay();
+    RenderRay refractionsLightRay = RenderRay();
+
+    if (_hitObjects[0]->isGlass())
+    {
+        refractionsLightRay = getRefractionsLight(_hitObjects[0]->hitPosition(_currentRay), _currentRay, objects, 2, _hitObjects[0]);
+    }
+    else
+    {
+        diffuseLightRay = getDiffuseLight(_hitObjects[0]->hitPosition(_currentRay), _hitObjects[0], objects, _lights, 10, 2);
+        directLightRay = getDirectLight(_hitObjects[0]->hitPosition(_currentRay), _hitObjects[0], objects, _lights);
+    }
 
     RenderRay finalRay = directLightRay + reflexionsLightRay + diffuseLightRay + refractionsLightRay;
     return finalRay;
@@ -352,7 +363,7 @@ raytracer::RenderRay raytracer::Renderer::getRefractionsLight(Point3D hitPoint, 
 
     RenderRay directLightRay = getDirectLight(outsideHitPoint, _hitObjects[0], objects, _lights);
     RenderRay reflexionsLightRay = getReflexionsLight(refracted.getRay(), objects, _hitObjects[0], bounces);
-    RenderRay diffuseLightRay = getDiffuseLight(outsideHitPoint, _hitObjects[0], objects, _lights, 100, bounces);
+    RenderRay diffuseLightRay = getDiffuseLight(outsideHitPoint, _hitObjects[0], objects, _lights, 10, bounces);
     RenderRay refractionsLightRay = getRefractionsLight(outsideHitPoint, refracted.getRay(), objects, bounces, _hitObjects[0]);
 
     RenderRay finalRay = directLightRay + reflexionsLightRay + diffuseLightRay + refractionsLightRay;
