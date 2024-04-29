@@ -146,15 +146,6 @@ raytracer::Renderer::getReflexionsLight(const Ray3D &ray, const std::vector<std:
 }
 
 raytracer::RenderRay
-raytracer::Renderer::getSurfaceLight(const Point3D hit_point, const std::shared_ptr<IPrimitive> object,
-                                     const std::vector<std::shared_ptr<IPrimitive>> &objects,
-                                     const std::vector<std::shared_ptr<ILight>> &lights, int rays, int bounces)
-{
-    RenderRay ray = getDirectLight(hit_point, object, objects, lights);
-    return ray;
-}
-
-raytracer::RenderRay
 raytracer::Renderer::getDiffuseLight(const Point3D hit_point, const std::shared_ptr<IPrimitive> object,
                                      const std::vector<std::shared_ptr<IPrimitive>> &objects,
                                      const std::vector<std::shared_ptr<ILight>> &lights, int rays, int bounces)
