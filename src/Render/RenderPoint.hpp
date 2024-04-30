@@ -23,6 +23,7 @@ namespace raytracer
 
             std::shared_ptr<IPrimitive> object;
             Vector3D surfaceNormal;
+            Vector3D volumeNormal;
             Ray3D ray;
             Point3D hitPoint;
     };
