@@ -1,6 +1,6 @@
 #include <iostream>
 #include "Render/Camera.hpp"
-#include "Primitives/Objects/Sphere.hpp"
+#include "Objects/Primitives/Sphere.hpp"
 #include <random>
 
 #include "sfml/sfml.hpp"
@@ -34,7 +34,7 @@ int main()
     camera.move(raytracer::Vector3D(-1.5, 5, -15));
     raytracer::Renderer renderer(camera);
 
-    std::vector<std::unique_ptr<raytracer::IPrimitive>> objects;
+    std::vector<std::unique_ptr<raytracer::IObject>> objects;
 
     auto obj1 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(-5, 5, -35), 5, raytracer::Color(255, 255, 255));
     auto obj2 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(3, 5, -35), 3, raytracer::Color(255, 255, 255));
@@ -45,12 +45,12 @@ int main()
     obj1->setGlassState(true);
 //    obj2->setGlassState(true);
 
-//    obj1->setReflexionIndice(0.1);
-//    obj2->setReflexionIndice(1);
-//    obj3->setReflexionIndice(0.5);
+//    obj1->setReflexionIndex(0.1);
+//    obj2->setReflexionIndex(1);
+//    obj3->setReflexionIndex(0.5);
 
-    obj1->setRefractionIndice(1.5);
-//    obj2->setRefractionIndice(1.5);
+    obj1->setRefractionIndex(1.5);
+//    obj2->setRefractionIndex(1.5);
 
     renderer.addObject(obj1);
     renderer.addObject(obj2);
@@ -124,7 +124,7 @@ int main()
                         raytracer::Color color(0, 0, 0);
                         for (int i = 0; i < MAX_SAMPLES; i++)
                         {
-                            color = color + color_matrix[i][x][y].getColor();
+                            color = color + color_matrix[i][x][y].getSurfaceAbsorbtion();
                         }
                         color = color * (1.0 / MAX_SAMPLES);
                         color = color * (255 / max_intensity);

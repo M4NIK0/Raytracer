@@ -10,7 +10,7 @@
 #include "../sfml/sfml.hpp"
 #include "../Math/Point3D.hpp"
 #include "../Math/Ray3D.hpp"
-#include "../Primitives/IPrimitive.hpp"
+#include "../Objects/IObject.hpp"
 
 namespace raytracer
 {
@@ -21,7 +21,7 @@ namespace raytracer
 
             ~RenderPoint();
 
-            std::shared_ptr<IPrimitive> object;
+            std::shared_ptr<IObject> object;
             Vector3D surfaceNormal;
             Vector3D volumeNormal;
             Ray3D ray;
