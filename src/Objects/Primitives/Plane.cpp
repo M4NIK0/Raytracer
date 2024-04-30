@@ -19,7 +19,7 @@ raytracer::Point3D raytracer::Plane::hit(const Ray3D &ray)
 
 raytracer::Vector3D raytracer::Plane::getSurfaceNormal(const Point3D &point)
 {
-    return (point - _position).normalize();
+    return _normal;
 }
 
 raytracer::Vector3D raytracer::Plane::getVolumeNormal(const Point3D &point)
