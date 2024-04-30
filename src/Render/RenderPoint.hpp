@@ -22,6 +22,9 @@ namespace raytracer
             ~RenderPoint();
 
             bool hitObject(std::shared_ptr<IObject> object, Ray3D &ray);
+            void hitNearestObject(const std::vector<std::shared_ptr<IObject>> &objects, Ray3D &ray);
+            bool hits(const std::shared_ptr<IObject> &object, const Ray3D &ray) const;
+            bool hitsSomething(const std::vector<std::shared_ptr<IObject>> &objects, const Ray3D &ray) const;
 
             std::shared_ptr<IObject> object;
             Vector3D surfaceNormal;

@@ -20,7 +20,7 @@ raytracer::Point3D raytracer::Sphere::hit(const Ray3D &ray)
     double discriminant = b * b - 4 * a * c;
 
     if (discriminant < 0) {
-        return Point3D(0, 0, 0);
+        return Point3D(INFINITY, INFINITY, INFINITY);
     } else {
         double root1 = (-b - std::sqrt(discriminant)) / (2.0 * a);
         double root2 = (-b + std::sqrt(discriminant)) / (2.0 * a);

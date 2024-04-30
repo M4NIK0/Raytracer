@@ -16,6 +16,26 @@
 
 namespace raytracer
 {
+    class renderData
+    {
+        public:
+            renderData() = default;
+            ~renderData() = default;
+
+            std::vector<std::shared_ptr<IObject>> objects;
+            std::vector<std::shared_ptr<ILight>> lights;
+
+            size_t diffuseRays = 20;
+            size_t reflexionsRays = 20;
+            size_t maxBounces = 4;
+
+            size_t width = 1920;
+            size_t height = 1080;
+
+            size_t chunks_x = 10;
+            size_t chunks_y = 10;
+    };
+
     class Renderer
     {
         public:
@@ -26,31 +46,16 @@ namespace raytracer
             void addLight(std::shared_ptr<ILight> light);
 
             raytracer::RenderRay traceRay(int x, int y);
-            void renderImage();
-            std::vector<std::shared_ptr<IObject>> objects;
 
-            RenderRay getReflexionsLight(const RenderPoint &point, const std::vector<std::shared_ptr<IObject>> &objects,
-                                         int bounces);
-
-            RenderRay getDirectLight(const RenderPoint &point, const std::vector<std::shared_ptr<IObject>> &objects,
-                                     const std::vector<std::shared_ptr<ILight>> &lights);
-
-            RenderRay getDiffuseLight(const RenderPoint &point, const std::vector<std::shared_ptr<IObject>> &objects,
-                                      const std::vector<std::shared_ptr<ILight>> &lights, int rays, int bounces);
-
-            RenderRay getRefractionsLight(const RenderPoint &point, const std::vector<std::shared_ptr<IObject>> &objects,
-                                          int bounces);
-
-            static RenderRay getRandomRay(const RenderPoint &point);
+            RenderRay getDirectLight(const RenderPoint &point, const renderData &data);
+//            RenderRay getReflexionsLight(const RenderPoint &point, const renderData &data, int bounces);
+//            RenderRay getDiffuseLight(const RenderPoint &point, const renderData &data, int bounces);
+//            RenderRay getRefractionsLight(const RenderPoint &point, const renderData &data, int bounces);
+//            static RenderRay getRandomRay(const RenderPoint &point);
 
             Camera camera;
         private:
-            std::vector<std::shared_ptr<ILight>> _lights;
-
-            int maxBounces = 2;
-            int maxDiffuseBounces = 2;
-
-            int diffuseReflexionRays = 20;
+            renderData _renderData;
 
             double cameraExposure = 2;
 

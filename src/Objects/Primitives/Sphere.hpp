@@ -14,7 +14,7 @@ namespace raytracer
     class Sphere : public IObject
     {
         public:
-            Sphere(raytracer::Point3D pos, double r, Color &surfaceAbsorbtion) : _radius(r), _position(pos), _surfaceAbsorbtion(surfaceAbsorbtion), _volumeAbsorbtion(Color(0, 0, 0)) {}
+            Sphere(raytracer::Point3D pos, double r, Color surfaceReflexion) : _radius(r), _position(pos), _surfaceAbsorbtion(surfaceReflexion), _volumeAbsorbtion(Color(0, 0, 0)) {}
             ~Sphere();
 
             Point3D hit(const Ray3D &ray) override;
