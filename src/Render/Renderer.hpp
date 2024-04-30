@@ -7,55 +7,55 @@
 
 #pragma once
 
-#include "../Primitives/IPrimitive.hpp"
+#include "../Objects/IObject.hpp"
 #include "Camera.hpp"
 #include "../sfml/sfml.hpp"
 #include "../Light/ILight.hpp"
 #include "RenderRay.hpp"
+#include "RenderPoint.hpp"
 
 namespace raytracer
 {
+    class renderData
+    {
+        public:
+            renderData() = default;
+            ~renderData() = default;
+
+            std::vector<std::shared_ptr<IObject>> objects;
+            std::vector<std::shared_ptr<ILight>> lights;
+
+            size_t diffuseRays = 20;
+            size_t reflexionsRays = 20;
+            size_t maxBounces = 4;
+
+            size_t width = 1920;
+            size_t height = 1080;
+
+            size_t chunks_x = 10;
+            size_t chunks_y = 10;
+    };
+
     class Renderer
     {
         public:
             Renderer(Camera camera) : camera(camera) {}
             ~Renderer();
 
-            void addObject(std::shared_ptr<IPrimitive> object);
+            void addObject(std::shared_ptr<IObject> object);
             void addLight(std::shared_ptr<ILight> light);
 
             raytracer::RenderRay traceRay(int x, int y);
-            void renderImage();
-            std::vector<std::shared_ptr<IPrimitive>> objects;
 
-            RenderRay getReflexionsLight(const Ray3D &ray, const std::vector<std::shared_ptr<IPrimitive>> &objects,
-                                         std::shared_ptr<IPrimitive> object, int bounces);
-            RenderRay getSurfaceLight(const Point3D hit_point, const std::shared_ptr<IPrimitive> object,
-                                      const std::vector<std::shared_ptr<IPrimitive>> &objects,
-                                      const std::vector<std::shared_ptr<ILight>> &lights, int rays, int bounces);
+            RenderRay getDirectLight(const RenderPoint &point, const renderData &data);
+//            RenderRay getReflexionsLight(const RenderPoint &point, const renderData &data, int bounces);
+//            RenderRay getDiffuseLight(const RenderPoint &point, const renderData &data, int bounces);
+//            RenderRay getRefractionsLight(const RenderPoint &point, const renderData &data, int bounces);
+//            static RenderRay getRandomRay(const RenderPoint &point);
 
-            RenderRay getDirectLight(const Point3D hit_point, const std::shared_ptr<IPrimitive> object,
-                                     const std::vector<std::shared_ptr<IPrimitive>> &objects,
-                                     const std::vector<std::shared_ptr<ILight>> &lights);
-            RenderRay getDiffuseLight(const Point3D hit_point, const std::shared_ptr<IPrimitive> object,
-                                      const std::vector<std::shared_ptr<IPrimitive>> &objects,
-                                      const std::vector<std::shared_ptr<ILight>> &lights, int rays, int bounces);
-            RenderRay getRefractionsLight(Point3D hitPoint, const Ray3D &ray,
-                                          const std::vector<std::shared_ptr<IPrimitive>> &objects, int bounces,
-                                          std::shared_ptr<IPrimitive> object);
-
-            static RenderRay getRandomRay(const Point3D &origin, const std::shared_ptr<IPrimitive> &object);
-            static Color getColorFromLight(const RenderRay &ray, double max_intensity);
             Camera camera;
         private:
-            Ray3D _currentRay;
-            std::vector<std::shared_ptr<IPrimitive>> _hitObjects;
-            std::vector<std::shared_ptr<ILight>> _lights;
-
-            int maxBounces = 2;
-            int maxDiffuseBounces = 2;
-
-            int diffuseReflexionRays = 20;
+            renderData _renderData;
 
             double cameraExposure = 2;
 

@@ -14,17 +14,15 @@ add_executable(raytracer src/main.cpp
         src/Math/Point3D.hpp
         src/Math/Ray3D.cpp
         src/Math/Ray3D.hpp
-        src/Primitives/IPrimitive.hpp
-        src/Primitives/Objects/Sphere.cpp
-        src/Primitives/Objects/Sphere.hpp
+        src/Objects/IObject.hpp
+        src/Objects/Primitives/Sphere.cpp
+        src/Objects/Primitives/Sphere.hpp
         src/Render/Camera.cpp
         src/Render/Camera.hpp
         src/Math/Rectangle3D.cpp
         src/Math/Rectangle3D.hpp
         src/sfml/sfml.cpp
         src/sfml/sfml.hpp
-        src/Primitives/Objects/Cube.cpp
-        src/Primitives/Objects/Cube.hpp
         src/Render/Renderer.cpp
         src/Render/Renderer.hpp
         src/Light/ILight.hpp
@@ -34,6 +32,8 @@ add_executable(raytracer src/main.cpp
         src/Render/RenderRay.hpp
         src/Math/Matrix.cpp
         src/Math/Matrix.hpp
+        src/Render/RenderPoint.cpp
+        src/Render/RenderPoint.hpp
 )
 
 # Link SFML
