@@ -21,10 +21,13 @@ namespace raytracer
 
             ~RenderPoint();
 
+            bool hitObject(std::shared_ptr<IObject> object, Ray3D &ray);
+
             std::shared_ptr<IObject> object;
             Vector3D surfaceNormal;
             Vector3D volumeNormal;
             Ray3D ray;
             Point3D hitPoint;
+            double distance;
     };
 }

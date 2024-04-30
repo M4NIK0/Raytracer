@@ -12,6 +12,7 @@
 #include "../sfml/sfml.hpp"
 #include "../Light/ILight.hpp"
 #include "RenderRay.hpp"
+#include "RenderPoint.hpp"
 
 namespace raytracer
 {
@@ -28,24 +29,22 @@ namespace raytracer
             void renderImage();
             std::vector<std::shared_ptr<IObject>> objects;
 
-            RenderRay getReflexionsLight(const Ray3D &ray, const std::vector<std::shared_ptr<IObject>> &objects,
-                                         std::shared_ptr<IObject> object, int bounces);
-            RenderRay getDirectLight(const Point3D hit_point, const std::shared_ptr<IObject> object,
-                                     const std::vector<std::shared_ptr<IObject>> &objects,
-                                     const std::vector<std::shared_ptr<ILight>> &lights);
-            RenderRay getDiffuseLight(const Point3D hit_point, const std::shared_ptr<IObject> object,
-                                      const std::vector<std::shared_ptr<IObject>> &objects,
-                                      const std::vector<std::shared_ptr<ILight>> &lights, int rays, int bounces);
-            RenderRay getRefractionsLight(Point3D hitPoint, const Ray3D &ray,
-                                          const std::vector<std::shared_ptr<IObject>> &objects, int bounces,
-                                          std::shared_ptr<IObject> object);
+            RenderRay getReflexionsLight(const RenderPoint &point, const std::vector<std::shared_ptr<IObject>> &objects,
+                                         int bounces);
 
-            static RenderRay getRandomRay(const Point3D &origin, const std::shared_ptr<IObject> object);
-            static Color getColorFromLight(const RenderRay &ray, double max_intensity);
+            RenderRay getDirectLight(const RenderPoint &point, const std::vector<std::shared_ptr<IObject>> &objects,
+                                     const std::vector<std::shared_ptr<ILight>> &lights);
+
+            RenderRay getDiffuseLight(const RenderPoint &point, const std::vector<std::shared_ptr<IObject>> &objects,
+                                      const std::vector<std::shared_ptr<ILight>> &lights, int rays, int bounces);
+
+            RenderRay getRefractionsLight(const RenderPoint &point, const std::vector<std::shared_ptr<IObject>> &objects,
+                                          int bounces);
+
+            static RenderRay getRandomRay(const RenderPoint &point);
+
             Camera camera;
         private:
-            Ray3D _currentRay;
-            std::vector<std::shared_ptr<IObject>> _hitObjects;
             std::vector<std::shared_ptr<ILight>> _lights;
 
             int maxBounces = 2;
