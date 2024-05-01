@@ -38,12 +38,10 @@ int main()
 
     auto obj1 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0, -5, -25), 5, raytracer::Color(1, 0, 0));
     auto obj2 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(10, -5, -25), 5, raytracer::Color(1, 1, 1));
-    auto obj3 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0, 10000, -25), 9999, raytracer::Color(1, 1, 1));
+    auto obj3 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0, -10000, -25), 9990, raytracer::Color(1, 1, 1));
     auto obj4 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(3.72607, -11.4024, -25.1806), 1, raytracer::Color(1, 1, 1));
 
-//    obj1->setReflexionIndex(0.1);
-//    obj2->setReflexionIndex(0.95);
-//    obj3->setReflexionIndex(0.25);
+    obj1->setGlassState(true);
     obj4->setReflexionIndex(1);
 
     renderer.addObject(obj1);
@@ -51,11 +49,7 @@ int main()
     renderer.addObject(obj3);
     renderer.addObject(obj4);
 
-    renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(255, 255, 255), raytracer::Point3D(0, -200, -25), 1000));
-//    renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(255, 0, 0), raytracer::Point3D(10, -20, 0), 1000));
-//    renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(0, 0, 255), raytracer::Point3D(-10, -20, 0), 1000));
-//    renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(255, 255, 255), raytracer::Point3D(0, -20, -50), 1000));
-//    renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(255, 255, 255), raytracer::Point3D(0, -20, 0), 1000));
+    renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(255, 255, 255), raytracer::Point3D(0, 200, -25), 1000));
 
     sfml display;
 
