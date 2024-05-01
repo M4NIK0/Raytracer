@@ -16,18 +16,30 @@
 
 namespace raytracer
 {
+    class Chunk
+    {
+        public:
+            Chunk(size_t x, size_t y, size_t width, size_t height) : x(x), y(y), width(width), height(height) {}
+            ~Chunk() = default;
+
+            size_t x;
+            size_t y;
+            size_t width;
+            size_t height;
+    };
+
     class renderData
     {
         public:
             renderData() = default;
             ~renderData() = default;
 
-            std::vector<std::shared_ptr<IObject>> objects;
-            std::vector<std::shared_ptr<ILight>> lights;
+            std::vector<std::shared_ptr<IObject>> objects = {};
+            std::vector<std::shared_ptr<ILight>> lights = {};
 
-            size_t diffuseRays = 20;
-            size_t reflexionsRays = 20;
-            size_t maxBounces = 4;
+            size_t diffuseRays = 10;
+            size_t reflexionsRays = 5;
+            size_t maxBounces = 2;
 
             size_t width = 1920;
             size_t height = 1080;
@@ -45,11 +57,15 @@ namespace raytracer
             void addObject(std::shared_ptr<IObject> object);
             void addLight(std::shared_ptr<ILight> light);
 
+            std::vector<std::vector<RenderRay>> renderChunks(const Chunk &chunk);
+
             raytracer::RenderRay traceRay(int x, int y);
 
+            static Vector3D getRandomRayFromCone(const Vector3D &normal, double angle);
+
             RenderRay getDirectLight(const RenderPoint &point, const renderData &data);
-//            RenderRay getReflexionsLight(const RenderPoint &point, const renderData &data, int bounces);
-//            RenderRay getDiffuseLight(const RenderPoint &point, const renderData &data, int bounces);
+            RenderRay getReflexionsLight(const RenderPoint &point, const renderData &data, int bounces);
+            RenderRay getDiffuseLight(const RenderPoint &point, const renderData &data, int bounces);
 //            RenderRay getRefractionsLight(const RenderPoint &point, const renderData &data, int bounces);
 //            static RenderRay getRandomRay(const RenderPoint &point);
 
@@ -58,7 +74,5 @@ namespace raytracer
             renderData _renderData;
 
             double cameraExposure = 2;
-
-            void _sortHitObjectsByContactDistance();
     };
 }
