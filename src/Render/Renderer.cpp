@@ -191,7 +191,7 @@ raytracer::RenderRay raytracer::Renderer::getDiffuseLight(const RenderPoint &poi
 
     RenderRay ray = RenderRay(Ray3D(Point3D(0, 0, 0), Vector3D(0, 0, 0)));
     // Calculate the mean color
-    ray.color = totalColor * (1.0 / data.diffuseRays);
+    ray.color = totalColor * (1.0 / data.diffuseRays) * (1 - point.object->getReflexionIndex(point.hitPoint));
 
     // Return a ray with the mean color
     return ray;

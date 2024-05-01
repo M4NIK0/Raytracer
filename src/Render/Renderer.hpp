@@ -16,6 +16,18 @@
 
 namespace raytracer
 {
+    class Chunk
+    {
+        public:
+            Chunk(size_t x, size_t y, size_t width, size_t height) : x(x), y(y), width(width), height(height) {}
+            ~Chunk() = default;
+
+            size_t x;
+            size_t y;
+            size_t width;
+            size_t height;
+    };
+
     class renderData
     {
         public:
@@ -45,6 +57,8 @@ namespace raytracer
             void addObject(std::shared_ptr<IObject> object);
             void addLight(std::shared_ptr<ILight> light);
 
+            std::vector<std::vector<RenderRay>> renderChunks(const Chunk &chunk);
+
             raytracer::RenderRay traceRay(int x, int y);
 
             static Vector3D getRandomRayFromCone(const Vector3D &normal, double angle);
@@ -60,7 +74,5 @@ namespace raytracer
             renderData _renderData;
 
             double cameraExposure = 2;
-
-            void _sortHitObjectsByContactDistance();
     };
 }

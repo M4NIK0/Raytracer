@@ -19,7 +19,7 @@
 #define CHUNK_SIZE_X WIDTH / CHUNKS_X
 #define CHUNK_SIZE_Y HEIGHT / CHUNKS_Y
 
-#define MAX_SAMPLES 10
+#define MAX_SAMPLES 3
 
 #include <chrono>
 
@@ -39,11 +39,12 @@ int main()
     auto obj1 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0, -5, -25), 5, raytracer::Color(1, 0, 0));
     auto obj2 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(10, -5, -25), 5, raytracer::Color(1, 1, 1));
     auto obj3 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0, 10000, -25), 9999, raytracer::Color(1, 1, 1));
-    auto obj4 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0, -15, -25), 1, raytracer::Color(1, 1, 1));
+    auto obj4 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(3.72607, -11.4024, -25.1806), 1, raytracer::Color(1, 1, 1));
 
 //    obj1->setReflexionIndex(0.1);
 //    obj2->setReflexionIndex(0.95);
 //    obj3->setReflexionIndex(0.25);
+    obj4->setReflexionIndex(1);
 
     renderer.addObject(obj1);
     renderer.addObject(obj2);
