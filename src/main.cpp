@@ -45,6 +45,7 @@ int main()
 
     obj1->setReflexionIndex(0.1);
     obj2->setReflexionIndex(0.95);
+    obj3->setReflexionIndex(0.25);
 
     renderer.addObject(obj1);
     renderer.addObject(obj2);

@@ -51,7 +51,7 @@ namespace raytracer
 
             RenderRay getDirectLight(const RenderPoint &point, const renderData &data);
             RenderRay getReflexionsLight(const RenderPoint &point, const renderData &data, int bounces);
-//            RenderRay getDiffuseLight(const RenderPoint &point, const renderData &data, int bounces);
+            RenderRay getDiffuseLight(const RenderPoint &point, const renderData &data, int bounces);
 //            RenderRay getRefractionsLight(const RenderPoint &point, const renderData &data, int bounces);
 //            static RenderRay getRandomRay(const RenderPoint &point);
 
