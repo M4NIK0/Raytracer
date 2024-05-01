@@ -148,38 +148,52 @@ raytracer::Renderer::getReflexionsLight(const RenderPoint &point, const renderDa
     return ray;
 }
 
-raytracer::RenderRay
-raytracer::Renderer::getDiffuseLight(const RenderPoint &point, const renderData &data, int bounces)
+raytracer::RenderRay raytracer::Renderer::getDiffuseLight(const RenderPoint &point, const renderData &data, int bounces)
 {
     if (bounces <= 0)
     {
         return RenderRay(Ray3D(Point3D(0, 0, 0), Vector3D(0, 0, 0)));
     }
 
-    // Get the random ray
-    Vector3D randomRay = getRandomRayFromCone(point.surfaceNormal, M_PI / 2);
-    Ray3D randomRayDirection(point.hitPoint + point.surfaceNormal * 0.001, randomRay);
-
-    // Create the random point
-    RenderPoint randomPoint;
-    randomPoint.hitNearestObject(data.objects, randomRayDirection);
-
-    // If the random ray hits nothing, return black
-    if (!randomPoint.object)
+    Color totalColor(0, 0, 0);
+    for (int i = 0; i < data.diffuseRays; ++i)
     {
-        return RenderRay(Ray3D(Point3D(0, 0, 0), Vector3D(0, 0, 0)));
+        // Get the random ray
+        Vector3D randomRay = getRandomRayFromCone(point.surfaceNormal, M_PI / 2);
+        Ray3D randomRayDirection(point.hitPoint + point.surfaceNormal * 0.001, randomRay);
+
+        // Create the random point
+        RenderPoint randomPoint;
+        randomPoint.hitNearestObject(data.objects, randomRayDirection);
+
+        // If the random ray hits nothing, continue to the next ray
+        if (!randomPoint.object)
+        {
+            continue;
+        }
+
+        // Get the direct light
+        RenderRay directLight = getDirectLight(randomPoint, data);
+
+        // Get the diffuse light
+        RenderRay diffuseLight = getDiffuseLight(randomPoint, data, bounces - 1);
+
+        // Get the reflection light
+        RenderRay reflectionLight = getReflexionsLight(randomPoint, data, bounces - 1);
+
+        // Mix the direct and diffuse light
+        RenderRay ray = directLight + diffuseLight + reflectionLight;
+        ray.color = ray.color * point.object->getSurfaceAbsorbtion(point.hitPoint);
+
+        // Add the color of this ray to the total color
+        totalColor = totalColor + ray.color;
     }
 
-    // Get the direct light
-    RenderRay directLight = getDirectLight(randomPoint, data);
+    RenderRay ray = RenderRay(Ray3D(Point3D(0, 0, 0), Vector3D(0, 0, 0)));
+    // Calculate the mean color
+    ray.color = totalColor * (1.0 / data.diffuseRays);
 
-    // Get the diffuse light
-    RenderRay diffuseLight = getDiffuseLight(randomPoint, data, bounces - 1);
-
-    // Mix the direct and diffuse light
-    RenderRay ray = directLight + diffuseLight;
-    ray.color = ray.color * point.object->getSurfaceAbsorbtion(point.hitPoint);
-
+    // Return a ray with the mean color
     return ray;
 }
 

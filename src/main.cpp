@@ -19,7 +19,7 @@
 #define CHUNK_SIZE_X WIDTH / CHUNKS_X
 #define CHUNK_SIZE_Y HEIGHT / CHUNKS_Y
 
-#define MAX_SAMPLES 50
+#define MAX_SAMPLES 10
 
 #include <chrono>
 
@@ -28,8 +28,8 @@ int main()
     int width = WIDTH;
     int height = HEIGHT;
 
-    raytracer::Rectangle3D screen(raytracer::Point3D(0, 0, 0), raytracer::Vector3D(1, 0, 0),
-                                  raytracer::Vector3D(0, 1, 0));
+    raytracer::Rectangle3D screen(raytracer::Point3D(0, 1, 0), raytracer::Vector3D(1, 0, 0),
+                              raytracer::Vector3D(0, -1, 0)); // Invert the Y vector
     raytracer::Camera camera(raytracer::Point3D(0.5, 0.5, 1), screen, width, height);
     camera.move(raytracer::Vector3D(5, -5, 0));
 
@@ -50,17 +50,17 @@ int main()
     renderer.addObject(obj3);
     renderer.addObject(obj4);
 
-    renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(0, 255, 0), raytracer::Point3D(0, -20, 0), 1000));
-    renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(255, 0, 0), raytracer::Point3D(10, -20, 0), 1000));
-    renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(0, 0, 255), raytracer::Point3D(-10, -20, 0), 1000));
-    renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(255, 255, 255), raytracer::Point3D(0, -20, -50), 1000));
+    renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(255, 255, 255), raytracer::Point3D(0, -200, -25), 1000));
+//    renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(255, 0, 0), raytracer::Point3D(10, -20, 0), 1000));
+//    renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(0, 0, 255), raytracer::Point3D(-10, -20, 0), 1000));
+//    renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(255, 255, 255), raytracer::Point3D(0, -20, -50), 1000));
 //    renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(255, 255, 255), raytracer::Point3D(0, -20, 0), 1000));
 
     sfml display;
 
     display.initImage(width, height);
     // Initialize the window
-    display.initWindow(1200, 1200);
+    display.initWindow(800, 800);
 
     std::vector<std::vector<std::vector<raytracer::RenderRay>>> color_matrix;
     std::vector<std::vector<raytracer::RenderRay>> mean_matrix;
@@ -96,6 +96,21 @@ int main()
     {
         for (int chunk_y = 0; chunk_y < CHUNKS_Y; chunk_y++)
         {
+            // draw rectangle around the current chunk
+            for (int x = 0; x < CHUNK_SIZE_X; x++)
+            {
+                display.drawPixel(x + (chunk_x * CHUNK_SIZE_X), chunk_y * CHUNK_SIZE_Y, raytracer::Color(255, 255, 255));
+                display.drawPixel(x + (chunk_x * CHUNK_SIZE_X), (chunk_y + 1) * CHUNK_SIZE_Y - 1, raytracer::Color(255, 255, 255));
+            }
+
+            for (int y = 0; y < CHUNK_SIZE_Y; y++)
+            {
+                display.drawPixel(chunk_x * CHUNK_SIZE_X, y + (chunk_y * CHUNK_SIZE_Y), raytracer::Color(255, 255, 255));
+                display.drawPixel((chunk_x + 1) * CHUNK_SIZE_X - 1, y + (chunk_y * CHUNK_SIZE_Y), raytracer::Color(255, 255, 255));
+            }
+
+            display.displayScreen();
+
             for (int i = 0; i < MAX_SAMPLES; i++)
             {
                 for (int x = 0; x < CHUNK_SIZE_X; x++)

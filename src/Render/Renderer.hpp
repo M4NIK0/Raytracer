@@ -22,12 +22,12 @@ namespace raytracer
             renderData() = default;
             ~renderData() = default;
 
-            std::vector<std::shared_ptr<IObject>> objects;
-            std::vector<std::shared_ptr<ILight>> lights;
+            std::vector<std::shared_ptr<IObject>> objects = {};
+            std::vector<std::shared_ptr<ILight>> lights = {};
 
-            size_t diffuseRays = 20;
+            size_t diffuseRays = 10;
             size_t reflexionsRays = 5;
-            size_t maxBounces = 4;
+            size_t maxBounces = 2;
 
             size_t width = 1920;
             size_t height = 1080;
