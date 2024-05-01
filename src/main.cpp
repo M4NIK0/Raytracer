@@ -12,7 +12,7 @@
 #define WIDTH SIZE
 #define HEIGHT SIZE
 
-#define CHUNKS 4
+#define CHUNKS 2
 #define CHUNKS_X CHUNKS
 #define CHUNKS_Y CHUNKS
 
@@ -27,6 +27,7 @@ int main()
 {
     int width = WIDTH;
     int height = HEIGHT;
+
     raytracer::Rectangle3D screen(raytracer::Point3D(0, 0, 0), raytracer::Vector3D(1, 0, 0),
                                   raytracer::Vector3D(0, 1, 0));
     raytracer::Camera camera(raytracer::Point3D(0.5, 0.5, 1), screen, width, height);
@@ -37,36 +38,24 @@ int main()
 
     std::vector<std::unique_ptr<raytracer::IObject>> objects;
 
-    auto obj1 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0, -5, -25), 5, raytracer::Color(1, 1, 1));
+    auto obj1 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0, -5, -25), 5, raytracer::Color(0.1, 0.1, 0.1));
     auto obj2 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(10, -5, -25), 5, raytracer::Color(1, 1, 1));
     auto obj3 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0, 10000, -25), 9999, raytracer::Color(1, 1, 1));
+    auto obj4 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0, -15, -25), 1, raytracer::Color(1, 1, 1));
 
-    obj1->setReflexionIndex(1);
-    obj2->setReflexionIndex(1);
-//    auto obj3 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0, 5010.5, 0), 4500, raytracer::Color(1, 1, 1));
-//    auto obj4 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0, 5, -550), 500, raytracer::Color(1, 1, 1));
-//    auto obj5 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(-5, 5, -45), 0.5, raytracer::Color(1, 1, 1));
-
-//    obj1->setGlassState(true);
-//    obj2->setGlassState(true);
-
-//    obj1->setReflexionIndex(0.1);
-//    obj2->setReflexionIndex(1);
-//    obj3->setReflexionIndex(0.5);
-
-//    obj1->setRefractionIndex(1.5);
-//    obj2->setRefractionIndex(1.5);
+    obj1->setReflexionIndex(0.1);
+    obj2->setReflexionIndex(0.95);
 
     renderer.addObject(obj1);
     renderer.addObject(obj2);
     renderer.addObject(obj3);
-//    renderer.addObject(obj4);
-//    renderer.addObject(obj5);
+    renderer.addObject(obj4);
 
     renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(0, 255, 0), raytracer::Point3D(0, -20, 0), 1000));
     renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(255, 0, 0), raytracer::Point3D(10, -20, 0), 1000));
     renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(0, 0, 255), raytracer::Point3D(-10, -20, 0), 1000));
     renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(255, 255, 255), raytracer::Point3D(0, -20, -50), 1000));
+//    renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(255, 255, 255), raytracer::Point3D(0, -20, 0), 1000));
 
     sfml display;
 
