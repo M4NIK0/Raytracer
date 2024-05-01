@@ -43,12 +43,12 @@ void raytracer::RenderPoint::hitNearestObject(const std::vector<std::shared_ptr<
         }
     }
 
-    distance = nearestPoint.distance;
-    hitPoint = nearestPoint.hitPoint;
-    object = nearestPoint.object;
-    ray = nearestPoint.ray;
-    surfaceNormal = nearestPoint.surfaceNormal;
-    volumeNormal = nearestPoint.volumeNormal;
+    this->distance = nearestPoint.distance;
+    this->hitPoint = nearestPoint.hitPoint;
+    this->object = nearestPoint.object;
+    this->ray = nearestPoint.ray;
+    this->surfaceNormal = nearestPoint.surfaceNormal;
+    this->volumeNormal = nearestPoint.volumeNormal;
 }
 
 bool raytracer::RenderPoint::hits(const std::shared_ptr<IObject> &object, const raytracer::Ray3D &ray) const

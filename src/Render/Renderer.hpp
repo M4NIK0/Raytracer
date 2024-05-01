@@ -26,7 +26,7 @@ namespace raytracer
             std::vector<std::shared_ptr<ILight>> lights;
 
             size_t diffuseRays = 20;
-            size_t reflexionsRays = 20;
+            size_t reflexionsRays = 5;
             size_t maxBounces = 4;
 
             size_t width = 1920;
@@ -47,8 +47,10 @@ namespace raytracer
 
             raytracer::RenderRay traceRay(int x, int y);
 
+            static Vector3D getRandomRayFromCone(const Vector3D &normal, double angle);
+
             RenderRay getDirectLight(const RenderPoint &point, const renderData &data);
-//            RenderRay getReflexionsLight(const RenderPoint &point, const renderData &data, int bounces);
+            RenderRay getReflexionsLight(const RenderPoint &point, const renderData &data, int bounces);
 //            RenderRay getDiffuseLight(const RenderPoint &point, const renderData &data, int bounces);
 //            RenderRay getRefractionsLight(const RenderPoint &point, const renderData &data, int bounces);
 //            static RenderRay getRandomRay(const RenderPoint &point);
