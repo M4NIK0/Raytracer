@@ -36,9 +36,9 @@ raytracer::RenderRay raytracer::Renderer::traceRay(int x, int y)
     RenderRay directLight = getDirectLight(point, _renderData);
     RenderRay reflexionsLight = getReflexionsLight(point, _renderData, _renderData.maxBounces);
     RenderRay diffuseLight = getDiffuseLight(point, _renderData, _renderData.maxBounces);
-//    RenderRay refractionsLight = getRefractionsLight(point, _renderData, _renderData.maxBounces);
+    RenderRay refractionsLight = getRefractionsLight(point, _renderData, _renderData.maxBounces);
 
-    RenderRay finalRay = directLight + reflexionsLight + diffuseLight;// + refractionsLight;
+    RenderRay finalRay = directLight + reflexionsLight + diffuseLight + refractionsLight;
 
     return finalRay;
 }
@@ -71,6 +71,11 @@ raytracer::Renderer::getDirectLight(const RenderPoint &point, const renderData &
     std::vector<RenderRay> directLightRays;
 
     RenderRay ray = RenderRay(Ray3D(Point3D(0, 0, 0), Vector3D(0, 0, 0)));
+
+    if (!point.object || point.object->getGlassState(point.hitPoint))
+    {
+        return ray;
+    }
 
     for (auto &light: _renderData.lights)
     {
@@ -150,7 +155,7 @@ raytracer::Renderer::getReflexionsLight(const RenderPoint &point, const renderDa
 
 raytracer::RenderRay raytracer::Renderer::getDiffuseLight(const RenderPoint &point, const renderData &data, int bounces)
 {
-    if (bounces <= 0)
+    if (bounces <= 0 || point.object->getGlassState(point.hitPoint))
     {
         return RenderRay(Ray3D(Point3D(0, 0, 0), Vector3D(0, 0, 0)));
     }
@@ -197,75 +202,55 @@ raytracer::RenderRay raytracer::Renderer::getDiffuseLight(const RenderPoint &poi
     return ray;
 }
 
-//raytracer::RenderRay raytracer::Renderer::getRefractionsLight(Point3D hitPoint, const Ray3D &ray,
-//                                                              const std::vector<std::shared_ptr<IObject>> &objects, int bounces,
-//                                                              std::shared_ptr<IObject> object)
-//{
-//    Vector3D normal = object->getNormalFromPoint(hitPoint);
-//    normal.normalize();
-//
-//    if (!object->getGlassState())
-//    {
-//        return RenderRay(Ray3D(Point3D(0, 0, 0), Vector3D(0, 0, 0)));
-//    }
-//
-//    double refractionIndex = object->getRefractionxionIndex();
-//
-//    double cosTheta1 = -normal.dot(ray.direction);
-//    double eta = 1 / refractionIndex;  // Assuming the incident ray is in air or vacuum
-//    double k = 1 - eta * eta * (1 - cosTheta1 * cosTheta1);
-//
-//    RenderRay refracted;
-//
-//    if (k < 0)
-//    {
-//        Total internal reflection, return zero vector
-//        return RenderRay(Ray3D(Point3D(0, 0, 0), Vector3D(0, 0, 0)));
-//    }
-//    else
-//    {
-//        refracted = RenderRay(Ray3D(hitPoint, (ray.direction * eta) + (normal * (eta * cosTheta1 - sqrt(k)))));
-//    }
-//
-//    exit point
-//    refracted.origin = refracted.origin + refracted.direction * 0.1;
-//    Point3D exitPoint = object->hit(refracted.getRay());
-//
-//    Vector3D normalExit = (object->getNormalFromPoint(exitPoint) * (-1));
-//
-//    double cosTheta2 = -normalExit.dot(refracted.direction);
-//    double eta2 = refractionIndex;
-//    double k2 = 1 - eta2 * eta2 * (1 - cosTheta2 * cosTheta2);
-//
-//    refracted = RenderRay(Ray3D(exitPoint, (refracted.direction * eta2) + (normalExit * (eta2 * cosTheta2 - sqrt(k2)))));
-//
-//    _hitObjects.clear();
-//
-//    for (auto &obj: objects)
-//    {
-//        if (obj == object)
-//            continue;
-//        if (obj->hits(refracted.getRay()))
-//        {
-//            _hitObjects.push_back(obj);
-//        }
-//    }
-//
-//    if (_hitObjects.empty())
-//    {
-//        return RenderRay(Ray3D(Point3D(0, 0, 0), Vector3D(0, 0, 0)));
-//    }
-//
-//    _sortHitObjectsByContactDistance();
-//
-//    Point3D outsideHitPoint = _hitObjects[0]->hit(refracted.getRay());
-//
-//    RenderRay directLightRay = getDirectLight(outsideHitPoint, _hitObjects[0], objects, _lights);
-//    RenderRay reflexionsLightRay = getReflexionsLight(refracted.getRay(), objects, _hitObjects[0], bounces);
-//    RenderRay diffuseLightRay = getDiffuseLight(outsideHitPoint, _hitObjects[0], objects, _lights, 10, bounces);
-//    RenderRay refractionsLightRay = getRefractionsLight(outsideHitPoint, refracted.getRay(), objects, bounces, _hitObjects[0]);
-//
-//    RenderRay finalRay = directLightRay + reflexionsLightRay + diffuseLightRay + refractionsLightRay;
-//
-//    return finalRay;
-//}
+raytracer::RenderRay raytracer::Renderer::getRefractionsLight(const RenderPoint &point, const renderData &data, int bounces)
+{
+    if (!point.object->getGlassState(point.hitPoint))
+    {
+        return RenderRay(Ray3D(Point3D(0, 0, 0), Vector3D(0, 0, 0)));
+    }
+
+    double refractionIndex = point.object->getRefractionIndex();
+
+    double cosTheta1 = -point.surfaceNormal.dot(point.ray.direction);
+    double eta = 1 / refractionIndex;  // Assuming the incident ray is in air or vacuum
+    double k = 1 - eta * eta * (1 - cosTheta1 * cosTheta1);
+
+    RenderRay refracted;
+
+    if (k < 0)
+    {
+        return RenderRay(Ray3D(Point3D(0, 0, 0), Vector3D(0, 0, 0)));
+    }
+    else
+    {
+        refracted = RenderRay(Ray3D(point.hitPoint, (point.ray.direction * eta) + (point.surfaceNormal * (eta * cosTheta1 - sqrt(k)))));
+    }
+
+    refracted.origin = refracted.origin + refracted.direction * 0.1;
+    Point3D exitPoint = point.object->hit(refracted.getRay());
+
+    Vector3D normalExit = (point.object->getSurfaceNormal(exitPoint) * (-1));
+
+    double cosTheta2 = -normalExit.dot(refracted.direction);
+    double eta2 = refractionIndex;
+    double k2 = 1 - eta2 * eta2 * (1 - cosTheta2 * cosTheta2);
+
+    refracted = Ray3D(exitPoint, (refracted.direction * eta2) + (normalExit * (eta2 * cosTheta2 - sqrt(k2))));
+
+    RenderPoint refractedPoint;
+    refractedPoint.hitNearestObject(data.objects, refracted);
+
+    if (!refractedPoint.object)
+    {
+        return RenderRay(Ray3D(Point3D(0, 0, 0), Vector3D(0, 0, 0)));
+    }
+
+    RenderRay directLight = getDirectLight(refractedPoint, data);
+    RenderRay reflectionLight = getReflexionsLight(refractedPoint, data, bounces);
+    RenderRay diffuseLight = getDiffuseLight(refractedPoint, data, bounces);
+    RenderRay refractionsLight = getRefractionsLight(refractedPoint, data, bounces);
+
+    RenderRay finalRay = directLight + reflectionLight + diffuseLight + refractionsLight;
+
+    return finalRay;
+}

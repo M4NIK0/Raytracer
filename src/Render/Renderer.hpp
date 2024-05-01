@@ -37,7 +37,7 @@ namespace raytracer
             std::vector<std::shared_ptr<IObject>> objects = {};
             std::vector<std::shared_ptr<ILight>> lights = {};
 
-            size_t diffuseRays = 10;
+            size_t diffuseRays = 20;
             size_t reflexionsRays = 5;
             size_t maxBounces = 2;
 
@@ -57,8 +57,6 @@ namespace raytracer
             void addObject(std::shared_ptr<IObject> object);
             void addLight(std::shared_ptr<ILight> light);
 
-            std::vector<std::vector<RenderRay>> renderChunks(const Chunk &chunk);
-
             raytracer::RenderRay traceRay(int x, int y);
 
             static Vector3D getRandomRayFromCone(const Vector3D &normal, double angle);
@@ -66,8 +64,7 @@ namespace raytracer
             RenderRay getDirectLight(const RenderPoint &point, const renderData &data);
             RenderRay getReflexionsLight(const RenderPoint &point, const renderData &data, int bounces);
             RenderRay getDiffuseLight(const RenderPoint &point, const renderData &data, int bounces);
-//            RenderRay getRefractionsLight(const RenderPoint &point, const renderData &data, int bounces);
-//            static RenderRay getRandomRay(const RenderPoint &point);
+            RenderRay getRefractionsLight(const RenderPoint &point, const renderData &data, int bounces);
 
             Camera camera;
         private:
