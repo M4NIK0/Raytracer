@@ -8,7 +8,7 @@
 #include "Light/ILight.hpp"
 #include "Light/Objects/PointLight.hpp"
 
-#define SIZE 512
+#define SIZE 256
 #define WIDTH SIZE
 #define HEIGHT SIZE
 
@@ -19,7 +19,7 @@
 #define CHUNK_SIZE_X WIDTH / CHUNKS_X
 #define CHUNK_SIZE_Y HEIGHT / CHUNKS_Y
 
-#define MAX_SAMPLES 3
+#define MAX_SAMPLES 1
 
 #include <chrono>
 

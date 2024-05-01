@@ -235,7 +235,7 @@ raytracer::RenderRay raytracer::Renderer::getRefractionsLight(const RenderPoint 
     double eta2 = refractionIndex;
     double k2 = 1 - eta2 * eta2 * (1 - cosTheta2 * cosTheta2);
 
-    refracted = Ray3D(exitPoint, (refracted.direction * eta2) + (normalExit * (eta2 * cosTheta2 - sqrt(k2))));
+    refracted = Ray3D(exitPoint - normalExit * 0.1, (refracted.direction * eta2) + (normalExit * (eta2 * cosTheta2 - sqrt(k2))));
 
     RenderPoint refractedPoint;
     refractedPoint.hitNearestObject(data.objects, refracted);
