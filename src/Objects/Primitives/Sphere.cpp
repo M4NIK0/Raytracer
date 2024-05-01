@@ -84,7 +84,7 @@ bool raytracer::Sphere::getGlassState(const Point3D &point)
     return _isGlass;
 }
 
-double raytracer::Sphere::getRefractionxionIndex()
+double raytracer::Sphere::getRefractionIndex()
 {
     return _refractionIndex;
 }

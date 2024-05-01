@@ -34,7 +34,7 @@ namespace raytracer
 
             virtual bool getGlassState(const Point3D &point) = 0;
 
-            virtual double getRefractionxionIndex() = 0;
+            virtual double getRefractionIndex() = 0;
             virtual double getReflexionIndex(const Point3D &point) = 0;
 
             virtual void setReflexionIndex(double index) = 0;

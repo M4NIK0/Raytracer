@@ -34,7 +34,7 @@ namespace raytracer
 
             bool getGlassState(const Point3D &point) override;
 
-            double getRefractionxionIndex() override;
+            double getRefractionIndex() override;
             double getReflexionIndex(const Point3D &point) override;
 
             void setReflexionIndex(double index) override;
@@ -45,7 +45,7 @@ namespace raytracer
             double _radius;
             Point3D _position;
 
-            double _surfaceRoughness = 0;
+            double _surfaceRoughness = 1;
             Color _surfaceAbsorbtion;
             Color _volumeAbsorbtion;
             double _volumeAbsorbtionCoeff = 0;
