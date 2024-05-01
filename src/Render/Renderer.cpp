@@ -35,10 +35,10 @@ raytracer::RenderRay raytracer::Renderer::traceRay(int x, int y)
 
     RenderRay directLight = getDirectLight(point, _renderData);
     RenderRay reflexionsLight = getReflexionsLight(point, _renderData, _renderData.maxBounces);
-//    RenderRay diffuseLight = getDiffuseLight(point, _renderData, _renderData.maxBounces);
+    RenderRay diffuseLight = getDiffuseLight(point, _renderData, _renderData.maxBounces);
 //    RenderRay refractionsLight = getRefractionsLight(point, _renderData, _renderData.maxBounces);
 
-    RenderRay finalRay = directLight + reflexionsLight;// + diffuseLight + refractionsLight;
+    RenderRay finalRay = directLight + reflexionsLight + diffuseLight;// + refractionsLight;
 
     return finalRay;
 }
@@ -151,52 +151,36 @@ raytracer::Renderer::getReflexionsLight(const RenderPoint &point, const renderDa
 raytracer::RenderRay
 raytracer::Renderer::getDiffuseLight(const RenderPoint &point, const renderData &data, int bounces)
 {
-    std::vector <RenderRay> diffuseLightRays;
-
     if (bounces <= 0)
     {
-        return RenderRay();
+        return RenderRay(Ray3D(Point3D(0, 0, 0), Vector3D(0, 0, 0)));
     }
 
-    for (int i = 0; i < rays; ++i)
+    // Get the random ray
+    Vector3D randomRay = getRandomRayFromCone(point.surfaceNormal, M_PI / 2);
+    Ray3D randomRayDirection(point.hitPoint + point.surfaceNormal * 0.001, randomRay);
+
+    // Create the random point
+    RenderPoint randomPoint;
+    randomPoint.hitNearestObject(data.objects, randomRayDirection);
+
+    // If the random ray hits nothing, return black
+    if (!randomPoint.object)
     {
-        RenderRay currentRay = getRandomRay(hit_point, object);
-
-        _hitObjects.clear();
-        for (auto &obj : objects)
-        {
-            if (obj == object && object->getNormalFromPoint(hit_point).dot(currentRay.direction) > 0)
-                continue;
-
-            if (obj->hits(currentRay))
-                _hitObjects.push_back(obj);
-        }
-
-        if (_hitObjects.empty())
-            continue;
-
-        _sortHitObjectsByContactDistance();
-
-        Point3D contactPoint = _hitObjects[0]->hit(currentRay);
-        double distance = Point3D::distance(currentRay.origin, contactPoint);
-
-        RenderRay directLight = getDirectLight(contactPoint, _hitObjects[0], objects, lights);
-        RenderRay diffuseLight = getDiffuseLight(contactPoint, _hitObjects[0], objects, lights, rays, (bounces - 1));
-
-        currentRay.color = (directLight.color + diffuseLight.color) * object->getSurfaceAbsorbtion();
-
-        diffuseLightRays.push_back(currentRay);
+        return RenderRay(Ray3D(Point3D(0, 0, 0), Vector3D(0, 0, 0)));
     }
 
-    RenderRay finalRay = RenderRay();
-    for (auto ray : diffuseLightRays)
-    {
-        finalRay.color = finalRay.color + ray.color;
-    }
+    // Get the direct light
+    RenderRay directLight = getDirectLight(randomPoint, data);
 
-    finalRay.color = finalRay.color * (1.0 / rays);
+    // Get the diffuse light
+    RenderRay diffuseLight = getDiffuseLight(randomPoint, data, bounces - 1);
 
-    return finalRay;
+    // Mix the direct and diffuse light
+    RenderRay ray = directLight + diffuseLight;
+    ray.color = ray.color * point.object->getSurfaceAbsorbtion(point.hitPoint);
+
+    return ray;
 }
 
 //raytracer::RenderRay raytracer::Renderer::getRefractionsLight(Point3D hitPoint, const Ray3D &ray,

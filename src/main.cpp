@@ -8,18 +8,18 @@
 #include "Light/ILight.hpp"
 #include "Light/Objects/PointLight.hpp"
 
-#define SIZE 1024
+#define SIZE 512
 #define WIDTH SIZE
 #define HEIGHT SIZE
 
-#define CHUNKS 2
+#define CHUNKS 16
 #define CHUNKS_X CHUNKS
 #define CHUNKS_Y CHUNKS
 
 #define CHUNK_SIZE_X WIDTH / CHUNKS_X
 #define CHUNK_SIZE_Y HEIGHT / CHUNKS_Y
 
-#define MAX_SAMPLES 1
+#define MAX_SAMPLES 50
 
 #include <chrono>
 
@@ -36,16 +36,14 @@ int main()
 //    camera.move(raytracer::Vector3D(-1.5, 5, -15));
     raytracer::Renderer renderer(camera);
 
-    std::vector<std::unique_ptr<raytracer::IObject>> objects;
-
-    auto obj1 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0, -5, -25), 5, raytracer::Color(0.1, 0.1, 0.1));
+    auto obj1 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0, -5, -25), 5, raytracer::Color(1, 0, 0));
     auto obj2 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(10, -5, -25), 5, raytracer::Color(1, 1, 1));
     auto obj3 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0, 10000, -25), 9999, raytracer::Color(1, 1, 1));
     auto obj4 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0, -15, -25), 1, raytracer::Color(1, 1, 1));
 
-    obj1->setReflexionIndex(0.1);
-    obj2->setReflexionIndex(0.95);
-    obj3->setReflexionIndex(0.25);
+//    obj1->setReflexionIndex(0.1);
+//    obj2->setReflexionIndex(0.95);
+//    obj3->setReflexionIndex(0.25);
 
     renderer.addObject(obj1);
     renderer.addObject(obj2);
@@ -65,6 +63,7 @@ int main()
     display.initWindow(1200, 1200);
 
     std::vector<std::vector<std::vector<raytracer::RenderRay>>> color_matrix;
+    std::vector<std::vector<raytracer::RenderRay>> mean_matrix;
     int images_amount = 0;
 
     int frame = 0;
@@ -76,10 +75,12 @@ int main()
         for (int x = 0; x < width; x++)
         {
             color_matrix[i].push_back(std::vector<raytracer::RenderRay>());
+            mean_matrix.push_back(std::vector<raytracer::RenderRay>());
 
             for (int y = 0; y < height; y++)
             {
                 color_matrix[i][x].push_back(raytracer::RenderRay());
+                mean_matrix[x].push_back(raytracer::RenderRay());
             }
         }
     }
@@ -123,6 +124,7 @@ int main()
                         color = color + color_matrix[i][x][y].getColor();
                     }
                     color = color * (1.0 / MAX_SAMPLES);
+                    mean_matrix[x][y].color = color;
                     color = color * (255 / max_intensity);
                     color.cap();
                     display.drawPixel(x, y, color);
@@ -130,6 +132,33 @@ int main()
             }
 
             display.displayScreen();
+        }
+    }
+
+    max_intensity = 0;
+    for (int x = 0; x < WIDTH; x++)
+    {
+        for (int y = 0; y < HEIGHT; y++)
+        {
+            raytracer::Color color = mean_matrix[x][y].getColor();
+
+            if (color.r > max_intensity)
+                max_intensity = color.r;
+            if (color.g > max_intensity)
+                max_intensity = color.g;
+            if (color.b > max_intensity)
+                max_intensity = color.b;
+        }
+    }
+
+    for (int x = 0; x < WIDTH; x++)
+    {
+        for (int y = 0; y < HEIGHT; y++)
+        {
+            raytracer::Color color = mean_matrix[x][y].getColor();
+            color = color * (255 / max_intensity);
+            color.cap();
+            display.drawPixel(x, y, color);
         }
     }
 
