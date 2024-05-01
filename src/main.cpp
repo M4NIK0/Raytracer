@@ -1,6 +1,7 @@
 #include <iostream>
 #include "Render/Camera.hpp"
 #include "Objects/Primitives/Sphere.hpp"
+#include "Objects/Primitives/Cube.hpp"
 #include <random>
 
 #include "sfml/sfml.hpp"
@@ -37,10 +38,10 @@ int main()
 
     std::vector<std::unique_ptr<raytracer::IObject>> objects;
 
-    auto obj1 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0, -5, -25), 5, raytracer::Color(1, 1, 1));
+//    auto obj1 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0, -5, -25), 5, raytracer::Color(1, 1, 1));
     auto obj2 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(10, -5, -25), 5, raytracer::Color(1, 1, 1));
     auto obj3 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0, 10000, -25), 9999, raytracer::Color(1, 1, 1));
-//    auto obj3 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0, 5010.5, 0), 4500, raytracer::Color(1, 1, 1));
+    auto cube = std::make_shared<raytracer::Cube>(raytracer::Point3D(0, -5, -25), 10, raytracer::Color(1, 1, 1));
 //    auto obj4 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0, 5, -550), 500, raytracer::Color(1, 1, 1));
 //    auto obj5 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(-5, 5, -45), 0.5, raytracer::Color(1, 1, 1));
 
@@ -54,9 +55,10 @@ int main()
 //    obj1->setRefractionIndex(1.5);
 //    obj2->setRefractionIndex(1.5);
 
-    renderer.addObject(obj1);
+//    renderer.addObject(obj1);
     renderer.addObject(obj2);
     renderer.addObject(obj3);
+    renderer.addObject(cube);
 //    renderer.addObject(obj4);
 //    renderer.addObject(obj5);
 
