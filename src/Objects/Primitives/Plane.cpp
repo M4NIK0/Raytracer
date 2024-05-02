@@ -9,7 +9,7 @@ raytracer::Plane::~Plane() = default;
 raytracer::Point3D raytracer::Plane::hit(const Ray3D &ray)
 {
     double denominator = _normal.dot(ray.direction);
-    if (std::abs(denominator) > 1e-6) {
+    if (std::abs(std::abs(denominator)) > 1e-6) {
         double t = (_position - ray.origin).dot(_normal) / denominator;
         if (t >= 0)
             return ray.origin + ray.direction * t;
