@@ -6,6 +6,7 @@
 #define RAYTRACER_PLANE_HPP
 
 #include "../IObject.hpp"
+#include "../../Math/Matrix.hpp"
 
 namespace raytracer
 {

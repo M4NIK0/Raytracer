@@ -56,6 +56,8 @@ int main()
 //    obj1->setRefractionIndex(1.5);
 //    obj2->setRefractionIndex(1.5);
 
+//    plane->rotate(raytracer::Vector3D(0, 0, 90));
+
     renderer.addObject(obj1);
     renderer.addObject(obj2);
     renderer.addObject(plane);
