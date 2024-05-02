@@ -22,18 +22,33 @@ void raytracer::Renderer::addLight(std::shared_ptr<ILight> light)
     _renderData.lights.push_back(light);
 }
 
-std::vector<raytracer::Chunk> raytracer::Renderer::getChunks(renderData &data, size_t chunksX, size_t chunksY)
+std::vector<raytracer::Chunk> raytracer::Renderer::getChunks(renderData &data, size_t chunkSizeX, size_t chunkSizeY)
 {
     std::vector<Chunk> chunks;
 
-    size_t chunkWidth = data.width / chunksX;
-    size_t chunkHeight = data.height / chunksY;
+    size_t chunkWidth = data.width / chunkSizeX;
+    size_t chunkHeight = data.height / chunkSizeY;
 
-    for (size_t y = 0; y < chunksY; ++y)
+    for (size_t y = 0; y < chunkSizeY; ++y)
     {
-        for (size_t x = 0; x < chunksX; ++x)
+        for (size_t x = 0; x < chunkSizeX; ++x)
         {
-            chunks.push_back(Chunk(x * chunkWidth, y * chunkHeight, chunkWidth, chunkHeight));
+            if (x == chunkSizeX - 1 && y == chunkSizeY - 1)
+            {
+                chunks.push_back(Chunk(x * chunkWidth, y * chunkHeight, data.width - x * chunkWidth, data.height - y * chunkHeight));
+            }
+            else if (x == chunkSizeX - 1)
+            {
+                chunks.push_back(Chunk(x * chunkWidth, y * chunkHeight, data.width - x * chunkWidth, chunkHeight));
+            }
+            else if (y == chunkSizeY - 1)
+            {
+                chunks.push_back(Chunk(x * chunkWidth, y * chunkHeight, chunkWidth, data.height - y * chunkHeight));
+            }
+            else
+            {
+                chunks.push_back(Chunk(x * chunkWidth, y * chunkHeight, chunkWidth, chunkHeight));
+            }
         }
     }
 
