@@ -11,6 +11,22 @@ raytracer::Cube::~Cube() = default;
 
 raytracer::Point3D raytracer::Cube::hit(const Ray3D &ray)
 {
+    // Convert the cube's rotation to a matrix
+    raytracer::Matrix rotationMatrix;
+    rotationMatrix = {
+            {_rotation.x},
+            {_rotation.y},
+            {_rotation.z}
+    };
+
+    // Compute the inverse rotation matrix
+    raytracer::Matrix inverseRotationMatrix = rotationMatrix.transpose();
+
+    // Apply the inverse rotation to the ray's origin and direction
+    Ray3D localRay;
+    localRay.origin = matrixToVector(inverseRotationMatrix * vectorToMatrix(ray.origin - _position));
+    localRay.direction = matrixToVector(inverseRotationMatrix * vectorToMatrix(ray.direction));
+
     double tmin = (_position.x - _sideLength / 2 - ray.origin.x) / ray.direction.x;
     double tmax = (_position.x + _sideLength / 2 - ray.origin.x) / ray.direction.x;
 
@@ -101,6 +117,51 @@ void raytracer::Cube::move(Vector3D vec)
 
 void raytracer::Cube::rotate(Vector3D vec)
 {
+    // Convert the rotation angles from degrees to radians
+    double rx = vec.x * M_PI / 180.0;
+    double ry = vec.y * M_PI / 180.0;
+    double rz = vec.z * M_PI / 180.0;
+
+    // Create rotation matrices for the x, y, and z axes
+    raytracer::Matrix rotateX;
+    rotateX = {
+            {1, 0, 0},
+            {0, cos(rx), -sin(rx)},
+            {0, sin(rx), cos(rx)}
+    };
+
+    raytracer::Matrix rotateY;
+    rotateY = {
+            {cos(ry), 0, sin(ry)},
+            {0, 1, 0},
+            {-sin(ry), 0, cos(ry)}
+    };
+
+    raytracer::Matrix rotateZ;
+    rotateZ = {
+            {cos(rz), -sin(rz), 0},
+            {sin(rz), cos(rz), 0},
+            {0, 0, 1}
+    };
+
+    // Combine the rotation matrices
+    raytracer::Matrix rotationMatrix = rotateZ * rotateY * rotateX;
+
+    // Convert the cube's position to a matrix
+    raytracer::Matrix positionMatrix;
+    positionMatrix = {
+            {_position.x},
+            {_position.y},
+            {_position.z}
+    };
+
+    // Apply the rotation matrix to the cube's position
+    raytracer::Matrix rotatedPositionMatrix = rotationMatrix * positionMatrix;
+
+    // Convert the result back to a Vector3D and update the cube's position
+    _position.x = rotatedPositionMatrix.get(0, 0);
+    _position.y = rotatedPositionMatrix.get(1, 0);
+    _position.z = rotatedPositionMatrix.get(2, 0);
 }
 
 bool raytracer::Cube::getGlassState(const Point3D &point)
