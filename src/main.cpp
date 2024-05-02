@@ -41,7 +41,7 @@ int main()
 //    auto obj1 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0, -5, -25), 5, raytracer::Color(1, 1, 1));
     auto obj2 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(10, -5, -25), 5, raytracer::Color(1, 1, 1));
     auto obj3 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0, 10000, -25), 9999, raytracer::Color(1, 1, 1));
-    auto cube = std::make_shared<raytracer::Cube>(raytracer::Point3D(0, -5, -25), 10, raytracer::Color(1, 1, 1));
+    auto cube = std::make_shared<raytracer::Cube>(raytracer::Point3D(0, -8, -25), 10, raytracer::Color(1, 1, 1));
 //    auto obj4 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0, 5, -550), 500, raytracer::Color(1, 1, 1));
 //    auto obj5 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(-5, 5, -45), 0.5, raytracer::Color(1, 1, 1));
 
