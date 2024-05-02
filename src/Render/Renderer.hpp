@@ -24,6 +24,7 @@ namespace raytracer
 
             size_t x;
             size_t y;
+
             size_t width;
             size_t height;
     };
@@ -41,11 +42,11 @@ namespace raytracer
             size_t reflexionsRays = 5;
             size_t maxBounces = 2;
 
-            size_t width = 1920;
-            size_t height = 1080;
+            int width = 1920;
+            int height = 1080;
 
-            size_t chunks_x = 10;
-            size_t chunks_y = 10;
+            int chunkWidth = 100;
+            int chunkHeight = 100;
     };
 
     class Renderer
@@ -57,7 +58,7 @@ namespace raytracer
             void addObject(std::shared_ptr<IObject> object);
             void addLight(std::shared_ptr<ILight> light);
 
-            static std::vector<Chunk> getChunks(renderData &data, size_t chunksX, size_t chunksY);
+            static std::vector<Chunk> getChunks(renderData &data, int chunkSizeX, int chunkSizeY);
 
             std::vector<std::vector<RenderRay>> renderChunk(const Chunk &chunk, const renderData &data);
 
@@ -71,9 +72,7 @@ namespace raytracer
             RenderRay getRefractionsLight(const RenderPoint &point, const renderData &data, int bounces);
 
             Camera camera;
-        private:
-            renderData _renderData;
-
+            renderData data;
             double cameraExposure = 2;
     };
 }

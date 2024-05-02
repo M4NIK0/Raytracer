@@ -8,16 +8,10 @@
 #include "Light/ILight.hpp"
 #include "Light/Objects/PointLight.hpp"
 
-#define SIZE 512
-#define WIDTH SIZE
-#define HEIGHT SIZE
+#define WIDTH 64
+#define HEIGHT 64
 
-#define CHUNKS 16
-#define CHUNKS_X CHUNKS
-#define CHUNKS_Y CHUNKS
-
-#define CHUNK_SIZE_X WIDTH / CHUNKS_X
-#define CHUNK_SIZE_Y HEIGHT / CHUNKS_Y
+#define CHUNKS_SIZE 26
 
 #define MAX_SAMPLES 3
 
@@ -31,8 +25,14 @@ int main()
     raytracer::Rectangle3D screen(raytracer::Point3D(0, 1, 0), raytracer::Vector3D(1, 0, 0),
                               raytracer::Vector3D(0, -1, 0)); // Invert the Y vector
     raytracer::Camera camera(raytracer::Point3D(0.5, 0.5, 1), screen, width, height);
-
     raytracer::Renderer renderer(camera);
+    raytracer::renderData data;
+
+    data.width = width;
+    data.height = height;
+    data.chunkWidth = CHUNKS_SIZE;
+    data.chunkHeight = CHUNKS_SIZE;
+    renderer.data = data;
 
     auto obj1 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0.5, -101, -4), 100, raytracer::Color(1, 1, 1));
     auto obj2 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0.5, 0.5, -4), 1, raytracer::Color(1, 1, 1));
@@ -63,16 +63,16 @@ int main()
 
     for (int i = 0; i < MAX_SAMPLES; i++)
     {
-        color_matrix.push_back(std::vector<std::vector<raytracer::RenderRay>>());
+        color_matrix.emplace_back();
         for (int x = 0; x < width; x++)
         {
-            color_matrix[i].push_back(std::vector<raytracer::RenderRay>());
-            mean_matrix.push_back(std::vector<raytracer::RenderRay>());
+            color_matrix[i].emplace_back();
+            mean_matrix.emplace_back();
 
             for (int y = 0; y < height; y++)
             {
-                color_matrix[i][x].push_back(raytracer::RenderRay());
-                mean_matrix[x].push_back(raytracer::RenderRay());
+                color_matrix[i][x].emplace_back();
+                mean_matrix[x].emplace_back();
             }
         }
     }
@@ -82,63 +82,35 @@ int main()
 
     images_amount++;
 
-//        renderer.objects[0]->move(raytracer::Vector3D(0.1, 0, 0));
+    std::vector<raytracer::Chunk> chunks = raytracer::Renderer::getChunks(data, CHUNKS_SIZE, CHUNKS_SIZE);
 
-    for (int chunk_x = 0; chunk_x < CHUNKS_X; chunk_x++)
+    for (auto &chunk : chunks)
     {
-        for (int chunk_y = 0; chunk_y < CHUNKS_Y; chunk_y++)
+        for (int i = 0; i < MAX_SAMPLES; i++)
         {
-            // draw rectangle around the current chunk
-            for (int x = 0; x < CHUNK_SIZE_X; x++)
+            std::vector<std::vector<raytracer::RenderRay>> chunk_matrix = renderer.renderChunk(chunk, data);
+
+            for (int x = 0; x < chunk.width; x++)
             {
-                display.drawPixel(x + (chunk_x * CHUNK_SIZE_X), chunk_y * CHUNK_SIZE_Y, raytracer::Color(255, 255, 255));
-                display.drawPixel(x + (chunk_x * CHUNK_SIZE_X), (chunk_y + 1) * CHUNK_SIZE_Y - 1, raytracer::Color(255, 255, 255));
+                for (int y = 0; y < chunk.height; y++)
+                {
+                    color_matrix[i][x + (chunk.x * data.chunkWidth)][y + (chunk.y * data.chunkHeight)] = chunk_matrix[x][y];
+                }
             }
+        }
+    }
 
-            for (int y = 0; y < CHUNK_SIZE_Y; y++)
-            {
-                display.drawPixel(chunk_x * CHUNK_SIZE_X, y + (chunk_y * CHUNK_SIZE_Y), raytracer::Color(255, 255, 255));
-                display.drawPixel((chunk_x + 1) * CHUNK_SIZE_X - 1, y + (chunk_y * CHUNK_SIZE_Y), raytracer::Color(255, 255, 255));
-            }
-
-            display.displayScreen();
-
+    for (int x = 0; x < width; x++)
+    {
+        for (int y = 0; y < height; y++)
+        {
+            raytracer::Color color = raytracer::Color(0, 0, 0);
             for (int i = 0; i < MAX_SAMPLES; i++)
             {
-                for (int x = 0; x < CHUNK_SIZE_X; x++)
-                {
-                    for (int y = 0; y < CHUNK_SIZE_Y; y++)
-                    {
-                        raytracer::RenderRay ray = renderer.traceRay(x + (chunk_x * CHUNK_SIZE_X), y + (chunk_y * CHUNK_SIZE_Y));
-                        color_matrix[i][x + (chunk_x * CHUNK_SIZE_X)][y + (chunk_y * CHUNK_SIZE_Y)] = ray;
-                        if (ray.getColor().r > max_intensity)
-                            max_intensity = ray.getColor().r;
-                        if (ray.getColor().g > max_intensity)
-                            max_intensity = ray.getColor().g;
-                        if (ray.getColor().b > max_intensity)
-                            max_intensity = ray.getColor().b;
-                    }
-                }
+                color = color + color_matrix[i][x][y].getColor();
             }
-
-            for (int x = 0; x < WIDTH; x++)
-            {
-                for (int y = 0; y < HEIGHT; y++)
-                {
-                    raytracer::Color color(0, 0, 0);
-                    for (int i = 0; i < MAX_SAMPLES; i++)
-                    {
-                        color = color + color_matrix[i][x][y].getColor();
-                    }
-                    color = color * (1.0 / MAX_SAMPLES);
-                    mean_matrix[x][y].color = color;
-                    color = color * (255 / max_intensity);
-                    color.cap();
-                    display.drawPixel(x, y, color);
-                }
-            }
-
-            display.displayScreen();
+            color = color * (1.0 / MAX_SAMPLES);
+            mean_matrix[x][y].color = color;
         }
     }
 

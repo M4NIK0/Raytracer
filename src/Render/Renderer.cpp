@@ -14,42 +14,51 @@ raytracer::Renderer::~Renderer() = default;
 
 void raytracer::Renderer::addObject(std::shared_ptr<IObject> object)
 {
-    _renderData.objects.push_back(object);
+    data.objects.push_back(object);
 }
 
 void raytracer::Renderer::addLight(std::shared_ptr<ILight> light)
 {
-    _renderData.lights.push_back(light);
+    data.lights.push_back(light);
 }
 
-std::vector<raytracer::Chunk> raytracer::Renderer::getChunks(renderData &data, size_t chunkSizeX, size_t chunkSizeY)
+std::vector<raytracer::Chunk> raytracer::Renderer::getChunks(renderData &data, int chunkSizeX, int chunkSizeY)
 {
     std::vector<Chunk> chunks;
 
-    size_t chunkWidth = data.width / chunkSizeX;
-    size_t chunkHeight = data.height / chunkSizeY;
+    int x_max = 0;
+    int y_max;
 
-    for (size_t y = 0; y < chunkSizeY; ++y)
+    while (x_max < data.width)
     {
-        for (size_t x = 0; x < chunkSizeX; ++x)
+        y_max = 0;
+        while (y_max < data.height)
         {
-            if (x == chunkSizeX - 1 && y == chunkSizeY - 1)
+            size_t x = x_max / chunkSizeX;
+            size_t y = y_max / chunkSizeY;
+
+            size_t width = chunkSizeX;
+            size_t height = chunkSizeY;
+
+            int x_rest = data.width - (x_max + chunkSizeX);
+            int y_rest = data.height - (y_max + chunkSizeY);
+
+            if (x_rest < 0)
             {
-                chunks.push_back(Chunk(x * chunkWidth, y * chunkHeight, data.width - x * chunkWidth, data.height - y * chunkHeight));
+                width = chunkSizeX + x_rest;
             }
-            else if (x == chunkSizeX - 1)
+
+            if (y_rest < 0)
             {
-                chunks.push_back(Chunk(x * chunkWidth, y * chunkHeight, data.width - x * chunkWidth, chunkHeight));
+                height = chunkSizeY + y_rest;
             }
-            else if (y == chunkSizeY - 1)
-            {
-                chunks.push_back(Chunk(x * chunkWidth, y * chunkHeight, chunkWidth, data.height - y * chunkHeight));
-            }
-            else
-            {
-                chunks.push_back(Chunk(x * chunkWidth, y * chunkHeight, chunkWidth, chunkHeight));
-            }
+
+            chunks.emplace_back(x, y, width, height);
+
+            y_max += chunkSizeY;
         }
+
+        x_max += chunkSizeX;
     }
 
     return chunks;
@@ -60,17 +69,17 @@ raytracer::RenderRay raytracer::Renderer::traceRay(int x, int y)
     Ray3D ray = camera.getRay(x, y);
     RenderPoint point;
 
-    point.hitNearestObject(_renderData.objects, ray);
+    point.hitNearestObject(data.objects, ray);
 
     if (!point.object)
     {
         return RenderRay(Ray3D(Point3D(0, 0, 0), Vector3D(0, 0, 0)));
     }
 
-    RenderRay directLight = getDirectLight(point, _renderData);
-    RenderRay reflexionsLight = getReflexionsLight(point, _renderData, _renderData.maxBounces);
-    RenderRay diffuseLight = getDiffuseLight(point, _renderData, _renderData.maxBounces);
-    RenderRay refractionsLight = getRefractionsLight(point, _renderData, _renderData.maxBounces);
+    RenderRay directLight = getDirectLight(point, data);
+    RenderRay reflexionsLight = getReflexionsLight(point, data, data.maxBounces);
+    RenderRay diffuseLight = getDiffuseLight(point, data, data.maxBounces);
+    RenderRay refractionsLight = getRefractionsLight(point, data, data.maxBounces);
 
     RenderRay finalRay = directLight + reflexionsLight + diffuseLight + refractionsLight;
 
@@ -79,19 +88,18 @@ raytracer::RenderRay raytracer::Renderer::traceRay(int x, int y)
 
 std::vector<std::vector<raytracer::RenderRay>> raytracer::Renderer::renderChunk(const Chunk &chunk, const renderData &data)
 {
-    std::vector<std::vector<RenderRay>> chunkRays;
+    std::vector<std::vector<RenderRay>> chunk_matrix;
 
-    for (size_t y = chunk.y; y < chunk.y + chunk.height; ++y)
+    for (int x = 0; x < chunk.width; x++)
     {
-        std::vector<RenderRay> rowRays;
-        for (size_t x = chunk.x; x < chunk.x + chunk.width; ++x)
+        chunk_matrix.emplace_back();
+        for (int y = 0; y < chunk.height; y++)
         {
-            rowRays.push_back(traceRay(x, y));
+            chunk_matrix[x].emplace_back(traceRay(x + (chunk.x * data.chunkWidth), y + (chunk.y * data.chunkHeight)));
         }
-        chunkRays.push_back(rowRays);
     }
 
-    return chunkRays;
+    return chunk_matrix;
 }
 
 raytracer::Vector3D raytracer::Renderer::getRandomRayFromCone(const raytracer::Vector3D &normal, double angle)
@@ -128,7 +136,7 @@ raytracer::Renderer::getDirectLight(const RenderPoint &point, const renderData &
         return ray;
     }
 
-    for (auto &light: _renderData.lights)
+    for (auto &light: data.lights)
     {
         // Get light rays
         std::vector<Ray3D> lightRays = light->getLightRays(point.hitPoint);
