@@ -57,6 +57,8 @@ namespace raytracer
             void addObject(std::shared_ptr<IObject> object);
             void addLight(std::shared_ptr<ILight> light);
 
+            static std::vector<Chunk> getChunks(renderData &data, size_t chunksX, size_t chunksY);
+
             std::vector<std::vector<RenderRay>> renderChunk(const Chunk &chunk, const renderData &data);
 
             raytracer::RenderRay traceRay(int x, int y);

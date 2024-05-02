@@ -22,6 +22,24 @@ void raytracer::Renderer::addLight(std::shared_ptr<ILight> light)
     _renderData.lights.push_back(light);
 }
 
+std::vector<raytracer::Chunk> raytracer::Renderer::getChunks(renderData &data, size_t chunksX, size_t chunksY)
+{
+    std::vector<Chunk> chunks;
+
+    size_t chunkWidth = data.width / chunksX;
+    size_t chunkHeight = data.height / chunksY;
+
+    for (size_t y = 0; y < chunksY; ++y)
+    {
+        for (size_t x = 0; x < chunksX; ++x)
+        {
+            chunks.push_back(Chunk(x * chunkWidth, y * chunkHeight, chunkWidth, chunkHeight));
+        }
+    }
+
+    return chunks;
+}
+
 raytracer::RenderRay raytracer::Renderer::traceRay(int x, int y)
 {
     Ray3D ray = camera.getRay(x, y);
