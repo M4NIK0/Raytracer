@@ -7,6 +7,7 @@
 
 #pragma once
 #include "../IObject.hpp"
+#include "../../Math/Matrix.hpp"
 
 namespace raytracer
 {
@@ -43,6 +44,7 @@ namespace raytracer
     private:
         double _sideLength;
         Point3D _position;
+        Vector3D _rotation;
 
         double _surfaceRoughness = 0;
         Color _surfaceAbsorbtion;

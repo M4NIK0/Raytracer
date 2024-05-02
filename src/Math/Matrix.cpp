@@ -101,3 +101,13 @@ raytracer::Matrix raytracer::Matrix::operator=(const std::vector<std::vector<dou
     matrix = other;
     return *this;
 }
+
+raytracer::Matrix transposeMatrix(const raytracer::Matrix& matrix) {
+    raytracer::Matrix transposed(3, 3);
+    for (std::size_t i = 0; i < 3; i++) {
+        for (std::size_t j = 0; j < 3; j++) {
+            transposed.set(j, i, matrix.get(i, j));
+        }
+    }
+    return transposed;
+}
