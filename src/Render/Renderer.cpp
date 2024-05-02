@@ -5,6 +5,7 @@
 ** raytracer
 */
 
+#include <vector>
 #include "Renderer.hpp"
 #include "RenderRay.hpp"
 #include "RenderPoint.hpp"
@@ -41,6 +42,23 @@ raytracer::RenderRay raytracer::Renderer::traceRay(int x, int y)
     RenderRay finalRay = directLight + reflexionsLight + diffuseLight + refractionsLight;
 
     return finalRay;
+}
+
+std::vector<std::vector<raytracer::RenderRay>> raytracer::Renderer::renderChunk(const Chunk &chunk, const renderData &data)
+{
+    std::vector<std::vector<RenderRay>> chunkRays;
+
+    for (size_t y = chunk.y; y < chunk.y + chunk.height; ++y)
+    {
+        std::vector<RenderRay> rowRays;
+        for (size_t x = chunk.x; x < chunk.x + chunk.width; ++x)
+        {
+            rowRays.push_back(traceRay(x, y));
+        }
+        chunkRays.push_back(rowRays);
+    }
+
+    return chunkRays;
 }
 
 raytracer::Vector3D raytracer::Renderer::getRandomRayFromCone(const raytracer::Vector3D &normal, double angle)
