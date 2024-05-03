@@ -14,15 +14,15 @@ raytracer::Renderer::~Renderer() = default;
 
 void raytracer::Renderer::addObject(std::shared_ptr<IObject> object)
 {
-    data.objects.push_back(object);
+    renderData.objects.push_back(object);
 }
 
 void raytracer::Renderer::addLight(std::shared_ptr<ILight> light)
 {
-    data.lights.push_back(light);
+    renderData.lights.push_back(light);
 }
 
-std::vector<raytracer::Chunk> raytracer::Renderer::getChunks(renderData &data, int chunkSizeX, int chunkSizeY)
+std::vector<raytracer::Chunk> raytracer::Renderer::getChunks(RenderData &data, int chunkSizeX, int chunkSizeY)
 {
     std::vector<Chunk> chunks;
 
@@ -69,37 +69,36 @@ raytracer::RenderRay raytracer::Renderer::traceRay(int x, int y)
     Ray3D ray = camera.getRay(x, y);
     RenderPoint point;
 
-    point.hitNearestObject(data.objects, ray);
+    point.hitNearestObject(renderData.objects, ray);
 
     if (!point.object)
     {
         return RenderRay(Ray3D(Point3D(0, 0, 0), Vector3D(0, 0, 0)));
     }
 
-    RenderRay directLight = getDirectLight(point, data);
-    RenderRay reflexionsLight = getReflexionsLight(point, data, data.maxBounces);
-    RenderRay diffuseLight = getDiffuseLight(point, data, data.maxBounces);
-    RenderRay refractionsLight = getRefractionsLight(point, data, data.maxBounces);
+    RenderRay directLight = getDirectLight(point, renderData);
+    RenderRay reflexionsLight = getReflexionsLight(point, renderData, renderData.maxBounces);
+    RenderRay diffuseLight = getDiffuseLight(point, renderData, renderData.maxBounces);
+    RenderRay refractionsLight = getRefractionsLight(point, renderData, renderData.maxBounces);
 
     RenderRay finalRay = directLight + reflexionsLight + diffuseLight + refractionsLight;
 
     return finalRay;
 }
 
-std::vector<std::vector<raytracer::RenderRay>> raytracer::Renderer::renderChunk(const Chunk &chunk, const renderData &data)
+void raytracer::Renderer::renderChunk(const Chunk &chunk, RenderData &data)
 {
-    std::vector<std::vector<RenderRay>> chunk_matrix;
-
-    for (int x = 0; x < chunk.width; x++)
+    for (int i = 0; i < data.maxSamples; i++)
     {
-        chunk_matrix.emplace_back();
-        for (int y = 0; y < chunk.height; y++)
+        for (int x = 0; x < chunk.width; x++)
         {
-            chunk_matrix[x].emplace_back(traceRay(x + (chunk.x * data.chunkWidth), y + (chunk.y * data.chunkHeight)));
+            for (int y = 0; y < chunk.height; y++)
+            {
+                Color tempColor = traceRay(x + (chunk.x * data.chunkWidth), y + (chunk.y * data.chunkHeight)).color / data.maxSamples;
+                data.renderBuffer[x + (chunk.x * data.chunkWidth)][y + (chunk.y * data.chunkHeight)] += tempColor;
+            }
         }
     }
-
-    return chunk_matrix;
 }
 
 raytracer::Vector3D raytracer::Renderer::getRandomRayFromCone(const raytracer::Vector3D &normal, double angle)
@@ -124,7 +123,7 @@ raytracer::Vector3D raytracer::Renderer::getRandomRayFromCone(const raytracer::V
 }
 
 raytracer::RenderRay
-raytracer::Renderer::getDirectLight(const RenderPoint &point, const renderData &data)
+raytracer::Renderer::getDirectLight(const RenderPoint &point, const RenderData &data)
 {
     // Get all direct light rays
     std::vector<RenderRay> directLightRays;
@@ -178,11 +177,11 @@ raytracer::Renderer::getDirectLight(const RenderPoint &point, const renderData &
 }
 
 raytracer::RenderRay
-raytracer::Renderer::getReflexionsLight(const RenderPoint &point, const renderData &data, int bounces)
+raytracer::Renderer::getReflexionsLight(const RenderPoint &point, const RenderData &data, int bounces)
 {
     if (bounces <= 0)
     {
-        return RenderRay(Ray3D(Point3D(0, 0, 0), Vector3D(0, 0, 0)));
+        return {Ray3D(Point3D(0, 0, 0), Vector3D(0, 0, 0))};
     }
 
     // Create the reflection ray
@@ -196,7 +195,7 @@ raytracer::Renderer::getReflexionsLight(const RenderPoint &point, const renderDa
     // If the reflection ray hits nothing, return black
     if (!reflectionPoint.object)
     {
-        return RenderRay(Ray3D(Point3D(0, 0, 0), Vector3D(0, 0, 0)));
+        return {Ray3D(Point3D(0, 0, 0), Vector3D(0, 0, 0))};
     }
 
     // Get the direct light
@@ -212,11 +211,11 @@ raytracer::Renderer::getReflexionsLight(const RenderPoint &point, const renderDa
     return ray;
 }
 
-raytracer::RenderRay raytracer::Renderer::getDiffuseLight(const RenderPoint &point, const renderData &data, int bounces)
+raytracer::RenderRay raytracer::Renderer::getDiffuseLight(const RenderPoint &point, const RenderData &data, int bounces)
 {
     if (bounces <= 0 || point.object->getGlassState(point.hitPoint))
     {
-        return RenderRay(Ray3D(Point3D(0, 0, 0), Vector3D(0, 0, 0)));
+        return {Ray3D(Point3D(0, 0, 0), Vector3D(0, 0, 0))};
     }
 
     Color totalColor(0, 0, 0);
@@ -261,11 +260,11 @@ raytracer::RenderRay raytracer::Renderer::getDiffuseLight(const RenderPoint &poi
     return ray;
 }
 
-raytracer::RenderRay raytracer::Renderer::getRefractionsLight(const RenderPoint &point, const renderData &data, int bounces)
+raytracer::RenderRay raytracer::Renderer::getRefractionsLight(const RenderPoint &point, const RenderData &data, int bounces)
 {
     if (!point.object->getGlassState(point.hitPoint))
     {
-        return RenderRay(Ray3D(Point3D(0, 0, 0), Vector3D(0, 0, 0)));
+        return {Ray3D(Point3D(0, 0, 0), Vector3D(0, 0, 0))};
     }
 
     double refractionIndex = point.object->getRefractionIndex();
@@ -278,7 +277,7 @@ raytracer::RenderRay raytracer::Renderer::getRefractionsLight(const RenderPoint 
 
     if (k < 0)
     {
-        return RenderRay(Ray3D(Point3D(0, 0, 0), Vector3D(0, 0, 0)));
+        return {Ray3D(Point3D(0, 0, 0), Vector3D(0, 0, 0))};
     }
     else
     {
@@ -301,7 +300,7 @@ raytracer::RenderRay raytracer::Renderer::getRefractionsLight(const RenderPoint 
 
     if (!refractedPoint.object)
     {
-        return RenderRay(Ray3D(Point3D(0, 0, 0), Vector3D(0, 0, 0)));
+        return {Ray3D(Point3D(0, 0, 0), Vector3D(0, 0, 0))};
     }
 
     RenderRay directLight = getDirectLight(refractedPoint, data);
@@ -312,4 +311,17 @@ raytracer::RenderRay raytracer::Renderer::getRefractionsLight(const RenderPoint 
     RenderRay finalRay = directLight + reflectionLight + diffuseLight + refractionsLight;
 
     return finalRay;
+}
+
+void raytracer::RenderData::initRenderBuffer()
+{
+    renderBuffer.clear();
+    for (int i = 0; i < width; i++)
+    {
+        renderBuffer.emplace_back();
+        for (int j = 0; j < height; j++)
+        {
+            renderBuffer[i].emplace_back(0, 0, 0);
+        }
+    }
 }

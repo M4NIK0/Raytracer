@@ -22,20 +22,31 @@ namespace raytracer
             double g;
             double b;
 
-            double length() {
-                return sqrt(r * r + g * g + b * b);
+            Color operator+(const Color& other) const {
+                return {r + other.r, g + other.g, b + other.b};
             }
 
-            Color operator+(const Color& other) {
-                return Color(r + other.r, g + other.g, b + other.b);
+            Color operator*(const Color& other) const {
+                return {r * other.r, g * other.g, b * other.b};
             }
 
-            Color operator*(const Color& other) {
-                return Color(r * other.r, g * other.g, b * other.b);
+            Color operator*(double scalar) const {
+                return {r * scalar, g * scalar, b * scalar};
             }
 
-            Color operator*(double scalar) {
-                return Color(r * scalar, g * scalar, b * scalar);
+            Color operator/(double scalar) const {
+                return {r / scalar, g / scalar, b / scalar};
+            }
+
+            Color operator-(const Color& other) const {
+                return {r - other.r, g - other.g, b - other.b};
+            }
+
+            Color operator+=(const Color& other) {
+                r += other.r;
+                g += other.g;
+                b += other.b;
+                return *this;
             }
 
             void cap() {
