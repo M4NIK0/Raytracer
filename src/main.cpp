@@ -11,9 +11,10 @@
 #define WIDTH 256
 #define HEIGHT 256
 
-#define CHUNKS_SIZE 49
+#define CHUNK_SIZE_X 16
+#define CHUNK_SIZE_Y 16
 
-#define MAX_SAMPLES 3
+#define MAX_SAMPLES 2
 
 #include <chrono>
 
@@ -26,8 +27,8 @@ int main()
 
     renderer.renderData.width = WIDTH;
     renderer.renderData.height = HEIGHT;
-    renderer.renderData.chunkWidth = CHUNKS_SIZE;
-    renderer.renderData.chunkHeight = CHUNKS_SIZE;
+    renderer.renderData.chunkWidth = CHUNK_SIZE_X;
+    renderer.renderData.chunkHeight = CHUNK_SIZE_Y;
     renderer.renderData.maxSamples = MAX_SAMPLES;
     renderer.renderData.initRenderBuffer();
 
@@ -64,7 +65,7 @@ int main()
 
     images_amount++;
 
-    std::vector<raytracer::Chunk> chunks = renderer.getChunks(CHUNKS_SIZE, CHUNKS_SIZE);
+    std::vector<raytracer::Chunk> chunks = renderer.getChunks(CHUNK_SIZE_X, CHUNK_SIZE_Y);
 
     for (auto &chunk : chunks)
     {
@@ -94,10 +95,38 @@ int main()
                 display.drawPixel(x, y, color);
             }
         }
-        display.drawCurrentchunkBoundaries(chunk, CHUNKS_SIZE, CHUNKS_SIZE);
+        display.drawCurrentchunkBoundaries(chunk, CHUNK_SIZE_X, CHUNK_SIZE_Y);
         display.displayScreen();
         renderer.renderChunk(chunk);
     }
+
+    max_intensity = 0;
+        for (int x = 0; x < WIDTH; x++)
+        {
+            for (int y = 0; y < HEIGHT; y++)
+            {
+                raytracer::Color color = renderer.renderData.renderBuffer[x][y];
+
+                if (color.r > max_intensity)
+                    max_intensity = color.r;
+                if (color.g > max_intensity)
+                    max_intensity = color.g;
+                if (color.b > max_intensity)
+                    max_intensity = color.b;
+            }
+        }
+
+        for (int x = 0; x < WIDTH; x++)
+        {
+            for (int y = 0; y < HEIGHT; y++)
+            {
+                raytracer::Color color = renderer.renderData.renderBuffer[x][y];
+                color = color * (255 / max_intensity);
+                color.cap();
+                display.drawPixel(x, y, color);
+            }
+        }
+        display.displayScreen();
 
 
     while (loop)
