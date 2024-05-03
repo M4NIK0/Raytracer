@@ -8,15 +8,16 @@
 #include "Light/ILight.hpp"
 #include "Light/Objects/PointLight.hpp"
 
-#define WIDTH 256
-#define HEIGHT 256
+#define WIDTH 512
+#define HEIGHT 512
 
-#define CHUNK_SIZE_X 16
-#define CHUNK_SIZE_Y 16
+#define CHUNK_SIZE_X 64
+#define CHUNK_SIZE_Y 64
 
 #define MAX_SAMPLES 2
 
 #include <chrono>
+#include "Render/Threads.hpp"
 
 int main()
 {
@@ -65,40 +66,37 @@ int main()
 
     images_amount++;
 
-    std::vector<raytracer::Chunk> chunks = renderer.getChunks(CHUNK_SIZE_X, CHUNK_SIZE_Y);
+    raytracer::Threads threads(renderer);
+    threads.startThreads(2, CHUNK_SIZE_X, CHUNK_SIZE_Y);
+    threads.stopThreads();
 
-    for (auto &chunk : chunks)
+    max_intensity = 0;
+    for (int x = 0; x < WIDTH; x++)
     {
-        max_intensity = 0;
-        for (int x = 0; x < WIDTH; x++)
+        for (int y = 0; y < HEIGHT; y++)
         {
-            for (int y = 0; y < HEIGHT; y++)
-            {
-                raytracer::Color color = renderer.renderData.renderBuffer[x][y];
+            raytracer::Color color = renderer.renderData.renderBuffer[x][y];
 
-                if (color.r > max_intensity)
-                    max_intensity = color.r;
-                if (color.g > max_intensity)
-                    max_intensity = color.g;
-                if (color.b > max_intensity)
-                    max_intensity = color.b;
-            }
+            if (color.r > max_intensity)
+                max_intensity = color.r;
+            if (color.g > max_intensity)
+                max_intensity = color.g;
+            if (color.b > max_intensity)
+                max_intensity = color.b;
         }
-
-        for (int x = 0; x < WIDTH; x++)
-        {
-            for (int y = 0; y < HEIGHT; y++)
-            {
-                raytracer::Color color = renderer.renderData.renderBuffer[x][y];
-                color = color * (255 / max_intensity);
-                color.cap();
-                display.drawPixel(x, y, color);
-            }
-        }
-        display.drawCurrentchunkBoundaries(chunk, CHUNK_SIZE_X, CHUNK_SIZE_Y);
-        display.displayScreen();
-        renderer.renderChunk(chunk);
     }
+
+    for (int x = 0; x < WIDTH; x++)
+    {
+        for (int y = 0; y < HEIGHT; y++)
+        {
+            raytracer::Color color = renderer.renderData.renderBuffer[x][y];
+            color = color * (255 / max_intensity);
+            color.cap();
+            display.drawPixel(x, y, color);
+        }
+    }
+    display.displayScreen();
 
     max_intensity = 0;
         for (int x = 0; x < WIDTH; x++)
