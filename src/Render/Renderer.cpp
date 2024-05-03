@@ -12,12 +12,12 @@
 
 raytracer::Renderer::~Renderer() = default;
 
-void raytracer::Renderer::addObject(std::shared_ptr<IObject> object)
+void raytracer::Renderer::addObject(const std::shared_ptr<IObject>& object)
 {
     renderData.objects.push_back(object);
 }
 
-void raytracer::Renderer::addLight(std::shared_ptr<ILight> light)
+void raytracer::Renderer::addLight(const std::shared_ptr<ILight>& light)
 {
     renderData.lights.push_back(light);
 }
@@ -167,7 +167,7 @@ raytracer::Renderer::getDirectLight(const RenderPoint &point, const RenderData &
     }
 
     // Mix all direct light rays
-    for (auto lightRay: directLightRays)
+    for (const auto& lightRay: directLightRays)
     {
         ray.color = ray.color + lightRay.color;
     }
@@ -177,7 +177,7 @@ raytracer::Renderer::getDirectLight(const RenderPoint &point, const RenderData &
 }
 
 raytracer::RenderRay
-raytracer::Renderer::getReflexionsLight(const RenderPoint &point, const RenderData &data, int bounces)
+raytracer::Renderer::getReflexionsLight(const RenderPoint &point, const RenderData &data, size_t bounces)
 {
     if (bounces <= 0)
     {
@@ -211,7 +211,7 @@ raytracer::Renderer::getReflexionsLight(const RenderPoint &point, const RenderDa
     return ray;
 }
 
-raytracer::RenderRay raytracer::Renderer::getDiffuseLight(const RenderPoint &point, const RenderData &data, int bounces)
+raytracer::RenderRay raytracer::Renderer::getDiffuseLight(const RenderPoint &point, const RenderData &data, size_t bounces)
 {
     if (bounces <= 0 || point.object->getGlassState(point.hitPoint))
     {
@@ -260,7 +260,7 @@ raytracer::RenderRay raytracer::Renderer::getDiffuseLight(const RenderPoint &poi
     return ray;
 }
 
-raytracer::RenderRay raytracer::Renderer::getRefractionsLight(const RenderPoint &point, const RenderData &data, int bounces)
+raytracer::RenderRay raytracer::Renderer::getRefractionsLight(const RenderPoint &point, const RenderData &data, size_t bounces)
 {
     if (!point.object->getGlassState(point.hitPoint))
     {
