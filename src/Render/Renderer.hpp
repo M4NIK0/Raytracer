@@ -35,9 +35,9 @@ namespace raytracer
             static Vector3D getRandomRayFromCone(const Vector3D &normal, double angle);
 
             static RenderRay getDirectLight(const RenderPoint &point, const RenderData &data);
-            RenderRay getReflexionsLight(const RenderPoint &point, const RenderData &data, size_t bounces);
-            RenderRay getDiffuseLight(const RenderPoint &point, const RenderData &data, size_t bounces);
-            RenderRay getRefractionsLight(const RenderPoint &point, const RenderData &data, size_t bounces);
+            static RenderRay getReflexionsLight(const RenderPoint &point, const RenderData &data, size_t bounces);
+            static RenderRay getDiffuseLight(const RenderPoint &point, const RenderData &data, size_t bounces);
+            static RenderRay getRefractionsLight(const RenderPoint &point, const RenderData &data, size_t bounces);
 
             Camera camera;
             RenderData renderData;
