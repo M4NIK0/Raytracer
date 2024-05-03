@@ -11,7 +11,7 @@
 #define WIDTH 256
 #define HEIGHT 256
 
-#define CHUNKS_SIZE 32
+#define CHUNKS_SIZE 49
 
 #define MAX_SAMPLES 3
 
@@ -68,35 +68,37 @@ int main()
 
     for (auto &chunk : chunks)
     {
+        max_intensity = 0;
+        for (int x = 0; x < WIDTH; x++)
+        {
+            for (int y = 0; y < HEIGHT; y++)
+            {
+                raytracer::Color color = renderer.renderData.renderBuffer[x][y];
+
+                if (color.r > max_intensity)
+                    max_intensity = color.r;
+                if (color.g > max_intensity)
+                    max_intensity = color.g;
+                if (color.b > max_intensity)
+                    max_intensity = color.b;
+            }
+        }
+
+        for (int x = 0; x < WIDTH; x++)
+        {
+            for (int y = 0; y < HEIGHT; y++)
+            {
+                raytracer::Color color = renderer.renderData.renderBuffer[x][y];
+                color = color * (255 / max_intensity);
+                color.cap();
+                display.drawPixel(x, y, color);
+            }
+        }
+        display.drawCurrentchunkBoundaries(chunk, CHUNKS_SIZE, CHUNKS_SIZE);
+        display.displayScreen();
         renderer.renderChunk(chunk);
     }
 
-    max_intensity = 0;
-    for (int x = 0; x < WIDTH; x++)
-    {
-        for (int y = 0; y < HEIGHT; y++)
-        {
-            raytracer::Color color = renderer.renderData.renderBuffer[x][y];
-
-            if (color.r > max_intensity)
-                max_intensity = color.r;
-            if (color.g > max_intensity)
-                max_intensity = color.g;
-            if (color.b > max_intensity)
-                max_intensity = color.b;
-        }
-    }
-
-    for (int x = 0; x < WIDTH; x++)
-    {
-        for (int y = 0; y < HEIGHT; y++)
-        {
-            raytracer::Color color = renderer.renderData.renderBuffer[x][y];
-            color = color * (255 / max_intensity);
-            color.cap();
-            display.drawPixel(x, y, color);
-        }
-    }
 
     while (loop)
     {

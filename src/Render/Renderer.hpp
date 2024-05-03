@@ -16,19 +16,6 @@
 
 namespace raytracer
 {
-    class Chunk
-    {
-        public:
-            Chunk(size_t x, size_t y, size_t width, size_t height) : x(x), y(y), width(width), height(height) {}
-            ~Chunk() = default;
-
-            size_t x;
-            size_t y;
-
-            size_t width;
-            size_t height;
-    };
-
     class RenderData
     {
         public:

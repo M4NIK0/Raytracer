@@ -9,6 +9,7 @@
 #include <SFML/Graphics.hpp>
 #include <memory>
 #include <valarray>
+#include "../Render/Chunk.hpp"
 
 #define FPS 60
 
@@ -100,6 +101,7 @@ class sfml : public raytracer::IDisplay {
 
         void initWindow(int width = 800, int height = 600) override;
         void endWindow() override;
+        void drawCurrentchunkBoundaries(raytracer::Chunk chunk, size_t chunkSizeX, size_t chunkSizeY);
         void drawPixel(int x, int y, raytracer::Color color) override;
         void displayScreen() override;
         void clearWindow() override;
