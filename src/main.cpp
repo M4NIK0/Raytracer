@@ -70,7 +70,7 @@ int main()
     std::cout << "Starting render, monitoring render time..." << std::endl;
 
     std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-    threads.startThreads(24, CHUNK_SIZE_X, CHUNK_SIZE_Y);
+    threads.startThreads(16, CHUNK_SIZE_X, CHUNK_SIZE_Y);
     max_intensity = 0;
     while (1)
     {
