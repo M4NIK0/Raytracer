@@ -61,21 +61,21 @@ namespace raytracer
             Renderer(Camera camera) : camera(camera) {}
             ~Renderer();
 
-            void addObject(std::shared_ptr<IObject> object);
-            void addLight(std::shared_ptr<ILight> light);
+            void addObject(const std::shared_ptr<IObject>& object);
+            void addLight(const std::shared_ptr<ILight>& light);
 
-            static std::vector<Chunk> getChunks(RenderData &data, int chunkSizeX, int chunkSizeY);
+            std::vector<Chunk> getChunks(int chunkSizeX, int chunkSizeY);
 
-            void renderChunk(const Chunk &chunk, RenderData &data);
+            void renderChunk(const Chunk &chunk);
 
             raytracer::RenderRay traceRay(int x, int y);
 
             static Vector3D getRandomRayFromCone(const Vector3D &normal, double angle);
 
-            RenderRay getDirectLight(const RenderPoint &point, const RenderData &data);
-            RenderRay getReflexionsLight(const RenderPoint &point, const RenderData &data, int bounces);
-            RenderRay getDiffuseLight(const RenderPoint &point, const RenderData &data, int bounces);
-            RenderRay getRefractionsLight(const RenderPoint &point, const RenderData &data, int bounces);
+            static RenderRay getDirectLight(const RenderPoint &point, const RenderData &data);
+            RenderRay getReflexionsLight(const RenderPoint &point, const RenderData &data, size_t bounces);
+            RenderRay getDiffuseLight(const RenderPoint &point, const RenderData &data, size_t bounces);
+            RenderRay getRefractionsLight(const RenderPoint &point, const RenderData &data, size_t bounces);
 
             Camera camera;
             RenderData renderData;

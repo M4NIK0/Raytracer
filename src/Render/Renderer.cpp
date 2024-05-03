@@ -22,17 +22,17 @@ void raytracer::Renderer::addLight(const std::shared_ptr<ILight>& light)
     renderData.lights.push_back(light);
 }
 
-std::vector<raytracer::Chunk> raytracer::Renderer::getChunks(RenderData &data, int chunkSizeX, int chunkSizeY)
+std::vector<raytracer::Chunk> raytracer::Renderer::getChunks(int chunkSizeX, int chunkSizeY)
 {
     std::vector<Chunk> chunks;
 
     int x_max = 0;
     int y_max;
 
-    while (x_max < data.width)
+    while (x_max < renderData.width)
     {
         y_max = 0;
-        while (y_max < data.height)
+        while (y_max < renderData.height)
         {
             size_t x = x_max / chunkSizeX;
             size_t y = y_max / chunkSizeY;
@@ -40,8 +40,8 @@ std::vector<raytracer::Chunk> raytracer::Renderer::getChunks(RenderData &data, i
             size_t width = chunkSizeX;
             size_t height = chunkSizeY;
 
-            int x_rest = data.width - (x_max + chunkSizeX);
-            int y_rest = data.height - (y_max + chunkSizeY);
+            int x_rest = renderData.width - (x_max + chunkSizeX);
+            int y_rest = renderData.height - (y_max + chunkSizeY);
 
             if (x_rest < 0)
             {
@@ -73,7 +73,7 @@ raytracer::RenderRay raytracer::Renderer::traceRay(int x, int y)
 
     if (!point.object)
     {
-        return RenderRay(Ray3D(Point3D(0, 0, 0), Vector3D(0, 0, 0)));
+        return {Ray3D(Point3D(0, 0, 0), Vector3D(0, 0, 0))};
     }
 
     RenderRay directLight = getDirectLight(point, renderData);
@@ -86,16 +86,16 @@ raytracer::RenderRay raytracer::Renderer::traceRay(int x, int y)
     return finalRay;
 }
 
-void raytracer::Renderer::renderChunk(const Chunk &chunk, RenderData &data)
+void raytracer::Renderer::renderChunk(const Chunk &chunk)
 {
-    for (int i = 0; i < data.maxSamples; i++)
+    for (int i = 0; i < renderData.maxSamples; i++)
     {
         for (int x = 0; x < chunk.width; x++)
         {
             for (int y = 0; y < chunk.height; y++)
             {
-                Color tempColor = traceRay(x + (chunk.x * data.chunkWidth), y + (chunk.y * data.chunkHeight)).color / data.maxSamples;
-                data.renderBuffer[x + (chunk.x * data.chunkWidth)][y + (chunk.y * data.chunkHeight)] += tempColor;
+                Color tempColor = traceRay(x + (chunk.x * renderData.chunkWidth), y + (chunk.y * renderData.chunkHeight)).color / renderData.maxSamples;
+                renderData.renderBuffer[x + (chunk.x * renderData.chunkWidth)][y + (chunk.y * renderData.chunkHeight)] += tempColor;
             }
         }
     }

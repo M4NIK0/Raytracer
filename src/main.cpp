@@ -8,10 +8,10 @@
 #include "Light/ILight.hpp"
 #include "Light/Objects/PointLight.hpp"
 
-#define WIDTH 32
-#define HEIGHT 32
+#define WIDTH 256
+#define HEIGHT 256
 
-#define CHUNKS_SIZE 16
+#define CHUNKS_SIZE 32
 
 #define MAX_SAMPLES 3
 
@@ -23,16 +23,16 @@ int main()
                               raytracer::Vector3D(0, -1, 0)); // Invert the Y vector
     raytracer::Camera camera(raytracer::Point3D(0.5, 0.5, 1), screen, WIDTH, HEIGHT);
     raytracer::Renderer renderer(camera);
-    raytracer::RenderData data;
 
     renderer.renderData.width = WIDTH;
     renderer.renderData.height = HEIGHT;
     renderer.renderData.chunkWidth = CHUNKS_SIZE;
     renderer.renderData.chunkHeight = CHUNKS_SIZE;
+    renderer.renderData.maxSamples = MAX_SAMPLES;
     renderer.renderData.initRenderBuffer();
 
     auto obj1 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0.5, -101, -4), 100, raytracer::Color(1, 1, 1));
-    auto obj2 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0.5, 5, -4), 1, raytracer::Color(1, 1, 1));
+    auto obj2 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0.5, 0, -4), 1, raytracer::Color(1, 1, 1));
     auto obj3 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0.5, 1.7, -4), 0.1, raytracer::Color(1, 1, 1));
     auto obj4 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0.2, 0.5, -9), 1, raytracer::Color(1, 1, 1));
 
@@ -64,11 +64,11 @@ int main()
 
     images_amount++;
 
-    std::vector<raytracer::Chunk> chunks = raytracer::Renderer::getChunks(data, CHUNKS_SIZE, CHUNKS_SIZE);
+    std::vector<raytracer::Chunk> chunks = renderer.getChunks(CHUNKS_SIZE, CHUNKS_SIZE);
 
     for (auto &chunk : chunks)
     {
-        renderer.renderChunk(chunk, data);
+        renderer.renderChunk(chunk);
     }
 
     max_intensity = 0;
