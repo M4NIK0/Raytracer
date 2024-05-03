@@ -16,23 +16,13 @@
 
 namespace raytracer
 {
-    class Chunk
+    class RenderData
     {
         public:
-            Chunk(size_t x, size_t y, size_t width, size_t height) : x(x), y(y), width(width), height(height) {}
-            ~Chunk() = default;
+            RenderData() = default;
+            ~RenderData() = default;
 
-            size_t x;
-            size_t y;
-            size_t width;
-            size_t height;
-    };
-
-    class renderData
-    {
-        public:
-            renderData() = default;
-            ~renderData() = default;
+            void initRenderBuffer();
 
             std::vector<std::shared_ptr<IObject>> objects = {};
             std::vector<std::shared_ptr<ILight>> lights = {};
@@ -41,11 +31,15 @@ namespace raytracer
             size_t reflexionsRays = 5;
             size_t maxBounces = 2;
 
-            size_t width = 1920;
-            size_t height = 1080;
+            std::vector<std::vector<Color>> renderBuffer = {};
 
-            size_t chunks_x = 10;
-            size_t chunks_y = 10;
+            int width = 1920;
+            int height = 1080;
+
+            int chunkWidth = 100;
+            int chunkHeight = 100;
+
+            int maxSamples = 5;
     };
 
     class Renderer
@@ -54,22 +48,24 @@ namespace raytracer
             Renderer(Camera camera) : camera(camera) {}
             ~Renderer();
 
-            void addObject(std::shared_ptr<IObject> object);
-            void addLight(std::shared_ptr<ILight> light);
+            void addObject(const std::shared_ptr<IObject>& object);
+            void addLight(const std::shared_ptr<ILight>& light);
+
+            std::vector<Chunk> getChunks(int chunkSizeX, int chunkSizeY);
+
+            void renderChunk(const Chunk &chunk);
 
             raytracer::RenderRay traceRay(int x, int y);
 
             static Vector3D getRandomRayFromCone(const Vector3D &normal, double angle);
 
-            RenderRay getDirectLight(const RenderPoint &point, const renderData &data);
-            RenderRay getReflexionsLight(const RenderPoint &point, const renderData &data, int bounces);
-            RenderRay getDiffuseLight(const RenderPoint &point, const renderData &data, int bounces);
-            RenderRay getRefractionsLight(const RenderPoint &point, const renderData &data, int bounces);
+            static RenderRay getDirectLight(const RenderPoint &point, const RenderData &data);
+            RenderRay getReflexionsLight(const RenderPoint &point, const RenderData &data, size_t bounces);
+            RenderRay getDiffuseLight(const RenderPoint &point, const RenderData &data, size_t bounces);
+            RenderRay getRefractionsLight(const RenderPoint &point, const RenderData &data, size_t bounces);
 
             Camera camera;
-        private:
-            renderData _renderData;
-
+            RenderData renderData;
             double cameraExposure = 2;
     };
 }

@@ -9,6 +9,7 @@
 #include <SFML/Graphics.hpp>
 #include <memory>
 #include <valarray>
+#include "../Render/Chunk.hpp"
 
 #define FPS 60
 
@@ -22,20 +23,31 @@ namespace raytracer
             double g;
             double b;
 
-            double length() {
-                return sqrt(r * r + g * g + b * b);
+            Color operator+(const Color& other) const {
+                return {r + other.r, g + other.g, b + other.b};
             }
 
-            Color operator+(const Color& other) {
-                return Color(r + other.r, g + other.g, b + other.b);
+            Color operator*(const Color& other) const {
+                return {r * other.r, g * other.g, b * other.b};
             }
 
-            Color operator*(const Color& other) {
-                return Color(r * other.r, g * other.g, b * other.b);
+            Color operator*(double scalar) const {
+                return {r * scalar, g * scalar, b * scalar};
             }
 
-            Color operator*(double scalar) {
-                return Color(r * scalar, g * scalar, b * scalar);
+            Color operator/(double scalar) const {
+                return {r / scalar, g / scalar, b / scalar};
+            }
+
+            Color operator-(const Color& other) const {
+                return {r - other.r, g - other.g, b - other.b};
+            }
+
+            Color operator+=(const Color& other) {
+                r += other.r;
+                g += other.g;
+                b += other.b;
+                return *this;
             }
 
             void cap() {
@@ -89,6 +101,7 @@ class sfml : public raytracer::IDisplay {
 
         void initWindow(int width = 800, int height = 600) override;
         void endWindow() override;
+        void drawCurrentchunkBoundaries(raytracer::Chunk chunk, size_t chunkSizeX, size_t chunkSizeY);
         void drawPixel(int x, int y, raytracer::Color color) override;
         void displayScreen() override;
         void clearWindow() override;

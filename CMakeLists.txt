@@ -34,6 +34,7 @@ add_executable(raytracer src/main.cpp
         src/Math/Matrix.hpp
         src/Render/RenderPoint.cpp
         src/Render/RenderPoint.hpp
+        src/Render/Chunk.hpp
 )
 
 # Link SFML

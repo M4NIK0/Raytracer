@@ -79,3 +79,15 @@ void sfml::initImage(int width, int height)
 {
     _image.create(width, height, sf::Color::Black);
 }
+
+void sfml::drawCurrentchunkBoundaries(raytracer::Chunk chunk, size_t chunkSizeX, size_t chunkSizeY)
+{
+    for (size_t x = 0; x < chunk.width; x++)
+    {
+        for (size_t y = 0; y < chunk.height; y++)
+        {
+            if (x == 0 || y == 0 || x == chunk.width - 1 || y == chunk.height - 1)
+                drawPixel(x + (chunkSizeX * chunk.x), y + (chunkSizeY * chunk.y), raytracer::Color(255, 255, 255));
+        }
+    }
+}
