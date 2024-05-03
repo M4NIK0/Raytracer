@@ -8,11 +8,11 @@
 #include "Light/ILight.hpp"
 #include "Light/Objects/PointLight.hpp"
 
-#define WIDTH 512
-#define HEIGHT 512
+#define WIDTH 256
+#define HEIGHT 256
 
-#define CHUNK_SIZE_X 64
-#define CHUNK_SIZE_Y 64
+#define CHUNK_SIZE_X 1
+#define CHUNK_SIZE_Y HEIGHT
 
 #define MAX_SAMPLES 2
 
@@ -67,8 +67,14 @@ int main()
     images_amount++;
 
     raytracer::Threads threads(renderer);
+    std::cout << "Starting render, monitoring render time..." << std::endl;
+
+    std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
     threads.startThreads(2, CHUNK_SIZE_X, CHUNK_SIZE_Y);
     threads.stopThreads();
+    end = std::chrono::steady_clock::now();
+
+    std::cout << "Rendered in " << std::chrono::duration_cast<std::chrono::seconds>(end - begin).count() << "s" << std::endl;
 
     max_intensity = 0;
     for (int x = 0; x < WIDTH; x++)
