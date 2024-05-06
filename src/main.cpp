@@ -8,13 +8,13 @@
 #include "Light/ILight.hpp"
 #include "Light/Objects/PointLight.hpp"
 
-#define WIDTH 128
-#define HEIGHT 128
+#define WIDTH 64
+#define HEIGHT 64
 
-#define CHUNK_SIZE_X 16
-#define CHUNK_SIZE_Y 16
+#define CHUNK_SIZE_X 8
+#define CHUNK_SIZE_Y 8
 
-#define MAX_SAMPLES 2
+#define MAX_SAMPLES 3
 
 #include <chrono>
 #include "Render/Threads.hpp"
@@ -79,7 +79,8 @@ int main()
     std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
     for (int i = 0; i < MAX_SAMPLES; i++)
     {
-        threads.startThreads(35, CHUNK_SIZE_X, CHUNK_SIZE_Y);
+        std::cout << "Sample " << i + 1 << "/" << MAX_SAMPLES << std::endl;
+        threads.startThreads(30, CHUNK_SIZE_X, CHUNK_SIZE_Y);
         max_intensity = 0;
         while (1)
         {
