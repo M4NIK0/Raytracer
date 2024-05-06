@@ -64,11 +64,11 @@ std::vector<raytracer::Chunk> raytracer::Renderer::getChunks(int chunkSizeX, int
     }
 
     // Create a random device and a random engine
-    std::random_device rd;
-    std::mt19937 g(rd());
+//    std::random_device rd;
+//    std::mt19937 g(rd());
 
     // Shuffle the chunks
-    std::shuffle(chunks.begin(), chunks.end(), g);
+//    std::shuffle(chunks.begin(), chunks.end(), g);
 
     return chunks;
 }
@@ -217,8 +217,12 @@ raytracer::Renderer::getReflexionsLight(const RenderPoint &point, const RenderDa
     // Get the reflection light
     RenderRay reflectionLight = getReflexionsLight(reflectionPoint, data, bounces - 1);
 
-    // Mix the direct and reflection light
-    RenderRay ray = directLight + reflectionLight;
+    // Get the diffuse light
+    RenderRay diffuseLight = getDiffuseLight(reflectionPoint, data, bounces - 1);
+
+    // Mix the direct, reflection and diffuse light
+    RenderRay ray = directLight + reflectionLight + diffuseLight;
+
     ray.color = ray.color * point.object->getReflexionIndex(point.hitPoint);
 
     return ray;
