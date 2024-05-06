@@ -8,16 +8,17 @@
 #include "Light/ILight.hpp"
 #include "Light/Objects/PointLight.hpp"
 
-#define WIDTH 256
-#define HEIGHT 256
+#define WIDTH 128
+#define HEIGHT 128
 
-#define CHUNK_SIZE_X 32
-#define CHUNK_SIZE_Y 32
+#define CHUNK_SIZE_X 16
+#define CHUNK_SIZE_Y 16
 
-#define MAX_SAMPLES 2
+#define MAX_SAMPLES 1
 
 #include <chrono>
 #include "Render/Threads.hpp"
+#include "Output/PPMOutput.hpp"
 
 int main()
 {
@@ -72,7 +73,7 @@ int main()
     std::cout << "Starting render, monitoring render time..." << std::endl;
 
     std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
-    threads.startThreads(20, CHUNK_SIZE_X, CHUNK_SIZE_Y);
+    threads.startThreads(8, CHUNK_SIZE_X, CHUNK_SIZE_Y);
     max_intensity = 0;
     while (1)
     {
@@ -159,6 +160,18 @@ int main()
 
     // End the window
     display.endWindow();
+
+    // Create PPM Output
+    raytracer::PPMOutput output("./output.ppm", WIDTH, HEIGHT);
+    for (int x = 0; x < WIDTH; x++)
+    {
+        for (int y = 0; y < HEIGHT; y++)
+        {
+            raytracer::Color color = renderer.renderData.renderBuffer[x][y];
+            output.setPixel(x, y, color);
+        }
+    }
+    output.writeToFile();
 
     return 0;
 }
