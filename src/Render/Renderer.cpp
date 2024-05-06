@@ -63,12 +63,12 @@ std::vector<raytracer::Chunk> raytracer::Renderer::getChunks(int chunkSizeX, int
         x_max += chunkSizeX;
     }
 
-    // Create a random device and a random engine
-//    std::random_device rd;
-//    std::mt19937 g(rd());
+//     Create a random device and a random engine
+    std::random_device rd;
+    std::mt19937 g(rd());
 
-    // Shuffle the chunks
-//    std::shuffle(chunks.begin(), chunks.end(), g);
+//     Shuffle the chunks
+    std::shuffle(chunks.begin(), chunks.end(), g);
 
     return chunks;
 }
@@ -97,15 +97,12 @@ raytracer::RenderRay raytracer::Renderer::traceRay(int x, int y)
 
 void raytracer::Renderer::renderChunk(const Chunk &chunk)
 {
-    for (int i = 0; i < renderData.maxSamples; i++)
+    for (int x = 0; x < chunk.width; x++)
     {
-        for (int x = 0; x < chunk.width; x++)
+        for (int y = 0; y < chunk.height; y++)
         {
-            for (int y = 0; y < chunk.height; y++)
-            {
-                Color tempColor = traceRay(x + (chunk.x * renderData.chunkWidth), y + (chunk.y * renderData.chunkHeight)).color / renderData.maxSamples;
-                renderData.renderBuffer[x + (chunk.x * renderData.chunkWidth)][y + (chunk.y * renderData.chunkHeight)] += tempColor;
-            }
+            Color tempColor = traceRay(x + (chunk.x * renderData.chunkWidth), y + (chunk.y * renderData.chunkHeight)).color / renderData.maxSamples;
+            renderData.renderBuffer[x + (chunk.x * renderData.chunkWidth)][y + (chunk.y * renderData.chunkHeight)] += tempColor;
         }
     }
 }

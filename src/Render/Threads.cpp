@@ -36,4 +36,6 @@ void raytracer::Threads::stopThreads()
     for (auto &thread : _threads) {
         thread.join();
     }
+
+    _threads.clear();
 }
