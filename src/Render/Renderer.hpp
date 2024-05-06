@@ -14,6 +14,7 @@
 #include "RenderRay.hpp"
 #include "RenderPoint.hpp"
 #include "RenderData.hpp"
+#include <chrono>
 
 namespace raytracer
 {

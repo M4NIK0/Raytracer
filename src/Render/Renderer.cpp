@@ -63,11 +63,10 @@ std::vector<raytracer::Chunk> raytracer::Renderer::getChunks(int chunkSizeX, int
         x_max += chunkSizeX;
     }
 
-    // Create a random device and a random engine
     std::random_device rd;
     std::mt19937 g(rd());
 
-    // Shuffle the chunks
+//     Shuffle the chunks
     std::shuffle(chunks.begin(), chunks.end(), g);
 
     return chunks;
@@ -97,15 +96,12 @@ raytracer::RenderRay raytracer::Renderer::traceRay(int x, int y)
 
 void raytracer::Renderer::renderChunk(const Chunk &chunk)
 {
-    for (int i = 0; i < renderData.maxSamples; i++)
+    for (int x = 0; x < chunk.width; x++)
     {
-        for (int x = 0; x < chunk.width; x++)
+        for (int y = 0; y < chunk.height; y++)
         {
-            for (int y = 0; y < chunk.height; y++)
-            {
-                Color tempColor = traceRay(x + (chunk.x * renderData.chunkWidth), y + (chunk.y * renderData.chunkHeight)).color / renderData.maxSamples;
-                renderData.renderBuffer[x + (chunk.x * renderData.chunkWidth)][y + (chunk.y * renderData.chunkHeight)] += tempColor;
-            }
+            Color tempColor = traceRay(x + (chunk.x * renderData.chunkWidth), y + (chunk.y * renderData.chunkHeight)).color / renderData.maxSamples;
+            renderData.renderBuffer[x + (chunk.x * renderData.chunkWidth)][y + (chunk.y * renderData.chunkHeight)] += tempColor;
         }
     }
 }
@@ -113,8 +109,8 @@ void raytracer::Renderer::renderChunk(const Chunk &chunk)
 raytracer::Vector3D raytracer::Renderer::getRandomRayFromCone(const raytracer::Vector3D &normal, double angle)
 {
     // Generate two random numbers
-    std::random_device rd;  // Will be used to obtain a seed for the random number engine
-    std::mt19937 gen(rd()); // Standard mersenne_twister_engine seeded with rd()
+    std::random_device rd;
+    std::mt19937 gen(rd());
     std::uniform_real_distribution<> dis(0.0, 1.0);
 
     double u = dis(gen);
@@ -217,8 +213,15 @@ raytracer::Renderer::getReflexionsLight(const RenderPoint &point, const RenderDa
     // Get the reflection light
     RenderRay reflectionLight = getReflexionsLight(reflectionPoint, data, bounces - 1);
 
-    // Mix the direct and reflection light
-    RenderRay ray = directLight + reflectionLight;
+    // Get the diffuse light
+    RenderRay diffuseLight = getDiffuseLight(reflectionPoint, data, bounces - 1);
+
+    // Get the refractions light
+    RenderRay refractionsLight = getRefractionsLight(reflectionPoint, data, bounces - 1);
+
+    // Mix the direct, reflection and diffuse light
+    RenderRay ray = directLight + reflectionLight + diffuseLight + refractionsLight;
+
     ray.color = ray.color * point.object->getReflexionIndex(point.hitPoint);
 
     return ray;

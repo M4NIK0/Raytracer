@@ -25,7 +25,7 @@ namespace raytracer
             std::vector<std::shared_ptr<IObject>> objects = {};
             std::vector<std::shared_ptr<ILight>> lights = {};
 
-            size_t diffuseRays = 20;
+            size_t diffuseRays = 50;
             size_t reflexionsRays = 5;
             size_t maxBounces = 2;
 
