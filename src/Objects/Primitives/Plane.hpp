@@ -8,12 +8,14 @@
 #include "../IObject.hpp"
 #include "../../Math/Matrix.hpp"
 
+#pragma once
+
 namespace raytracer
 {
     class Plane : public IObject
     {
     public:
-        Plane(raytracer::Point3D pos, Vector3D normal, Color surfaceReflexion) : _normal(normal), _position(pos), _surfaceAbsorbtion(surfaceReflexion), _volumeAbsorbtion(Color(0, 0, 0)) {}
+        Plane(raytracer::Point3D pos, double size, Vector3D normal, Color surfaceReflexion);
         ~Plane();
 
         Point3D hit(const Ray3D &ray) override;
@@ -33,7 +35,7 @@ namespace raytracer
 
         bool getGlassState(const Point3D &point) override;
 
-        double getRefractionxionIndex() override;
+        double getRefractionIndex() override;
         double getReflexionIndex(const Point3D &point) override;
 
         void setReflexionIndex(double index) override;
@@ -43,6 +45,7 @@ namespace raytracer
     private:
         Vector3D _normal;
         Point3D _position;
+        double _size;
 
         double _surfaceRoughness = 0;
         Color _surfaceAbsorbtion;

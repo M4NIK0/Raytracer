@@ -4,6 +4,15 @@
 
 #include "Plane.hpp"
 
+raytracer::Plane::Plane(raytracer::Point3D pos, double size, Vector3D normal, Color surfaceReflexion)
+        : _normal(normal), _size(size), _position(pos), _surfaceAbsorbtion(surfaceReflexion), _volumeAbsorbtion(Color(0, 0, 0))
+{
+    if (size < 0) {
+        _size = std::numeric_limits<double>::infinity();
+    } else {
+        _size = size;
+    }
+}
 raytracer::Plane::~Plane() = default;
 
 raytracer::Point3D raytracer::Plane::hit(const Ray3D &ray)
@@ -11,8 +20,12 @@ raytracer::Point3D raytracer::Plane::hit(const Ray3D &ray)
     double denominator = _normal.dot(ray.direction);
     if (std::abs(std::abs(denominator)) > 1e-6) {
         double t = (_position - ray.origin).dot(_normal) / denominator;
-        if (t >= 0)
-            return ray.origin + ray.direction * t;
+        if (t >= 0) {
+            Point3D intersectionPoint = ray.origin + ray.direction * t;
+            if (std::abs(intersectionPoint.x - _position.x) <= _size && std::abs(intersectionPoint.z - _position.z) <= _size) {
+                return intersectionPoint;
+            }
+        }
     }
     return {INFINITY, INFINITY, INFINITY};
 }
@@ -111,7 +124,7 @@ bool raytracer::Plane::getGlassState(const Point3D &point)
     return _isGlass;
 }
 
-double raytracer::Plane::getRefractionxionIndex()
+double raytracer::Plane::getRefractionIndex()
 {
     return _refractionIndex;
 }
