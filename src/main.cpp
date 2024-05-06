@@ -18,6 +18,7 @@
 
 #include <chrono>
 #include "Render/Threads.hpp"
+#include "Output/PPMOutput.hpp"
 
 int main()
 {
@@ -77,6 +78,7 @@ int main()
     std::cout << "Starting render, monitoring render time..." << std::endl;
 
     std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();
+  
     for (int i = 0; i < MAX_SAMPLES; i++)
     {
         std::cout << "Sample " << i + 1 << "/" << MAX_SAMPLES << std::endl;
@@ -168,6 +170,18 @@ int main()
 
     // End the window
     display.endWindow();
+
+    // Create PPM Output
+    raytracer::PPMOutput output("./output.ppm", WIDTH, HEIGHT);
+    for (int x = 0; x < WIDTH; x++)
+    {
+        for (int y = 0; y < HEIGHT; y++)
+        {
+            raytracer::Color color = renderer.renderData.renderBuffer[x][y];
+            output.setPixel(x, y, color);
+        }
+    }
+    output.writeToFile();
 
     return 0;
 }
