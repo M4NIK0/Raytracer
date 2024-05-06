@@ -108,3 +108,9 @@ void raytracer::Sphere::setGlassState(bool state)
 {
     _isGlass = state;
 }
+
+void raytracer::Sphere::setMotion(Vector3D &translation, Vector3D &rotation)
+{
+    _translation = translation;
+    _rotation = rotation;
+}

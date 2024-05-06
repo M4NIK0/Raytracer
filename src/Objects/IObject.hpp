@@ -40,5 +40,7 @@ namespace raytracer
             virtual void setReflexionIndex(double index) = 0;
             virtual void setRefractionIndex(double index) = 0;
             virtual void setGlassState(bool state) = 0;
+
+            virtual void setMotion(Vector3D &translation, Vector3D &rotation) = 0;
     };
 }
