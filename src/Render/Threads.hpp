@@ -21,6 +21,7 @@ namespace raytracer
 
             void startThreads(size_t nbThreads, int chunkWidth, int chunkHeight);
             void stopThreads();
+            size_t getRemainingChunks() { return _chunks.size(); }
 
         private:
             Renderer &_renderer;
