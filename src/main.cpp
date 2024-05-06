@@ -8,13 +8,13 @@
 #include "Light/ILight.hpp"
 #include "Light/Objects/PointLight.hpp"
 
-#define WIDTH 128
-#define HEIGHT 128
+#define WIDTH 256
+#define HEIGHT 256
 
-#define CHUNK_SIZE_X 16
-#define CHUNK_SIZE_Y 16
+#define CHUNK_SIZE_X 32
+#define CHUNK_SIZE_Y 32
 
-#define MAX_SAMPLES 5
+#define MAX_SAMPLES 2
 
 #include <chrono>
 #include "Render/Threads.hpp"
@@ -34,12 +34,14 @@ int main()
     renderer.renderData.initRenderBuffer();
 
     auto obj1 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0.5, -101, -4), 100, raytracer::Color(1, 1, 1));
-    auto obj2 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0.5, 0, -4), 1, raytracer::Color(0, 0, 0));
+    auto obj2 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0.5, 0, -2), 1, raytracer::Color(0, 0, 0));
     auto obj3 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0.5, 1.7, -4), 0.1, raytracer::Color(1, 1, 1));
     auto obj4 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0.2, 0.5, -9), 1, raytracer::Color(1, 1, 1));
     auto obj5 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0.8, 0, -109), 100, raytracer::Color(0, 1, 1));
+    auto obj6 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0.5, 0, 2), 1, raytracer::Color(0, 0, 0));
 
     obj2->setReflexionIndex(1);
+    obj6->setGlassState(true);
 
 //    obj2->setGlassState(true);
 
@@ -48,6 +50,7 @@ int main()
     renderer.addObject(obj3);
     renderer.addObject(obj4);
     renderer.addObject(obj5);
+    renderer.addObject(obj6);
 
     renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(255, 0, 0), raytracer::Point3D(-50, 200, -25), 1000));
     renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(0, 255, 0), raytracer::Point3D(0, 200, -25), 1000));

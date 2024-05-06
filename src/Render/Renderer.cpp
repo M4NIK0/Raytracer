@@ -220,8 +220,11 @@ raytracer::Renderer::getReflexionsLight(const RenderPoint &point, const RenderDa
     // Get the diffuse light
     RenderRay diffuseLight = getDiffuseLight(reflectionPoint, data, bounces - 1);
 
+    // Get the refractions light
+    RenderRay refractionsLight = getRefractionsLight(reflectionPoint, data, bounces - 1);
+
     // Mix the direct, reflection and diffuse light
-    RenderRay ray = directLight + reflectionLight + diffuseLight;
+    RenderRay ray = directLight + reflectionLight + diffuseLight + refractionsLight;
 
     ray.color = ray.color * point.object->getReflexionIndex(point.hitPoint);
 
