@@ -16,6 +16,7 @@ namespace raytracer
     {
         public:
             Camera(Point3D origin, Rectangle3D screen, int width, int height) : origin(origin), _screen(screen), width(width), height(height) {}
+            Camera(int width, int height);
             ~Camera();
 
             Ray3D getRay(int x, int y);

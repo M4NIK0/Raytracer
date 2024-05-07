@@ -16,7 +16,6 @@ void raytracer::Threads::startThreads(size_t nbThreads, int chunkWidth, int chun
     _chunks = _renderer.getChunks(chunkWidth, chunkHeight);
 
     for (size_t i = 0; i < nbThreads; i++) {
-        std::cout << "starting thread " << i << std::endl;
         _threads.emplace_back([this]() {
             while (true) {
                 std::unique_lock<std::mutex> lock(_chunksMutex);
@@ -37,4 +36,6 @@ void raytracer::Threads::stopThreads()
     for (auto &thread : _threads) {
         thread.join();
     }
+
+    _threads.clear();
 }

@@ -8,6 +8,11 @@
 #include <iostream>
 #include "Sphere.hpp"
 
+raytracer::Sphere::Sphere() : _radius(1), _position(Point3D(0, 0, 0)), _surfaceRoughness(0),
+                              _surfaceAbsorbtion(Color(1, 1, 1)), _volumeAbsorbtion(Color(0, 0, 0)), _volumeAbsorbtionCoeff(0),
+                              _isGlass(false), _reflexionIndex(0), _refractionIndex(0), _translation(Vector3D(0, 0, 0)),
+                              _rotation(Vector3D(0, 0, 0)) {}
+
 raytracer::Sphere::~Sphere() = default;
 
 raytracer::Point3D raytracer::Sphere::hit(const Ray3D &ray)
@@ -128,4 +133,33 @@ void raytracer::Sphere::setRefractionIndex(double index)
 void raytracer::Sphere::setGlassState(bool state)
 {
     _isGlass = state;
+}
+
+void raytracer::Sphere::setMotion(Vector3D &translation, Vector3D &rotation)
+{
+    _translation = translation;
+    _rotation = rotation;
+}
+
+void raytracer::Sphere::initiateMotion(double time, size_t steps)
+{
+    Vector3D totalTranslation = _translation * time;
+    Vector3D totalRotation = _rotation * time;
+
+    _translationStep = totalTranslation / steps;
+    _rotationStep = totalRotation / steps;
+
+    _position = _position - totalTranslation / 2;
+    _rotation = _rotation - totalRotation / 2;
+}
+
+void raytracer::Sphere::stepMotion()
+{
+    _position = _position + _translationStep;
+    _rotation = _rotation + _rotationStep;
+}
+
+void raytracer::Sphere::parseData(libconfig::Setting &config)
+{
+
 }

@@ -29,3 +29,8 @@ double raytracer::PointLight::getIntensityFromDistance(double distance)
 {
     return _intensity / (distance * distance);
 }
+
+void raytracer::PointLight::parseData(libconfig::Setting &config)
+{
+
+}

@@ -29,6 +29,8 @@ namespace raytracer
                 private:
                     std::string _message;
             };
+
+            Sphere();
             Sphere(raytracer::Point3D pos, double r, Color surfaceReflexion) : _radius(r), _position(pos), _surfaceAbsorbtion(surfaceReflexion), _volumeAbsorbtion(Color(0, 0, 0)) {}
             ~Sphere();
 
@@ -58,6 +60,13 @@ namespace raytracer
             void setRefractionIndex(double index) override;
             void setGlassState(bool state) override;
 
+            void setMotion(Vector3D &translation, Vector3D &rotation) override;
+            void initiateMotion(double time, size_t steps) override;
+
+            void stepMotion() override;
+
+            void parseData(libconfig::Setting &config) override;
+
         private:
             double _radius;
             Point3D _position;
@@ -70,5 +79,11 @@ namespace raytracer
             bool _isGlass = false;
             double _reflexionIndex = 0;
             double _refractionIndex = 1.5;
+
+            Vector3D _translation = {0, 0, 0};
+            Vector3D _rotation = {0, 0, 0};
+
+            Vector3D _translationStep = {0, 0, 0};
+            Vector3D _rotationStep = {0, 0, 0};
     };
 }

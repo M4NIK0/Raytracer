@@ -14,12 +14,28 @@
 #include "RenderRay.hpp"
 #include "RenderPoint.hpp"
 #include "RenderData.hpp"
+#include <chrono>
 
 namespace raytracer
 {
     class Renderer
     {
         public:
+            class Error : public std::exception
+            {
+                public:
+                    Error(std::string const &message) noexcept
+                        : _message(message) {}
+
+                    const char *what() const noexcept override
+                    {
+                        return _message.c_str();
+                    }
+
+                private:
+                    std::string _message;
+            };
+
             Renderer(Camera camera) : camera(camera) {}
             ~Renderer();
 
@@ -31,6 +47,8 @@ namespace raytracer
             void renderChunk(const Chunk &chunk);
 
             raytracer::RenderRay traceRay(int x, int y);
+
+            void stepMotions();
 
             static Vector3D getRandomRayFromCone(const Vector3D &normal, double angle);
 
