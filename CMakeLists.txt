@@ -7,6 +7,7 @@ set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wextra -pedantic -g3 
 
 # Find SFML
 find_package(SFML 2.5 COMPONENTS graphics window system REQUIRED)
+find_package(libconfig++ REQUIRED)
 
 add_executable(raytracer src/main.cpp
         src/Math/Vector3D.cpp
@@ -43,4 +44,4 @@ add_executable(raytracer src/main.cpp
 )
 
 # Link SFML
-target_link_libraries(raytracer sfml-graphics sfml-window sfml-system)
+target_link_libraries(raytracer sfml-graphics sfml-window sfml-system config++)
