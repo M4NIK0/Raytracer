@@ -16,6 +16,21 @@ namespace raytracer
     class IObject
     {
         public:
+            class Error : public std::exception
+            {
+                public:
+                    Error(std::string const &message) :
+                        _message(message) {};
+
+                    const char *what() const noexcept override
+                    {
+                        return _message.c_str();
+                    }
+
+                private:
+                    std::string _message;
+            };
+
             virtual ~IObject() = default;
 
             virtual Point3D hit(const Ray3D &ray) = 0;
