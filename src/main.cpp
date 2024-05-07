@@ -8,13 +8,13 @@
 #include "Light/ILight.hpp"
 #include "Light/Objects/PointLight.hpp"
 
-#define WIDTH 64
-#define HEIGHT 64
+#define WIDTH 256
+#define HEIGHT 256
 
-#define CHUNK_SIZE_X 8
-#define CHUNK_SIZE_Y 8
+#define CHUNK_SIZE_X 16
+#define CHUNK_SIZE_Y 16
 
-#define MAX_SAMPLES 3
+#define MAX_SAMPLES 10
 
 #include <chrono>
 #include "Render/Threads.hpp"
@@ -25,7 +25,9 @@ int main()
     raytracer::Rectangle3D screen(raytracer::Point3D(0, 1, 0), raytracer::Vector3D(1, 0, 0),
                               raytracer::Vector3D(0, -1, 0)); // Invert the Y vector
     raytracer::Camera camera(raytracer::Point3D(0.5, 0.5, 1), screen, WIDTH, HEIGHT);
+    camera.move(raytracer::Vector3D(0, 0, 2));
     raytracer::Renderer renderer(camera);
+
 
     renderer.renderData.width = WIDTH;
     renderer.renderData.height = HEIGHT;
@@ -35,14 +37,21 @@ int main()
     renderer.renderData.initRenderBuffer();
 
     auto obj1 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0.5, -101, -4), 100, raytracer::Color(1, 1, 1));
-    auto obj2 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0.5, 0, -2), 1, raytracer::Color(0, 0, 0));
+    auto obj2 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0.5, 0, -4), 1, raytracer::Color(1, 0, 1));
     auto obj3 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0.5, 1.7, -4), 0.1, raytracer::Color(1, 1, 1));
     auto obj4 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0.2, 0.5, -9), 1, raytracer::Color(1, 1, 1));
     auto obj5 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0.8, 0, -109), 100, raytracer::Color(0, 1, 1));
-    auto obj6 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0.5, 0, 2), 1, raytracer::Color(0, 0, 0));
+    auto obj6 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(3, 0, -4), 1, raytracer::Color(0, 0, 0));
 
-    obj2->setReflexionIndex(1);
-    obj6->setGlassState(true);
+
+    raytracer::Vector3D motion = raytracer::Vector3D(2, 0, 0);
+    raytracer::Vector3D rotation = raytracer::Vector3D(0, 0, 0);
+
+    obj2->setMotion(motion, rotation);
+    obj2->initiateMotion(0.5, MAX_SAMPLES);
+    obj6->setReflexionIndex(1);
+
+    obj1->setReflexionIndex(0.5);
 
 //    obj2->setGlassState(true);
 
@@ -121,6 +130,8 @@ int main()
 
         display.displayScreen();
         threads.stopThreads();
+
+        renderer.stepMotions();
     }
     end = std::chrono::steady_clock::now();
 
