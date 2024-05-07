@@ -14,6 +14,7 @@ namespace raytracer
     class Sphere : public IObject
     {
         public:
+            Sphere();
             Sphere(raytracer::Point3D pos, double r, Color surfaceReflexion) : _radius(r), _position(pos), _surfaceAbsorbtion(surfaceReflexion), _volumeAbsorbtion(Color(0, 0, 0)) {}
             ~Sphere();
 
@@ -45,6 +46,8 @@ namespace raytracer
             void initiateMotion(double time, size_t steps) override;
 
             void stepMotion() override;
+
+            void parseData(libconfig::Setting &config) override;
 
         private:
             double _radius;
