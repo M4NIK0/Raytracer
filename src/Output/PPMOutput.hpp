@@ -13,6 +13,7 @@
 #include <fstream>
 #include <vector>
 #include <iostream>
+#include <filesystem>
 #include "../sfml/sfml.hpp"
 
 namespace raytracer
