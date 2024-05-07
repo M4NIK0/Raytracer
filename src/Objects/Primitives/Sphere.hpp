@@ -16,6 +16,7 @@ namespace raytracer
         public:
             Sphere(raytracer::Point3D pos, double r, Color surfaceReflexion) : _radius(r), _position(pos),
                                                                                _positionBackup(pos), _surfaceAbsorbtion(surfaceReflexion), _volumeAbsorbtion(Color(0, 0, 0)), _emissionColor(Color(0, 0, 0)) {}
+            Sphere();
             ~Sphere();
 
             Point3D hit(const Ray3D &ray) override;
@@ -51,6 +52,8 @@ namespace raytracer
             void resetMotion() override;
 
             void stepMotion() override;
+
+            void parseData(libconfig::Setting &config) override;
 
         private:
             double _radius;

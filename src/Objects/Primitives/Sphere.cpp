@@ -8,6 +8,11 @@
 #include <iostream>
 #include "Sphere.hpp"
 
+raytracer::Sphere::Sphere() : _radius(1), _position(Point3D(0, 0, 0)), _surfaceRoughness(0),
+                              _surfaceAbsorbtion(Color(1, 1, 1)), _volumeAbsorbtion(Color(0, 0, 0)), _volumeAbsorbtionCoeff(0),
+                              _isGlass(false), _reflexionIndex(0), _refractionIndex(0), _translation(Vector3D(0, 0, 0)),
+                              _rotation(Vector3D(0, 0, 0)) {}
+
 raytracer::Sphere::~Sphere() = default;
 
 raytracer::Point3D raytracer::Sphere::hit(const Ray3D &ray)
@@ -157,4 +162,9 @@ void raytracer::Sphere::stepMotion()
 {
     _position = _position + _translationStep;
     _rotation = _rotation + _rotationStep;
+}
+
+void raytracer::Sphere::parseData(libconfig::Setting &config)
+{
+
 }
