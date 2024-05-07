@@ -10,8 +10,8 @@
 
 #define WIN_SIZE 1024
 
-#define WIDTH 400
-#define HEIGHT 200
+#define WIDTH 640
+#define HEIGHT 480
 
 #define CHUNK_SIZE_X 20
 #define CHUNK_SIZE_Y 20
