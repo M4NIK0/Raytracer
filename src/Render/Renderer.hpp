@@ -21,7 +21,22 @@ namespace raytracer
     class Renderer
     {
         public:
-            Renderer(Camera camera) : camera(camera), renderData(RenderData()) {}
+            class Error : public std::exception
+            {
+                public:
+                    Error(std::string const &message) noexcept
+                        : _message(message) {}
+
+                    const char *what() const noexcept override
+                    {
+                        return _message.c_str();
+                    }
+
+                private:
+                    std::string _message;
+            };
+
+            Renderer(Camera camera) : camera(camera) {}
             ~Renderer();
 
             void addObject(const std::shared_ptr<IObject>& object);

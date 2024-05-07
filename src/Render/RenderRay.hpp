@@ -14,6 +14,21 @@ namespace raytracer
     class RenderRay : public Ray3D
     {
         public:
+            class Error : public std::exception
+            {
+                public:
+                    Error(std::string const &message) :
+                        _message(message) {};
+
+                    const char *what() const noexcept override
+                    {
+                        return _message.c_str();
+                    }
+
+                private:
+                    std::string _message;
+            };
+
             RenderRay(Point3D origin = {0, 0, 0}, Vector3D direction = {0, 0, 0});
 
             RenderRay(Ray3D ray) : Ray3D(ray.origin, ray.direction) {}
