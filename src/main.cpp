@@ -8,13 +8,15 @@
 #include "Light/ILight.hpp"
 #include "Light/Objects/PointLight.hpp"
 
-#define WIDTH 256
-#define HEIGHT 256
+#define WIN_SIZE 1024
 
-#define CHUNK_SIZE_X 16
-#define CHUNK_SIZE_Y 16
+#define WIDTH 400
+#define HEIGHT 200
 
-#define MAX_SAMPLES 10
+#define CHUNK_SIZE_X 20
+#define CHUNK_SIZE_Y 20
+
+#define MAX_SAMPLES 1
 
 #include <chrono>
 #include "Render/Threads.hpp"
@@ -22,12 +24,9 @@
 
 int main()
 {
-    raytracer::Rectangle3D screen(raytracer::Point3D(0, 1, 0), raytracer::Vector3D(1, 0, 0),
-                              raytracer::Vector3D(0, -1, 0)); // Invert the Y vector
-    raytracer::Camera camera(raytracer::Point3D(0.5, 0.5, 1), screen, WIDTH, HEIGHT);
-    camera.move(raytracer::Vector3D(0, 0, 2));
+    raytracer::Camera camera(WIDTH, HEIGHT);
     raytracer::Renderer renderer(camera);
-
+    renderer.camera.move(raytracer::Vector3D(0, 0, 2));
 
     renderer.renderData.width = WIDTH;
     renderer.renderData.height = HEIGHT;
@@ -37,14 +36,13 @@ int main()
     renderer.renderData.initRenderBuffer();
 
     auto obj1 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0.5, -101, -4), 100, raytracer::Color(1, 1, 1));
-    auto obj2 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0.5, 0, -4), 1, raytracer::Color(1, 0, 1));
+    auto obj2 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0, 0, -4), 1, raytracer::Color(1, 0, 1));
     auto obj3 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0.5, 1.7, -4), 0.1, raytracer::Color(1, 1, 1));
     auto obj4 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0.2, 0.5, -9), 1, raytracer::Color(1, 1, 1));
     auto obj5 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0.8, 0, -109), 100, raytracer::Color(0, 1, 1));
-    auto obj6 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(3, 0, -4), 1, raytracer::Color(0, 0, 0));
+    auto obj6 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(2.5, 0, -4), 2, raytracer::Color(1, 1, 0));
 
-
-    raytracer::Vector3D motion = raytracer::Vector3D(2, 0, 0);
+    raytracer::Vector3D motion = raytracer::Vector3D(2, 2, 2);
     raytracer::Vector3D rotation = raytracer::Vector3D(0, 0, 0);
 
     obj2->setMotion(motion, rotation);
@@ -70,7 +68,12 @@ int main()
 
     display.initImage(WIDTH, HEIGHT);
     // Initialize the window
-    display.initWindow(800, 800);
+
+    int maxSize = std::max(WIDTH, HEIGHT);
+    double realWidth = (double)WIDTH / (double)maxSize;
+    double realHeight = (double)HEIGHT / (double)maxSize;
+
+    display.initWindow((int)(realWidth * WIN_SIZE), (int)(realHeight * WIN_SIZE));
 
     int images_amount = 0;
 
