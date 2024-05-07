@@ -31,6 +31,8 @@ namespace raytracer
 
             void move(Vector3D vec) override { _position = _position + vec; }
 
+            void parseData(libconfig::Setting &config) override;
+
         private:
             Color _color;
             double _intensity;
