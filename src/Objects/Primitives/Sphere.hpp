@@ -42,6 +42,9 @@ namespace raytracer
             void setGlassState(bool state) override;
 
             void setMotion(Vector3D &translation, Vector3D &rotation) override;
+            void initiateMotion(double time, size_t steps) override;
+
+            void stepMotion() override;
 
         private:
             double _radius;
@@ -58,5 +61,8 @@ namespace raytracer
 
             Vector3D _translation = {0, 0, 0};
             Vector3D _rotation = {0, 0, 0};
+
+            Vector3D _translationStep = {0, 0, 0};
+            Vector3D _rotationStep = {0, 0, 0};
     };
 }
