@@ -140,34 +140,33 @@ int main()
 
     std::cout << "Rendered in " << std::chrono::duration_cast<std::chrono::seconds>(end - begin).count() << "s" << std::endl;
 
-
     max_intensity = 0;
-        for (int x = 0; x < WIDTH; x++)
+    for (int x = 0; x < WIDTH; x++)
+    {
+        for (int y = 0; y < HEIGHT; y++)
         {
-            for (int y = 0; y < HEIGHT; y++)
-            {
-                raytracer::Color color = renderer.renderData.renderBuffer[x][y];
+            raytracer::Color color = renderer.renderData.renderBuffer[x][y];
 
-                if (color.r > max_intensity)
-                    max_intensity = color.r;
-                if (color.g > max_intensity)
-                    max_intensity = color.g;
-                if (color.b > max_intensity)
-                    max_intensity = color.b;
-            }
+            if (color.r > max_intensity)
+                max_intensity = color.r;
+            if (color.g > max_intensity)
+                max_intensity = color.g;
+            if (color.b > max_intensity)
+                max_intensity = color.b;
         }
+    }
 
-        for (int x = 0; x < WIDTH; x++)
+    for (int x = 0; x < WIDTH; x++)
+    {
+        for (int y = 0; y < HEIGHT; y++)
         {
-            for (int y = 0; y < HEIGHT; y++)
-            {
-                raytracer::Color color = renderer.renderData.renderBuffer[x][y];
-                color = color * (255 / max_intensity);
-                color.cap();
-                display.drawPixel(x, y, color);
-            }
+            raytracer::Color color = renderer.renderData.renderBuffer[x][y];
+            color = color * (255 / max_intensity);
+            color.cap();
+            display.drawPixel(x, y, color);
         }
-        display.displayScreen();
+    }
+    display.displayScreen();
 
 
     while (loop)
