@@ -72,6 +72,18 @@ std::vector<raytracer::Chunk> raytracer::Renderer::getChunks(int chunkSizeX, int
     return chunks;
 }
 
+void raytracer::Renderer::renderChunk(const Chunk &chunk)
+{
+    for (int x = 0; x < chunk.width; x++)
+    {
+        for (int y = 0; y < chunk.height; y++)
+        {
+            Color tempColor = traceRay(x + (chunk.x * renderData.chunkWidth), y + (chunk.y * renderData.chunkHeight)).color / renderData.maxSamples;
+            renderData.renderBuffer[x + (chunk.x * renderData.chunkWidth)][y + (chunk.y * renderData.chunkHeight)] += tempColor;
+        }
+    }
+}
+
 raytracer::RenderRay raytracer::Renderer::traceRay(int x, int y)
 {
     Ray3D ray = camera.getRay(x, y);
@@ -94,15 +106,11 @@ raytracer::RenderRay raytracer::Renderer::traceRay(int x, int y)
     return finalRay;
 }
 
-void raytracer::Renderer::renderChunk(const Chunk &chunk)
+void raytracer::Renderer::stepMotions()
 {
-    for (int x = 0; x < chunk.width; x++)
+    for (auto &object: renderData.objects)
     {
-        for (int y = 0; y < chunk.height; y++)
-        {
-            Color tempColor = traceRay(x + (chunk.x * renderData.chunkWidth), y + (chunk.y * renderData.chunkHeight)).color / renderData.maxSamples;
-            renderData.renderBuffer[x + (chunk.x * renderData.chunkWidth)][y + (chunk.y * renderData.chunkHeight)] += tempColor;
-        }
+        object->stepMotion();
     }
 }
 
