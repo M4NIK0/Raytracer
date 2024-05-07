@@ -14,6 +14,21 @@ namespace raytracer
     class PointLight : public ILight
     {
         public:
+            class Error : public std::exception
+            {
+                public:
+                    Error(std::string const &message) noexcept
+                        : _message(message) {}
+
+                    const char *what() const noexcept override
+                    {
+                        return _message.c_str();
+                    }
+
+                private:
+                    std::string _message;
+            };
+
             PointLight(Color color, Point3D position, double intensity = 1) : _color(color), _position(position), _intensity(intensity) {_color.normalize();};
             ~PointLight();
 
