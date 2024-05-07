@@ -25,9 +25,17 @@ void raytracer::PPMOutput::writeToFile()
 
     writeHeader(file);
     writePixels(file);
+
+    if (file.fail())
+    {
+        std::cerr << "Error: Failed to write to file " << _filename << std::endl;
+        return;
+    }
+
+    std::cout << "File " << _filename << " written successfully." << std::endl;
 }
 
-void raytracer::PPMOutput::writePixels(std::ofstream& file)
+void raytracer::PPMOutput::writePixels(std::ofstream &file)
 {
     for (const auto& pixel : _pixels)
     {
@@ -37,7 +45,7 @@ void raytracer::PPMOutput::writePixels(std::ofstream& file)
     }
 }
 
-void raytracer::PPMOutput::writeHeader(std::ofstream& file) const
+void raytracer::PPMOutput::writeHeader(std::ofstream &file) const
 {
     file << "P6\n" << _width << " " << _height << "\n255\n";
 }

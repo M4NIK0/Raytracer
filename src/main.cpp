@@ -8,13 +8,13 @@
 #include "Light/ILight.hpp"
 #include "Light/Objects/PointLight.hpp"
 
-#define WIDTH 256
-#define HEIGHT 256
+#define WIDTH 4
+#define HEIGHT 4
 
 #define CHUNK_SIZE_X 16
 #define CHUNK_SIZE_Y 16
 
-#define MAX_SAMPLES 10
+#define MAX_SAMPLES 1
 
 #include <chrono>
 #include "Render/Threads.hpp"
@@ -91,7 +91,7 @@ int main()
     for (int i = 0; i < MAX_SAMPLES; i++)
     {
         std::cout << "Sample " << i + 1 << "/" << MAX_SAMPLES << std::endl;
-        threads.startThreads(30, CHUNK_SIZE_X, CHUNK_SIZE_Y);
+        threads.startThreads(4, CHUNK_SIZE_X, CHUNK_SIZE_Y);
         max_intensity = 0;
         while (1)
         {
@@ -183,7 +183,7 @@ int main()
     display.endWindow();
 
     // Create PPM Output
-    raytracer::PPMOutput output("./output.ppm", WIDTH, HEIGHT);
+    raytracer::PPMOutput output("output.ppm", WIDTH, HEIGHT);
     for (int x = 0; x < WIDTH; x++)
     {
         for (int y = 0; y < HEIGHT; y++)

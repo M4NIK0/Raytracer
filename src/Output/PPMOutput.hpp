@@ -28,8 +28,8 @@ namespace raytracer
             void setPixel(int x, int y, const Color& color) { _pixels.push_back(color); }
 
             void writeToFile();
-            void writePixels(std::ofstream& file);
-            void writeHeader(std::ofstream& file) const;
+            void writePixels(std::ofstream &file);
+            void writeHeader(std::ofstream &file) const;
 
         private:
             std::string _filename;
