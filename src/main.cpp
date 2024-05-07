@@ -21,6 +21,7 @@
 #include <chrono>
 #include "Render/Threads.hpp"
 #include "Output/PPMOutput.hpp"
+#include "Parser/Parser.hpp"
 
 int main()
 {
@@ -35,6 +36,9 @@ int main()
     renderer.renderData.maxSamples = MAX_SAMPLES;
     renderer.renderData.initRenderBuffer();
 
+    Parser parser;
+    parser.parseConfig("./info.txt");
+    parser.parseObjects();
     auto obj1 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0.5, -101, -4), 100, raytracer::Color(1, 1, 1));
     auto obj2 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0, 0, -4), 1, raytracer::Color(1, 0, 1));
     auto obj3 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0.5, 1.7, -4), 0.1, raytracer::Color(1, 1, 1));

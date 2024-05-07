@@ -40,6 +40,27 @@ raytracer::Point3D raytracer::Sphere::hit(const Ray3D &ray)
     }
 }
 
+void raytracer::Sphere::parseSphere(libconfig::Setting& sphere) {
+    double radius = sphere["radius"];
+    libconfig::Setting& position = sphere["position"];
+    double x = position[0];
+    double y = position[1];
+    double z = position[2];
+    double scale = sphere["scale"];
+    double reflectivity = sphere["reflectivity"];
+    double roughness = sphere["roughness"];
+    if (roughness < 0 || roughness > 1)
+        throw ParserError("Roughness must be between 0 and 1");
+    libconfig::Setting& color = sphere["color"];
+    int r_color = color["r"];
+    int g_color = color["g"];
+    int b_color = color["b"];
+    bool glass = sphere["glass"];
+    if (glass) {
+        double refraction_index = sphere["refraction_index"];
+    }
+}
+
 raytracer::Vector3D raytracer::Sphere::getSurfaceNormal(const Point3D &point)
 {
     return (point - _position).normalize();
