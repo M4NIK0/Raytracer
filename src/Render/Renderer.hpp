@@ -33,6 +33,8 @@ namespace raytracer
 
             raytracer::RenderRay traceRay(int x, int y);
 
+            void stepMotions();
+
             static Vector3D getRandomRayFromCone(const Vector3D &normal, double angle);
 
             static RenderRay getDirectLight(const RenderPoint &point, const RenderData &data);
