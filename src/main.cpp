@@ -7,15 +7,15 @@
 #include "Render/RenderProcessWrapper.hpp"
 #include "Light/Objects/PointLight.hpp"
 
-#define WIDTH 28
-#define HEIGHT 14
+#define WIDTH 160
+#define HEIGHT 128
 
 #define WIN_SIZE 800
 
 #define CHUNK_SIZE_X 16
 #define CHUNK_SIZE_Y 16
 
-#define MAX_SAMPLES 1
+#define MAX_SAMPLES 5
 
 #include <chrono>
 #include "Render/Threads.hpp"

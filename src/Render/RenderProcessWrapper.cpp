@@ -72,8 +72,8 @@ void raytracer::RenderProcessWrapper::renderImageDisplay(int windowSize)
         {
             raytracer::Color color = renderer.renderData.renderBuffer[x][y];
             color = color * renderer.camera.exposure * renderer.camera.sensitivity;
-            renderer.renderData.renderBuffer[x][y] = color;
             color.cap();
+            renderer.renderData.renderBuffer[x][y] = color;
             display.drawPixel(x, y, color);
         }
     }
