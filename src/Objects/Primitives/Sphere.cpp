@@ -70,6 +70,16 @@ double raytracer::Sphere::getVolumeAbsorbtionCoeff()
     return _volumeAbsorbtionCoeff;
 }
 
+raytracer::Color raytracer::Sphere::getSurfaceEmission(const Point3D &point)
+{
+    return _emissionColor;
+}
+
+double raytracer::Sphere::getSurfaceEmissionIntensity(const Point3D &point)
+{
+    return _emissionIntensity;
+}
+
 void raytracer::Sphere::move(Vector3D vec)
 {
     _position = _position + vec;
@@ -108,6 +118,16 @@ void raytracer::Sphere::setRefractionIndex(double index)
 void raytracer::Sphere::setGlassState(bool state)
 {
     _isGlass = state;
+}
+
+void raytracer::Sphere::setSurfaceEmission(raytracer::Color color)
+{
+    _emissionColor = color;
+}
+
+void raytracer::Sphere::setSurfaceEmissionIntensity(double intensity)
+{
+    _emissionIntensity = intensity;
 }
 
 void raytracer::Sphere::setMotion(Vector3D &translation, Vector3D &rotation)

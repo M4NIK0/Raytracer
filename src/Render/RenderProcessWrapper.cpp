@@ -49,7 +49,7 @@ void raytracer::RenderProcessWrapper::renderImageDisplay(int windowSize)
                 for (int y = 0; y < renderer.renderData.height; y++)
                 {
                     raytracer::Color color = renderer.renderData.renderBuffer[x][y];
-                    color = color * renderer.camera.exposure * renderer.camera.sensitivity;
+                    color = color * renderer.camera.sensitivity;
                     color.cap();
                     display.drawPixel(x, y, color);
                 }
@@ -70,7 +70,7 @@ void raytracer::RenderProcessWrapper::renderImageDisplay(int windowSize)
         for (int y = 0; y < renderer.renderData.height; y++)
         {
             raytracer::Color color = renderer.renderData.renderBuffer[x][y];
-            color = color * renderer.camera.exposure * renderer.camera.sensitivity;
+                    color = color * renderer.camera.sensitivity;
             color.cap();
             renderer.renderData.renderBuffer[x][y] = color;
             display.drawPixel(x, y, color);
@@ -125,7 +125,7 @@ void raytracer::RenderProcessWrapper::renderImageCLI()
         for (int y = 0; y < renderer.renderData.height; y++)
         {
             raytracer::Color color = renderer.renderData.renderBuffer[x][y];
-            color = color * renderer.camera.exposure * renderer.camera.sensitivity;
+            color = color * renderer.camera.sensitivity;
             color.cap();
             renderer.renderData.renderBuffer[x][y] = color;
         }

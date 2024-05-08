@@ -248,8 +248,12 @@ raytracer::Renderer::getReflexionsLight(const RenderPoint &point, const RenderDa
     // Get the refractions light
     RenderRay refractionsLight = getRefractionsLight(reflectionPoint, data, bounces - 1);
 
+    // Get the emission light
+    RenderRay emissionLight;
+    emissionLight.color = point.object->getSurfaceEmission(point.hitPoint) * point.object->getSurfaceEmissionIntensity(point.hitPoint) * point.surfaceNormal.dot(reflection);
+
     // Mix the direct, reflection and diffuse light
-    RenderRay ray = directLight + reflectionLight + diffuseLight + refractionsLight;
+    RenderRay ray = directLight + reflectionLight + diffuseLight + refractionsLight + emissionLight;
 
     ray.color = ray.color * point.object->getReflexionIndex(point.hitPoint);
 
@@ -289,8 +293,13 @@ raytracer::RenderRay raytracer::Renderer::getDiffuseLight(const RenderPoint &poi
         // Get the reflection light
         RenderRay reflectionLight = getReflexionsLight(randomPoint, data, bounces - 1);
 
+        // Get the emission light
+        RenderRay emissionLight;
+        emissionLight.color = point.object->getSurfaceEmission(randomPoint.hitPoint) * point.object->getSurfaceEmissionIntensity(randomPoint.hitPoint) * point.surfaceNormal.dot(randomRay);
+
         // Mix the direct and diffuse light
-        RenderRay ray = directLight + diffuseLight + reflectionLight;
+        RenderRay ray = directLight + diffuseLight + reflectionLight + emissionLight;
+
         ray.color = ray.color * point.object->getSurfaceAbsorbtion(point.hitPoint);
 
         // Add the color of this ray to the total color
@@ -352,8 +361,10 @@ raytracer::RenderRay raytracer::Renderer::getRefractionsLight(const RenderPoint 
     RenderRay reflectionLight = getReflexionsLight(refractedPoint, data, bounces);
     RenderRay diffuseLight = getDiffuseLight(refractedPoint, data, bounces);
     RenderRay refractionsLight = getRefractionsLight(refractedPoint, data, bounces);
+    RenderRay emissionLight;
+    emissionLight.color = point.object->getSurfaceEmission(point.hitPoint) * point.object->getSurfaceEmissionIntensity(point.hitPoint);
 
-    RenderRay finalRay = directLight + reflectionLight + diffuseLight + refractionsLight;
+    RenderRay finalRay = directLight + reflectionLight + diffuseLight + refractionsLight + emissionLight;
 
     return finalRay;
 }
