@@ -7,13 +7,13 @@
 #include "Render/RenderProcessWrapper.hpp"
 #include "Light/Objects/PointLight.hpp"
 
-#define WIDTH 1280
-#define HEIGHT 720
+#define WIDTH 256
+#define HEIGHT 256
 
-#define CHUNK_SIZE_X 128
-#define CHUNK_SIZE_Y 128
+#define CHUNK_SIZE_X 48
+#define CHUNK_SIZE_Y 48
 
-#define MAX_SAMPLES 20
+#define MAX_SAMPLES 15
 
 #include <chrono>
 #include "Render/Threads.hpp"
@@ -23,22 +23,22 @@ int main()
 {
     raytracer::RenderProcessWrapper renderer(WIDTH, HEIGHT, 30);
     renderer.renderer.camera.move(raytracer::Vector3D(0, 0, 2));
-    renderer.renderer.camera.sensitivity = 150;
-    renderer.renderer.camera.exposure = 0.1;
+    renderer.renderer.camera.sensitivity = 250;
+    renderer.renderer.camera.exposure = 0.01;
 
     renderer.renderer.renderData.chunkWidth = CHUNK_SIZE_X;
     renderer.renderer.renderData.chunkHeight = CHUNK_SIZE_Y;
     renderer.renderer.renderData.maxSamples = MAX_SAMPLES;
 
     auto obj1 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0.5, -101, -4), 100, raytracer::Color(1, 1, 1));
-    auto obj2 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0.5, 0, -4), 1, raytracer::Color(1, 0, 1));
+    auto obj2 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0.5, 1, -4), 1, raytracer::Color(1, 0, 1));
     auto obj3 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0.5, 1.7, -4), 0.1, raytracer::Color(1, 1, 1));
     auto obj4 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0.2, 0.5, -9), 1, raytracer::Color(1, 1, 1));
     auto obj5 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0.8, 0, -109), 100, raytracer::Color(0, 1, 1));
     auto obj6 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(3, 0, -4), 1, raytracer::Color(0, 0, 0));
 
 
-    raytracer::Vector3D motion = raytracer::Vector3D(2, 0, 0);
+    raytracer::Vector3D motion = raytracer::Vector3D(10, 10, 0);
     raytracer::Vector3D rotation = raytracer::Vector3D(0, 0, 0);
 
     obj2->setMotion(motion, rotation);
@@ -46,8 +46,6 @@ int main()
 
     obj1->setReflexionIndex(0.5);
 
-    obj3->setSurfaceEmission(raytracer::Color(1, 1, 1));
-    obj3->setSurfaceEmissionIntensity(5000);
 
 //    obj2->setGlassState(true);
 
@@ -58,11 +56,11 @@ int main()
     renderer.renderer.addObject(obj5);
     renderer.renderer.addObject(obj6);
 
-    renderer.renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(255, 0, 0), raytracer::Point3D(-50, 200, -25), 1000000));
-    renderer.renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(0, 255, 0), raytracer::Point3D(0, 200, -25), 1000000));
-    renderer.renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(0, 0, 255), raytracer::Point3D(50, 200, -25), 1000000));
+    renderer.renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(255, 0, 0), raytracer::Point3D(-50, 200, -25), 40000));
+    renderer.renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(0, 255, 0), raytracer::Point3D(0, 200, -25), 40000));
+    renderer.renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(0, 0, 255), raytracer::Point3D(50, 200, -25), 40000));
 
-    renderer.renderImageDisplay(1920);
+    renderer.renderImageDisplay(800);
 
     // Create PPM Output
     raytracer::PPMOutput output("./output.ppm", WIDTH, HEIGHT);

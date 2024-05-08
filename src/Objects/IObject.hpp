@@ -25,6 +25,8 @@ namespace raytracer
             virtual Color getSurfaceAbsorbtion(const Point3D &point) = 0;
             virtual double getSurfaceRoughness(const Point3D &point) = 0;
             virtual double getSurfaceTransparency(const Point3D &point) = 0;
+            virtual Color getSurfaceEmission(const Point3D &point) = 0;
+            virtual double getSurfaceEmissionIntensity(const Point3D &point) = 0;
 
             virtual Color getVolumeAbsorbtion() = 0;
             virtual double getVolumeAbsorbtionCoeff() = 0;
