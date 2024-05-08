@@ -34,8 +34,7 @@ void raytracer::PPMOutput::writeToFile()
 {
     if (!isFileWritable(_filename))
     {
-        std::cerr << "Error: File " << _filename << " is not writable." << std::endl;
-        return;
+        createFile(_filename, _width, _height);
     }
 
     std::ofstream file(_filename, std::ios::out | std::ios::binary);
