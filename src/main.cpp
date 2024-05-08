@@ -11,11 +11,13 @@
 #define WIDTH 512
 #define HEIGHT 512
 
-#define CHUNK_SIZE_X 48
-#define CHUNK_SIZE_Y 48
+#define CHUNK_SIZE_X 64
+#define CHUNK_SIZE_Y 64
 
-#define MAX_SAMPLES 15
+#define MAX_SAMPLES 5
 
+#include <chrono>
+#include "Render/Threads.hpp"
 #include "Output/PPMOutput.hpp"
 
 int main()
@@ -59,7 +61,9 @@ int main()
     renderer.renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(0, 255, 0), raytracer::Point3D(0, 200, -25), 40000));
     renderer.renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(0, 0, 255), raytracer::Point3D(50, 200, -25), 40000));
 
-    renderer.renderImageDisplay(800);
+    raytracer::editor editor(renderer.renderer, &renderer.display);
+    editor.run(800);
+    //renderer.renderImageDisplay(800);
 
     // Create PPM Output
     raytracer::PPMOutput output("./output.ppm", WIDTH, HEIGHT);
