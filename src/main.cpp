@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Render/Camera.hpp"
+#include "Render/Editor/Editor.hpp"
 #include "Objects/Primitives/Sphere.hpp"
 #include <random>
 
@@ -7,13 +8,13 @@
 #include "Render/RenderProcessWrapper.hpp"
 #include "Light/Objects/PointLight.hpp"
 
-#define WIDTH 256
-#define HEIGHT 256
+#define WIDTH 512
+#define HEIGHT 512
 
-#define CHUNK_SIZE_X 48
-#define CHUNK_SIZE_Y 48
+#define CHUNK_SIZE_X 64
+#define CHUNK_SIZE_Y 64
 
-#define MAX_SAMPLES 15
+#define MAX_SAMPLES 5
 
 #include <chrono>
 #include "Render/Threads.hpp"
@@ -21,7 +22,7 @@
 
 int main()
 {
-    raytracer::RenderProcessWrapper renderer(WIDTH, HEIGHT, 30);
+    raytracer::RenderProcessWrapper renderer(WIDTH, HEIGHT, 8);
     renderer.renderer.camera.move(raytracer::Vector3D(0, 0, 2));
     renderer.renderer.camera.sensitivity = 250;
     renderer.renderer.camera.exposure = 0.01;
@@ -60,7 +61,9 @@ int main()
     renderer.renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(0, 255, 0), raytracer::Point3D(0, 200, -25), 40000));
     renderer.renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(0, 0, 255), raytracer::Point3D(50, 200, -25), 40000));
 
-    renderer.renderImageDisplay(800);
+    raytracer::editor editor(renderer.renderer, &renderer.display);
+    editor.run(800);
+    //renderer.renderImageDisplay(800);
 
     // Create PPM Output
     raytracer::PPMOutput output("./output.ppm", WIDTH, HEIGHT);
