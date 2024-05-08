@@ -12,6 +12,11 @@ sfml::sfml()
         _image = std::make_unique<sf::Image>();
         _texture = std::make_unique<sf::Texture>();
         _sprite = std::make_unique<sf::Sprite>();
+        std::cout << "Display detected." << std::endl;
+    }
+    else
+    {
+        std::cerr << "Error: No display detected." << std::endl;
     }
 }
 

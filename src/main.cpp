@@ -7,15 +7,13 @@
 #include "Render/RenderProcessWrapper.hpp"
 #include "Light/Objects/PointLight.hpp"
 
-#define WIDTH 1920
-#define HEIGHT 1080
-
-#define WIN_SIZE 800
+#define WIDTH 1024
+#define HEIGHT 1024
 
 #define CHUNK_SIZE_X 64
 #define CHUNK_SIZE_Y 64
 
-#define MAX_SAMPLES 10
+#define MAX_SAMPLES 20
 
 #include <chrono>
 #include "Render/Threads.hpp"
@@ -23,7 +21,7 @@
 
 int main()
 {
-    raytracer::RenderProcessWrapper renderer(WIDTH, HEIGHT, 8);
+    raytracer::RenderProcessWrapper renderer(WIDTH, HEIGHT, 16);
     renderer.renderer.camera.move(raytracer::Vector3D(0, 0, 2));
     renderer.renderer.camera.sensitivity = 150;
     renderer.renderer.camera.exposure = 0.1;
@@ -61,7 +59,7 @@ int main()
     renderer.renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(0, 255, 0), raytracer::Point3D(0, 200, -25), 1000000));
     renderer.renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(0, 0, 255), raytracer::Point3D(50, 200, -25), 1000000));
 
-    renderer.renderImageCLI();
+    renderer.renderImageDisplay();
 
     // Create PPM Output
     raytracer::PPMOutput output("./output.ppm", WIDTH, HEIGHT);
