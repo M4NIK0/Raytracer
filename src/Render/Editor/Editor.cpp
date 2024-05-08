@@ -25,9 +25,8 @@ void raytracer::editor::run(int windowSize)
     auto begin = std::chrono::steady_clock::now();
 
     _renderer.initMotions();
-    bool isRunning = true;
     _display->initWindow(800, 600);
-    while (isRunning) {
+    while (_isRunning) {
         handleEvents();
         render();
     }
@@ -41,8 +40,10 @@ void raytracer::editor::render()
 void raytracer::editor::handleEvents()
 {
     int event = _display->getEvent();
-    if (event == 1)
+    if (event == 1) {
         _display->endWindow();
+        _isRunning = false;
+    }
     handleKeyboardEvents();
     handleMouseEvents();
     handleMouseWheelEvents();
