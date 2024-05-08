@@ -54,6 +54,13 @@ void raytracer::RenderProcessWrapper::renderImageDisplay(int windowSize)
                     display.drawPixel(x, y, color);
                 }
             }
+            int event = display.getEvent();
+            if (event == 1)
+            {
+                threads.stopThreads();
+                display.endWindow();
+                return;
+            }
             display.displayScreen();
         }
 
