@@ -7,7 +7,7 @@
 
 #include "RenderProcessWrapper.hpp"
 
-raytracer::RenderProcessWrapper::RenderProcessWrapper(int width, int height): renderer(Renderer(Camera(width, height))), threads(Threads(renderer)), _width(width), _height(height)
+raytracer::RenderProcessWrapper::RenderProcessWrapper(int width, int height, size_t nbThreads): renderer(Renderer(Camera(width, height))), threads(Threads(renderer)), _width(width), _height(height), _nbThreads(nbThreads)
 {
     renderer.renderData.width = width;
     renderer.renderData.height = height;
@@ -36,7 +36,7 @@ void raytracer::RenderProcessWrapper::renderImageDisplay(int windowSize)
     for (int i = 0; i < renderer.renderData.maxSamples; i++)
     {
         std::cout << "Sample " << i + 1 << "/" << renderer.renderData.maxSamples << std::endl;
-        threads.startThreads(30, renderer.renderData.chunkWidth, renderer.renderData.chunkHeight);
+        threads.startThreads(_nbThreads, renderer.renderData.chunkWidth, renderer.renderData.chunkHeight);
 
         while (1)
         {
@@ -105,7 +105,7 @@ void raytracer::RenderProcessWrapper::renderImageCLI()
     for (int i = 0; i < renderer.renderData.maxSamples; i++)
     {
         std::cout << "Sample " << i + 1 << "/" << renderer.renderData.maxSamples << std::endl;
-        threads.startThreads(30, renderer.renderData.chunkWidth, renderer.renderData.chunkHeight);
+        threads.startThreads(_nbThreads, renderer.renderData.chunkWidth, renderer.renderData.chunkHeight);
 
         while (1)
         {

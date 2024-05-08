@@ -16,7 +16,7 @@ namespace raytracer
     class RenderProcessWrapper
     {
         public:
-            RenderProcessWrapper(int width = 800, int height = 600);
+            RenderProcessWrapper(int width = 800, int height = 600, size_t nbThreads = 1);
             ~RenderProcessWrapper();
 
             void renderImageDisplay(int windowSize = 800);
@@ -29,5 +29,6 @@ namespace raytracer
 
         private:
             int _width, _height;
+            size_t _nbThreads;
     };
 }

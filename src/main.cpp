@@ -23,7 +23,7 @@
 
 int main()
 {
-    raytracer::RenderProcessWrapper renderer(WIDTH, HEIGHT);
+    raytracer::RenderProcessWrapper renderer(WIDTH, HEIGHT, 8);
     renderer.renderer.camera.move(raytracer::Vector3D(0, 0, 2));
     renderer.renderer.camera.sensitivity = 150;
     renderer.renderer.camera.exposure = 0.1;
@@ -61,7 +61,7 @@ int main()
     renderer.renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(0, 255, 0), raytracer::Point3D(0, 200, -25), 1000000));
     renderer.renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(0, 0, 255), raytracer::Point3D(50, 200, -25), 1000000));
 
-    renderer.renderImageCLI();
+    renderer.renderImageDisplay();
 
     // Create PPM Output
     raytracer::PPMOutput output("./output.ppm", WIDTH, HEIGHT);
