@@ -12,10 +12,10 @@
 
 #define WIN_SIZE 800
 
-#define CHUNK_SIZE_X 4
-#define CHUNK_SIZE_Y 4
+#define CHUNK_SIZE_X 16
+#define CHUNK_SIZE_Y 16
 
-#define MAX_SAMPLES 3
+#define MAX_SAMPLES 1
 
 #include <chrono>
 #include "Render/Threads.hpp"
