@@ -109,7 +109,7 @@ class sfml : public raytracer::IDisplay {
         void initImage(int width, int height) override;
 
     private:
-        std::unique_ptr<sf::RenderWindow> _window;
+        std::unique_ptr<sf::RenderWindow> _window = nullptr;
         sf::Image _image;
         sf::Texture _texture;
         sf::Sprite _sprite;
