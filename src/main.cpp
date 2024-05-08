@@ -4,8 +4,7 @@
 #include <random>
 
 #include "sfml/sfml.hpp"
-#include "Render/Renderer.hpp"
-#include "Light/ILight.hpp"
+#include "Render/RenderProcessWrapper.hpp"
 #include "Light/Objects/PointLight.hpp"
 
 #define WIDTH 160
@@ -24,19 +23,14 @@
 
 int main()
 {
-    raytracer::Camera camera(WIDTH, HEIGHT);
-    camera.move(raytracer::Vector3D(0, 0, 2));
-    camera.sensitivity = 150;
-    camera.exposure = 0.1;
-    raytracer::Renderer renderer(camera);
+    raytracer::RenderProcessWrapper renderer(WIDTH, HEIGHT);
+    renderer.renderer.camera.move(raytracer::Vector3D(0, 0, 2));
+    renderer.renderer.camera.sensitivity = 150;
+    renderer.renderer.camera.exposure = 0.1;
 
-
-    renderer.renderData.width = WIDTH;
-    renderer.renderData.height = HEIGHT;
-    renderer.renderData.chunkWidth = CHUNK_SIZE_X;
-    renderer.renderData.chunkHeight = CHUNK_SIZE_Y;
-    renderer.renderData.maxSamples = MAX_SAMPLES;
-    renderer.renderData.initRenderBuffer();
+    renderer.renderer.renderData.chunkWidth = CHUNK_SIZE_X;
+    renderer.renderer.renderData.chunkHeight = CHUNK_SIZE_Y;
+    renderer.renderer.renderData.maxSamples = MAX_SAMPLES;
 
     auto obj1 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0.5, -101, -4), 100, raytracer::Color(1, 1, 1));
     auto obj2 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0.5, 0, -4), 1, raytracer::Color(1, 0, 1));
@@ -56,131 +50,18 @@ int main()
 
 //    obj2->setGlassState(true);
 
-    renderer.addObject(obj1);
-    renderer.addObject(obj2);
-    renderer.addObject(obj3);
-    renderer.addObject(obj4);
-    renderer.addObject(obj5);
-    renderer.addObject(obj6);
+    renderer.renderer.addObject(obj1);
+    renderer.renderer.addObject(obj2);
+    renderer.renderer.addObject(obj3);
+    renderer.renderer.addObject(obj4);
+    renderer.renderer.addObject(obj5);
+    renderer.renderer.addObject(obj6);
 
-    renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(255, 0, 0), raytracer::Point3D(-50, 200, -25), 1000000));
-    renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(0, 255, 0), raytracer::Point3D(0, 200, -25), 1000000));
-    renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(0, 0, 255), raytracer::Point3D(50, 200, -25), 1000000));
+    renderer.renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(255, 0, 0), raytracer::Point3D(-50, 200, -25), 1000000));
+    renderer.renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(0, 255, 0), raytracer::Point3D(0, 200, -25), 1000000));
+    renderer.renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(0, 0, 255), raytracer::Point3D(50, 200, -25), 1000000));
 
-    sfml display;
-
-    display.initImage(WIDTH, HEIGHT);
-    // Initialize the window
-
-    int maxSize = std::max(WIDTH, HEIGHT);
-    double realWidth = (double)WIDTH / (double)maxSize;
-    double realHeight = (double)HEIGHT / (double)maxSize;
-
-    display.initWindow((int)(realWidth * WIN_SIZE), (int)(realHeight * WIN_SIZE));
-
-    int frame = 0;
-    bool loop = true;
-
-    std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
-    double max_intensity = 0;
-    display.clearWindow();
-
-    raytracer::Threads threads(renderer);
-    std::chrono::steady_clock::time_point end;
-
-    for (int i = 0; i < MAX_SAMPLES; i++)
-    {
-        std::cout << "Sample " << i + 1 << "/" << MAX_SAMPLES << std::endl;
-        threads.startThreads(30, CHUNK_SIZE_X, CHUNK_SIZE_Y);
-        max_intensity = 0;
-        while (1)
-        {
-            if (threads.getRemainingChunks() == 0)
-            {
-                break;
-            }
-
-            for (int x = 0; x < WIDTH; x++)
-            {
-                for (int y = 0; y < HEIGHT; y++)
-                {
-                    raytracer::Color color = renderer.renderData.renderBuffer[x][y];
-
-                    if (color.r > max_intensity)
-                        max_intensity = color.r;
-                    if (color.g > max_intensity)
-                        max_intensity = color.g;
-                    if (color.b > max_intensity)
-                        max_intensity = color.b;
-                }
-            }
-
-            for (int x = 0; x < WIDTH; x++)
-            {
-                for (int y = 0; y < HEIGHT; y++)
-                {
-                    raytracer::Color color = renderer.renderData.renderBuffer[x][y];
-                    color = color * renderer.camera.exposure * renderer.camera.sensitivity;
-                    color.cap();
-                    display.drawPixel(x, y, color);
-                }
-            }
-            display.displayScreen();
-        }
-
-        display.displayScreen();
-        threads.stopThreads();
-
-        renderer.stepMotions();
-    }
-    end = std::chrono::steady_clock::now();
-
-    std::cout << "Rendered in " << std::chrono::duration_cast<std::chrono::seconds>(end - begin).count() << "s" << std::endl;
-
-
-    max_intensity = 0;
-        for (int x = 0; x < WIDTH; x++)
-        {
-            for (int y = 0; y < HEIGHT; y++)
-            {
-                raytracer::Color color = renderer.renderData.renderBuffer[x][y];
-
-                if (color.r > max_intensity)
-                    max_intensity = color.r;
-                if (color.g > max_intensity)
-                    max_intensity = color.g;
-                if (color.b > max_intensity)
-                    max_intensity = color.b;
-            }
-        }
-
-        for (int x = 0; x < WIDTH; x++)
-        {
-            for (int y = 0; y < HEIGHT; y++)
-            {
-                raytracer::Color color = renderer.renderData.renderBuffer[x][y];
-                color = color * renderer.camera.exposure * renderer.camera.sensitivity;
-                color.cap();
-                display.drawPixel(x, y, color);
-            }
-        }
-        display.displayScreen();
-
-
-    while (loop)
-    {
-
-        int event = display.getEvent();
-        if (event == 1)
-        {
-            loop = false;
-        }
-        display.displayScreen();
-        frame++;
-    }
-
-    // End the window
-    display.endWindow();
+    renderer.renderImageDisplay();
 
     // Create PPM Output
     raytracer::PPMOutput output("./output.ppm", WIDTH, HEIGHT);
@@ -188,7 +69,7 @@ int main()
     {
         for (int y = 0; y < HEIGHT; y++)
         {
-            raytracer::Color color = renderer.renderData.renderBuffer[x][y];
+            raytracer::Color color = renderer.renderer.renderData.renderBuffer[x][y];
             output.setPixel(x, y, color);
         }
     }
