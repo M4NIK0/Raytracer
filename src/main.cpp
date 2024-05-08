@@ -21,7 +21,7 @@
 
 int main()
 {
-    raytracer::RenderProcessWrapper renderer(WIDTH, HEIGHT, 32);
+    raytracer::RenderProcessWrapper renderer(WIDTH, HEIGHT, 8);
     renderer.renderer.camera.move(raytracer::Vector3D(0, 0, 2));
     renderer.renderer.camera.sensitivity = 150;
     renderer.renderer.camera.exposure = 0.1;
