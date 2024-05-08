@@ -43,7 +43,7 @@ void raytracer::RenderPoint::hitNearestObject(const std::vector<std::shared_ptr<
         }
     }
 
-    this->distance = nearestPoint.distance;
+    this->distance = minimalDistance;
     this->hitPoint = nearestPoint.hitPoint;
     this->object = nearestPoint.object;
     this->ray = nearestPoint.ray;
