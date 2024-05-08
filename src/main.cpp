@@ -7,8 +7,8 @@
 #include "Render/RenderProcessWrapper.hpp"
 #include "Light/Objects/PointLight.hpp"
 
-#define WIDTH 160
-#define HEIGHT 128
+#define WIDTH 28
+#define HEIGHT 14
 
 #define WIN_SIZE 800
 
@@ -65,9 +65,9 @@ int main()
 
     // Create PPM Output
     raytracer::PPMOutput output("./output.ppm", WIDTH, HEIGHT);
-    for (int x = 0; x < WIDTH; x++)
+    for (int y = 0; y < HEIGHT; y++)
     {
-        for (int y = 0; y < HEIGHT; y++)
+        for (int x = 0; x < WIDTH; x++)
         {
             raytracer::Color color = renderer.renderer.renderData.renderBuffer[x][y];
             output.setPixel(x, y, color);
