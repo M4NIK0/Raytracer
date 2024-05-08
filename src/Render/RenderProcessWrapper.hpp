@@ -16,15 +16,18 @@ namespace raytracer
     class RenderProcessWrapper
     {
         public:
-            RenderProcessWrapper(int width, int height, int windowSize = 800);
+            RenderProcessWrapper(int width = 800, int height = 600);
             ~RenderProcessWrapper();
 
-            void renderImageDisplay();
+            void renderImageDisplay(int windowSize = 800);
 
             void renderImageCLI();
 
             Renderer renderer;
             Threads threads;
             sfml display;
+
+        private:
+            int _width, _height;
     };
 }

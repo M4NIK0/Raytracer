@@ -7,18 +7,8 @@
 
 #include "RenderProcessWrapper.hpp"
 
-raytracer::RenderProcessWrapper::RenderProcessWrapper(int width, int height, int windowSize): renderer(Renderer(Camera(width, height))), threads(Threads(renderer))
+raytracer::RenderProcessWrapper::RenderProcessWrapper(int width, int height): renderer(Renderer(Camera(width, height))), threads(Threads(renderer)), _width(width), _height(height)
 {
-    if (windowSize != -1)
-    {
-        int maxSize = std::max(width, height);
-        double realWidth = (double) width / (double) maxSize;
-        double realHeight = (double) height / (double) maxSize;
-
-        display.initImage(width, height);
-        display.initWindow((int) (realWidth * windowSize), (int) (realHeight * windowSize));
-    }
-
     renderer.renderData.width = width;
     renderer.renderData.height = height;
 
@@ -27,8 +17,19 @@ raytracer::RenderProcessWrapper::RenderProcessWrapper(int width, int height, int
 
 raytracer::RenderProcessWrapper::~RenderProcessWrapper() = default;
 
-void raytracer::RenderProcessWrapper::renderImageDisplay()
+void raytracer::RenderProcessWrapper::renderImageDisplay(int windowSize)
 {
+    if (windowSize > 0)
+    {
+        int maxSize = std::max(_width, _height);
+        double realWidth = (double) _width / (double) maxSize;
+        double realHeight = (double) _height / (double) maxSize;
+
+        display.initImage(_width, _height);
+        display.initWindow((int) (realWidth * windowSize), (int) (realHeight * windowSize));
+    }
+
+
     auto begin = std::chrono::steady_clock::now();
 
     renderer.initMotions();
