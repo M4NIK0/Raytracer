@@ -84,6 +84,11 @@ void raytracer::Renderer::renderChunk(const Chunk &chunk)
     }
 }
 
+void raytracer::Renderer::render()
+{
+
+}
+
 raytracer::RenderRay raytracer::Renderer::traceRay(int x, int y)
 {
     Ray3D ray = camera.getRay(x, y);
@@ -106,11 +111,27 @@ raytracer::RenderRay raytracer::Renderer::traceRay(int x, int y)
     return finalRay;
 }
 
+void raytracer::Renderer::initMotions()
+{
+    for (auto &object: renderData.objects)
+    {
+        object->initiateMotion(camera.exposure, renderData.maxSamples);
+    }
+}
+
 void raytracer::Renderer::stepMotions()
 {
     for (auto &object: renderData.objects)
     {
         object->stepMotion();
+    }
+}
+
+void raytracer::Renderer::resetMotions()
+{
+    for (auto &object: renderData.objects)
+    {
+        object->resetMotion();
     }
 }
 

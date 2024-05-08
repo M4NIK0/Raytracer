@@ -14,7 +14,8 @@ namespace raytracer
     class Sphere : public IObject
     {
         public:
-            Sphere(raytracer::Point3D pos, double r, Color surfaceReflexion) : _radius(r), _position(pos), _surfaceAbsorbtion(surfaceReflexion), _volumeAbsorbtion(Color(0, 0, 0)) {}
+            Sphere(raytracer::Point3D pos, double r, Color surfaceReflexion) : _radius(r), _position(pos),
+                                                                               _positionBackup(pos), _surfaceAbsorbtion(surfaceReflexion), _volumeAbsorbtion(Color(0, 0, 0)) {}
             ~Sphere();
 
             Point3D hit(const Ray3D &ray) override;
@@ -43,12 +44,14 @@ namespace raytracer
 
             void setMotion(Vector3D &translation, Vector3D &rotation) override;
             void initiateMotion(double time, size_t steps) override;
+            void resetMotion() override;
 
             void stepMotion() override;
 
         private:
             double _radius;
             Point3D _position;
+            Point3D _positionBackup;
 
             double _surfaceRoughness = 1;
             Color _surfaceAbsorbtion;

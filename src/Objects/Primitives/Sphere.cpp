@@ -73,6 +73,7 @@ double raytracer::Sphere::getVolumeAbsorbtionCoeff()
 void raytracer::Sphere::move(Vector3D vec)
 {
     _position = _position + vec;
+    _positionBackup = _position;
 }
 
 void raytracer::Sphere::rotate(Vector3D vec)
@@ -125,6 +126,11 @@ void raytracer::Sphere::initiateMotion(double time, size_t steps)
 
     _position = _position - totalTranslation / 2;
     _rotation = _rotation - totalRotation / 2;
+}
+
+void raytracer::Sphere::resetMotion()
+{
+    _position = _positionBackup;
 }
 
 void raytracer::Sphere::stepMotion()
