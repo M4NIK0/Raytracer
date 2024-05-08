@@ -1,6 +1,7 @@
 #include <iostream>
 #include "Render/Camera.hpp"
 #include "Objects/Primitives/Sphere.hpp"
+#include "Render/Editor/Editor.hpp"
 #include <random>
 
 #include "sfml/sfml.hpp"
@@ -58,7 +59,8 @@ int main()
     renderer.renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(0, 255, 0), raytracer::Point3D(0, 200, -25), 40000));
     renderer.renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(0, 0, 255), raytracer::Point3D(50, 200, -25), 40000));
 
-    renderer.renderImageCLI();
+    raytracer::editor editor(renderer.renderer, &renderer.display);
+    editor.run(800);
 
     // Create PPM Output
     raytracer::PPMOutput output("./output.ppm", WIDTH, HEIGHT);
