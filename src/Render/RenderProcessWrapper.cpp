@@ -29,7 +29,6 @@ void raytracer::RenderProcessWrapper::renderImageDisplay(int windowSize)
         display.initWindow((int) (realWidth * windowSize), (int) (realHeight * windowSize));
     }
 
-
     auto begin = std::chrono::steady_clock::now();
 
     renderer.initMotions();
