@@ -41,6 +41,8 @@ namespace raytracer
             void setReflexionIndex(double index) override;
             void setRefractionIndex(double index) override;
             void setGlassState(bool state) override;
+            void setSurfaceEmission(Color color) override;
+            void setSurfaceEmissionIntensity(double intensity) override;
 
             void setMotion(Vector3D &translation, Vector3D &rotation) override;
             void initiateMotion(double time, size_t steps) override;
@@ -57,6 +59,8 @@ namespace raytracer
             Color _surfaceAbsorbtion;
             Color _volumeAbsorbtion;
             double _volumeAbsorbtionCoeff = 0;
+            Color _emissionColor;
+            double _emissionIntensity = 0;
 
             bool _isGlass = false;
             double _reflexionIndex = 0;

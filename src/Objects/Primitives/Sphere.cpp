@@ -110,6 +110,16 @@ void raytracer::Sphere::setGlassState(bool state)
     _isGlass = state;
 }
 
+void raytracer::Sphere::setSurfaceEmission(raytracer::Color color)
+{
+    _emissionColor = color;
+}
+
+void raytracer::Sphere::setSurfaceEmissionIntensity(double intensity)
+{
+    _emissionIntensity = intensity;
+}
+
 void raytracer::Sphere::setMotion(Vector3D &translation, Vector3D &rotation)
 {
     _translation = translation;
