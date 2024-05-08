@@ -15,7 +15,8 @@ namespace raytracer
     class Camera
     {
         public:
-            Camera(Point3D origin, Rectangle3D screen, int width, int height) : origin(origin), _screen(screen), width(width), height(height) {}
+            Camera(Point3D origin, Rectangle3D screen, int width, int height) : origin(origin), width(width), height(height), _screen(screen) {}
+            Camera(int width, int height);
             ~Camera();
 
             Ray3D getRay(int x, int y);
@@ -24,6 +25,9 @@ namespace raytracer
 
             int width;
             int height;
+
+            double exposure = 1.0;
+            double sensitivity = 100;
 
             void move(Vector3D direction);
             void rotate(Vector3D direction);
