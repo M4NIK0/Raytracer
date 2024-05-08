@@ -16,6 +16,8 @@
 
 #define MAX_SAMPLES 15
 
+#include <chrono>
+#include "Render/Threads.hpp"
 #include "Output/PPMOutput.hpp"
 
 int main()
