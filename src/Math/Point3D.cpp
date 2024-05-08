@@ -15,3 +15,10 @@ raytracer::Point3D &raytracer::Point3D::operator=(const raytracer::Point3D &othe
 
     return *this;
 }
+
+raytracer::Point3D::Point3D(raytracer::Vector3D vector3D)
+{
+    x = vector3D.x;
+    y = vector3D.y;
+    z = vector3D.z;
+}
