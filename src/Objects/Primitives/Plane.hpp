@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include <utility>
+
 #include "../IObject.hpp"
 
 namespace raytracer
@@ -14,8 +16,7 @@ namespace raytracer
     class Plane : public IObject
     {
         public:
-            Plane(raytracer::Point3D pos, double r, Color surfaceReflexion) : _radius(r), _position(pos),
-                                                                               _positionBackup(pos), _surfaceAbsorbtion(surfaceReflexion), _volumeAbsorbtion(Color(0, 0, 0)), _emissionColor(Color(0, 0, 0)) {}
+            Plane(raytracer::Point3D pos, raytracer::Vector3D normal, Color surfaceReflexion) : _normal(normal), _position(std::move(pos)), _surfaceAbsorbtion(surfaceReflexion), _volumeAbsorbtion(surfaceReflexion), _emissionColor({0, 0, 0}) { _surfaceAbsorbtion.normalize(); _volumeAbsorbtion.normalize(); };
             ~Plane();
 
             Point3D hit(const Ray3D &ray) override;
@@ -53,7 +54,7 @@ namespace raytracer
             void stepMotion() override;
 
         private:
-            double _radius;
+            Vector3D _normal;
             Point3D _position;
             Point3D _positionBackup;
 

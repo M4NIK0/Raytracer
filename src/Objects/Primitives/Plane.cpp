@@ -12,37 +12,23 @@ raytracer::Plane::~Plane() = default;
 
 raytracer::Point3D raytracer::Plane::hit(const Ray3D &ray)
 {
-    Vector3D oc = ray.
-    origin - _position;
-    double a = ray.direction.dot(ray.direction);
-    double b = 2.0 * oc.dot(ray.direction);
-    double c = oc.dot(oc) - _radius * _radius;
-    double discriminant = b * b - 4 * a * c;
+    double t = (_position - ray.origin).dot(_normal) / ray.direction.dot(_normal);
 
-    if (discriminant < 0) {
-        return Point3D(INFINITY, INFINITY, INFINITY);
+    if (t < 0) {
+        return {INFINITY, INFINITY, INFINITY};
     } else {
-        double root1 = (-b - std::sqrt(discriminant)) / (2.0 * a);
-        double root2 = (-b + std::sqrt(discriminant)) / (2.0 * a);
-
-        if (root1 > 0) {
-            return ray.origin + ray.direction * root1;
-        } else if (root2 > 0) {
-            return ray.origin + ray.direction * root2;
-        } else {
-            return Point3D(INFINITY, INFINITY, INFINITY);
-        }
+        return ray.origin + ray.direction * t;
     }
 }
 
 raytracer::Vector3D raytracer::Plane::getSurfaceNormal(const Point3D &point)
 {
-    return (point - _position).normalize();
+    return _normal;
 }
 
 raytracer::Vector3D raytracer::Plane::getVolumeNormal(const Point3D &point)
 {
-    return (point - _position).normalize();
+    return _normal;
 }
 
 raytracer::Color raytracer::Plane::getSurfaceAbsorbtion(const Point3D &point)

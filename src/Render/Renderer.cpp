@@ -188,7 +188,10 @@ raytracer::Renderer::getDirectLight(const RenderPoint &point, const RenderData &
             RenderPoint shadowHitPoint;
 
             // If the shadow ray hits something before reaching the light source, continue to the next light source
-            if (shadowHitPoint.hitsSomething(data.objects, shadowRay))
+            RenderPoint shadowPoint;
+            shadowPoint.ray = shadowRay;
+            shadowPoint.hitNearestObject(data.objects, shadowRay);
+            if (!(shadowPoint.hitPoint == Point3D(INFINITY, INFINITY, INFINITY)) && shadowPoint.distance < Point3D::distance(point.hitPoint, light->getPosition()))
             {
                 continue;
             }
