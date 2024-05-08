@@ -97,6 +97,7 @@ namespace raytracer
 
 class sfml : public raytracer::IDisplay {
     public:
+        sfml();
         ~sfml() override = default;
 
         void initWindow(int width = 800, int height = 600) override;
@@ -109,10 +110,10 @@ class sfml : public raytracer::IDisplay {
         void initImage(int width, int height) override;
 
     private:
-        std::unique_ptr<sf::RenderWindow> _window = nullptr;
-        sf::Image _image;
-        sf::Texture _texture;
-        sf::Sprite _sprite;
+        std::unique_ptr<sf::RenderWindow> _window;
+        std::unique_ptr<sf::Image> _image;
+        std::unique_ptr<sf::Texture> _texture;
+        std::unique_ptr<sf::Sprite> _sprite;
 };
 
 #endif //RAYTRACER_SFML_HPP
