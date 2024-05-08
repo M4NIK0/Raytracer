@@ -1,43 +1,48 @@
-//
-// Created by Eth22 on 4/30/24.
-//
+/*
+** EPITECH PROJECT, 2024
+** Sphere.cpp
+** File description:
+** raytracer
+*/
 
+#include <iostream>
 #include "Plane.hpp"
 
-raytracer::Plane::Plane(raytracer::Point3D pos, double size, Vector3D normal, Color surfaceReflexion)
-        : _normal(normal), _size(size), _position(pos), _surfaceAbsorbtion(surfaceReflexion), _volumeAbsorbtion(Color(0, 0, 0))
-{
-    if (size < 0) {
-        _size = std::numeric_limits<double>::infinity();
-    } else {
-        _size = size;
-    }
-}
 raytracer::Plane::~Plane() = default;
 
 raytracer::Point3D raytracer::Plane::hit(const Ray3D &ray)
 {
-    double denominator = _normal.dot(ray.direction);
-    if (std::abs(std::abs(denominator)) > 1e-6) {
-        double t = (_position - ray.origin).dot(_normal) / denominator;
-        if (t >= 0) {
-            Point3D intersectionPoint = ray.origin + ray.direction * t;
-            if (std::abs(intersectionPoint.x - _position.x) <= _size && std::abs(intersectionPoint.z - _position.z) <= _size) {
-                return intersectionPoint;
-            }
+    Vector3D oc = ray.
+    origin - _position;
+    double a = ray.direction.dot(ray.direction);
+    double b = 2.0 * oc.dot(ray.direction);
+    double c = oc.dot(oc) - _radius * _radius;
+    double discriminant = b * b - 4 * a * c;
+
+    if (discriminant < 0) {
+        return Point3D(INFINITY, INFINITY, INFINITY);
+    } else {
+        double root1 = (-b - std::sqrt(discriminant)) / (2.0 * a);
+        double root2 = (-b + std::sqrt(discriminant)) / (2.0 * a);
+
+        if (root1 > 0) {
+            return ray.origin + ray.direction * root1;
+        } else if (root2 > 0) {
+            return ray.origin + ray.direction * root2;
+        } else {
+            return Point3D(INFINITY, INFINITY, INFINITY);
         }
     }
-    return {INFINITY, INFINITY, INFINITY};
 }
 
 raytracer::Vector3D raytracer::Plane::getSurfaceNormal(const Point3D &point)
 {
-    return _normal;
+    return (point - _position).normalize();
 }
 
 raytracer::Vector3D raytracer::Plane::getVolumeNormal(const Point3D &point)
 {
-    return _normal;
+    return (point - _position).normalize();
 }
 
 raytracer::Color raytracer::Plane::getSurfaceAbsorbtion(const Point3D &point)
@@ -65,58 +70,24 @@ double raytracer::Plane::getVolumeAbsorbtionCoeff()
     return _volumeAbsorbtionCoeff;
 }
 
+raytracer::Color raytracer::Plane::getSurfaceEmission(const Point3D &point)
+{
+    return _emissionColor;
+}
+
+double raytracer::Plane::getSurfaceEmissionIntensity(const Point3D &point)
+{
+    return _emissionIntensity;
+}
+
 void raytracer::Plane::move(Vector3D vec)
 {
     _position = _position + vec;
+    _positionBackup = _position;
 }
 
 void raytracer::Plane::rotate(Vector3D vec)
 {
-    // Convert the rotation angles from degrees to radians
-    double rx = vec.x * M_PI / 180.0;
-    double ry = vec.y * M_PI / 180.0;
-    double rz = vec.z * M_PI / 180.0;
-
-    // Create rotation matrices for the x, y, and z axes
-    raytracer::Matrix rotateX;
-    rotateX = {
-            {1, 0, 0},
-            {0, cos(rx), -sin(rx)},
-            {0, sin(rx), cos(rx)}
-    };
-
-    raytracer::Matrix rotateY;
-    rotateY = {
-            {cos(ry), 0, sin(ry)},
-            {0, 1, 0},
-            {-sin(ry), 0, cos(ry)}
-    };
-
-    raytracer::Matrix rotateZ;
-    rotateZ = {
-            {cos(rz), -sin(rz), 0},
-            {sin(rz), cos(rz), 0},
-            {0, 0, 1}
-    };
-
-    // Combine the rotation matrices in the opposite order
-    raytracer::Matrix rotationMatrix = rotateX * rotateY * rotateZ;
-
-    // Convert the plane's normal to a matrix
-    raytracer::Matrix normalMatrix;
-    normalMatrix = {
-            {_normal.x},
-            {_normal.y},
-            {_normal.z}
-    };
-
-    // Apply the rotation matrix to the plane's normal
-    raytracer::Matrix rotatedNormalMatrix = rotationMatrix * normalMatrix;
-
-    // Convert the result back to a Vector3D and update the plane's normal
-    _normal.x = rotatedNormalMatrix.get(0, 0);
-    _normal.y = rotatedNormalMatrix.get(1, 0);
-    _normal.z = rotatedNormalMatrix.get(2, 0);
 }
 
 bool raytracer::Plane::getGlassState(const Point3D &point)
@@ -147,4 +118,43 @@ void raytracer::Plane::setRefractionIndex(double index)
 void raytracer::Plane::setGlassState(bool state)
 {
     _isGlass = state;
+}
+
+void raytracer::Plane::setSurfaceEmission(raytracer::Color color)
+{
+    _emissionColor = color;
+}
+
+void raytracer::Plane::setSurfaceEmissionIntensity(double intensity)
+{
+    _emissionIntensity = intensity;
+}
+
+void raytracer::Plane::setMotion(Vector3D &translation, Vector3D &rotation)
+{
+    _translation = translation;
+    _rotation = rotation;
+}
+
+void raytracer::Plane::initiateMotion(double time, size_t steps)
+{
+    Vector3D totalTranslation = _translation * time;
+    Vector3D totalRotation = _rotation * time;
+
+    _translationStep = totalTranslation / steps;
+    _rotationStep = totalRotation / steps;
+
+    _position = _position - totalTranslation / 2;
+    _rotation = _rotation - totalRotation / 2;
+}
+
+void raytracer::Plane::resetMotion()
+{
+    _position = _positionBackup;
+}
+
+void raytracer::Plane::stepMotion()
+{
+    _position = _position + _translationStep;
+    _rotation = _rotation + _rotationStep;
 }

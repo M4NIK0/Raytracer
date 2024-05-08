@@ -63,11 +63,12 @@ std::vector<raytracer::Chunk> raytracer::Renderer::getChunks(int chunkSizeX, int
         x_max += chunkSizeX;
     }
 
-    std::random_device rd;
-    std::mt19937 g(rd());
+    // use time as seed
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    std::default_random_engine g(seed);
 
 //     Shuffle the chunks
-    std::shuffle(chunks.begin(), chunks.end(), g);
+//    std::shuffle(chunks.begin(), chunks.end(), g);
 
     return chunks;
 }
@@ -138,9 +139,9 @@ void raytracer::Renderer::resetMotions()
 raytracer::Vector3D raytracer::Renderer::getRandomRayFromCone(const raytracer::Vector3D &normal, double angle)
 {
     // Generate two random numbers
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_real_distribution<> dis(0.0, 1.0);
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    std::default_random_engine gen(seed);
+    std::uniform_real_distribution<double> dis(0, 1);
 
     double u = dis(gen);
     double v = dis(gen);
