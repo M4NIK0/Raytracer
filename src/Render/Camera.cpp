@@ -8,6 +8,20 @@
 #include "Camera.hpp"
 #include "../Math/Matrix.hpp"
 
+raytracer::Camera::Camera(int width, int height) : origin({0.5, 0.5, 1}), width(width), height(height), _screen({{0, 1, 0}, {1, 0, 0}, {0, -1, 0}})
+{
+    int maxSize = std::max(width, height);
+    double realWidth = (double)width / (double)maxSize;
+    double realHeight = (double)height / (double)maxSize;
+
+    _screen.origin = _screen.origin + _screen.bottom_side * 0.5 + _screen.left_side * 0.5;
+
+    _screen.bottom_side = _screen.bottom_side * realWidth;
+    _screen.left_side = _screen.left_side * realHeight;
+
+    _screen.origin = _screen.origin - _screen.bottom_side * 0.5 - _screen.left_side * 0.5;
+}
+
 raytracer::Camera::~Camera() = default;
 
 raytracer::Ray3D raytracer::Camera::getRay(int x, int y)
