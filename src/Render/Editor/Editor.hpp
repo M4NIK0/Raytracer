@@ -30,5 +30,6 @@ namespace raytracer {
 
             raytracer::Renderer _renderer;
             sfml *_display;
+            bool _isRunning = true;
     };
 }
