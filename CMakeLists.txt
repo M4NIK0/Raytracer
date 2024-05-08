@@ -41,6 +41,8 @@ add_executable(raytracer src/main.cpp
         src/Render/Threads.hpp
         src/Output/PPMOutput.cpp
         src/Output/PPMOutput.hpp
+        src/Render/RenderProcessWrapper.cpp
+        src/Render/RenderProcessWrapper.hpp
 )
 
 # Link SFML

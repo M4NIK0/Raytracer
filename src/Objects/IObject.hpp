@@ -45,5 +45,6 @@ namespace raytracer
 
             virtual void initiateMotion(double time, size_t steps) = 0;
             virtual void stepMotion() = 0;
+            virtual void resetMotion() = 0;
     };
 }
