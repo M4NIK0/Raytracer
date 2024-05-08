@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Render/Camera.hpp"
+#include "Render/Editor/Editor.hpp"
 #include "Objects/Primitives/Sphere.hpp"
 #include "Render/Editor/Editor.hpp"
 #include <random>
@@ -8,13 +9,13 @@
 #include "Render/RenderProcessWrapper.hpp"
 #include "Light/Objects/PointLight.hpp"
 
-#define WIDTH 1920
-#define HEIGHT 1080
+#define WIDTH 512
+#define HEIGHT 512
 
-#define CHUNK_SIZE_X 128
-#define CHUNK_SIZE_Y 128
+#define CHUNK_SIZE_X 64
+#define CHUNK_SIZE_Y 64
 
-#define MAX_SAMPLES 25
+#define MAX_SAMPLES 5
 
 #include "Output/PPMOutput.hpp"
 
@@ -61,6 +62,7 @@ int main()
 
     raytracer::editor editor(renderer.renderer, &renderer.display);
     editor.run(800);
+    //renderer.renderImageDisplay(800);
 
     // Create PPM Output
     raytracer::PPMOutput output("./output.ppm", WIDTH, HEIGHT);
