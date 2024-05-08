@@ -102,6 +102,19 @@ raytracer::Matrix raytracer::Matrix::operator=(const std::vector<std::vector<dou
     return *this;
 }
 
+raytracer::Matrix raytracer::Matrix::transpose()
+{
+    Matrix transposed(sizeY(), sizeX());
+
+    for (std::size_t i = 0; i < sizeX(); i++) {
+        for (std::size_t j = 0; j < sizeY(); j++) {
+            transposed.set(j, i, get(i, j));
+        }
+    }
+
+    return transposed;
+}
+
 raytracer::Matrix transposeMatrix(const raytracer::Matrix& matrix) {
     raytracer::Matrix transposed(3, 3);
     for (std::size_t i = 0; i < 3; i++) {

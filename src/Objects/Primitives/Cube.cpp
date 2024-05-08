@@ -193,3 +193,17 @@ void raytracer::Cube::setGlassState(bool state)
 {
     _isGlass = state;
 }
+
+raytracer::Matrix raytracer::Cube::vectorToMatrix(raytracer::Vector3D vector3D)
+{
+    Matrix matrix(3, 1);
+    matrix.set(0, 0, vector3D.x);
+    matrix.set(1, 0, vector3D.y);
+    matrix.set(2, 0, vector3D.z);
+    return matrix;
+}
+
+raytracer::Vector3D raytracer::Cube::matrixToVector(raytracer::Matrix matrix)
+{
+    return Vector3D(matrix.get(0, 0), matrix.get(1, 0), matrix.get(2, 0));
+}

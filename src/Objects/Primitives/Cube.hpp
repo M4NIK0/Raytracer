@@ -54,5 +54,9 @@ namespace raytracer
         bool _isGlass = false;
         double _reflexionIndex = 0;
         double _refractionIndex = 1.5;
+
+            raytracer::Matrix vectorToMatrix(Vector3D vector3D);
+
+            Vector3D matrixToVector(Matrix matrix);
     };
 }
