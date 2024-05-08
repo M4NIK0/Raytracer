@@ -5,6 +5,21 @@
 #include <iostream>
 #include "sfml.hpp"
 
+sfml::sfml()
+{
+    if (std::getenv("DISPLAY") != nullptr)
+    {
+        _image = std::make_unique<sf::Image>();
+        _texture = std::make_unique<sf::Texture>();
+        _sprite = std::make_unique<sf::Sprite>();
+        std::cout << "Display detected." << std::endl;
+    }
+    else
+    {
+        std::cerr << "Error: No display detected." << std::endl;
+    }
+}
+
 void sfml::initWindow(int width, int height)
 {
     _window = std::make_unique<sf::RenderWindow>(sf::VideoMode(width, height), "Blender 4.1", sf::Style::Titlebar | sf::Style::Close);
@@ -18,27 +33,27 @@ void sfml::endWindow()
 
 void sfml::drawPixel(int x, int y, raytracer::Color color)
 {
-    _image.setPixel(x, y, sf::Color(color.r, color.g, color.b));
+    _image->setPixel(x, y, sf::Color(color.r, color.g, color.b));
 }
 
 void sfml::displayScreen()
 {
-    _texture.loadFromImage(_image);
+    _texture->loadFromImage(*_image);
 
-    _sprite = sf::Sprite();
-    _sprite.setTexture(_texture);
+    *_sprite = sf::Sprite();
+    _sprite->setTexture(*_texture);
 
-    _sprite.setScale(_window->getSize().x / (_image.getSize().x * 1.0f), _window->getSize().y / (_image.getSize().y * 1.0f));
+    _sprite->setScale(_window->getSize().x / (_image->getSize().x * 1.0f), _window->getSize().y / (_image->getSize().y * 1.0f));
 
-    _window->setTitle("Blender 4.1 - " + std::to_string(_image.getSize().x) + "x" + std::to_string(_image.getSize().y));
+    _window->setTitle("Blender 4.1 - " + std::to_string(_image->getSize().x) + "x" + std::to_string(_image->getSize().y));
 
-    _window->draw(_sprite);
+    _window->draw(*_sprite);
     _window->display();
 }
 
 void sfml::clearWindow()
 {
-    _image.create(_image.getSize().x, _image.getSize().y, sf::Color::Black);
+    _image->create(_image->getSize().x, _image->getSize().y, sf::Color::Black);
     _window->clear();
 }
 
@@ -77,7 +92,7 @@ int sfml::getEvent()
 
 void sfml::initImage(int width, int height)
 {
-    _image.create(width, height, sf::Color::Black);
+    _image->create(width, height, sf::Color::Black);
 }
 
 void sfml::drawCurrentchunkBoundaries(raytracer::Chunk chunk, size_t chunkSizeX, size_t chunkSizeY)
