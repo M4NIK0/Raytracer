@@ -24,7 +24,7 @@ int main()
     {
         std::cout << "Rendering frame " << i + 1 << " / 100" << std::endl;
 
-        raytracer::RenderProcessWrapper renderer(WIDTH, HEIGHT, 32);
+        raytracer::RenderProcessWrapper renderer(WIDTH, HEIGHT, 8);
         renderer.renderer.camera.move(raytracer::Vector3D(0, 0, 2));
         renderer.renderer.camera.sensitivity = 250;
         renderer.renderer.camera.exposure = 0.1;
