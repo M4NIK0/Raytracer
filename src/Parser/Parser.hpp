@@ -7,6 +7,7 @@
 
 #include <libconfig.h++>
 #include "../Objects/Primitives/Sphere.hpp"
+#include "../Render/Renderer.hpp"
 
 class Parser{
     public:
@@ -27,11 +28,10 @@ class Parser{
         Parser();
         ~Parser();
         void parseConfig(const char* path);
-        void parseObjects();
-        void parseCamera();
-        void parseScreen();
-        void parseRenderer();
-        void parseScene();
+        void parseObjects(raytracer::Renderer &renderer);
+        raytracer::Camera parseCamera();
+        raytracer::Renderer parseScene();
+        raytracer::Renderer parseRenderer();
     private:
         libconfig::Config* cfg;
 };
