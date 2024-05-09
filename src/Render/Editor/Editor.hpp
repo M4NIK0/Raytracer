@@ -22,9 +22,8 @@ namespace raytracer {
             void handleMouseEvents();
             void handleMouseWheelEvents();
 
-            void _initImage();
-
         private:
+            void _initImage();
             Camera _EditorCamera;
             Camera _rendererCamera;
             RenderData _EditorData = {};
@@ -35,7 +34,5 @@ namespace raytracer {
             raytracer::Renderer &_renderer;
             sfml _display;
             bool _isRunning = true;
-
-            void renderObject();
     };
 }

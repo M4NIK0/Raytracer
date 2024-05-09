@@ -7,11 +7,6 @@
 
 #include "Editor.hpp"
 
-void raytracer::Editor::renderObject()
-{
-
-}
-
 raytracer::Editor::Editor(Renderer &renderer, int windowSize) : _EditorCamera(renderer.camera), _rendererCamera(renderer.camera), _EditorData(renderer.renderData), _rendererData(renderer.renderData), _renderer(renderer), _display(sfml())
 {
     if (windowSize > 0)
@@ -24,6 +19,7 @@ raytracer::Editor::Editor(Renderer &renderer, int windowSize) : _EditorCamera(re
         _display.initWindow((int) (realWidth * windowSize), (int) (realHeight * windowSize));
     }
 }
+
 void raytracer::Editor::run()
 {
     auto begin = std::chrono::steady_clock::now();
@@ -38,7 +34,32 @@ void raytracer::Editor::run()
 
 void raytracer::Editor::render()
 {
-    _display.clearWindow();
+    double maxColor = 0;
+
+    for (int i = 0; i < _EditorData.width; i++)
+    {
+        for (int j = 0; j < _EditorData.height; j++)
+        {
+            _imageBuffer[i][j] = _renderer.traceEditorRay(i, j);
+
+            if (_imageBuffer[i][j].color.r > maxColor)
+                maxColor = _imageBuffer[i][j].color.r;
+            if (_imageBuffer[i][j].color.g > maxColor)
+                maxColor = _imageBuffer[i][j].color.g;
+            if (_imageBuffer[i][j].color.b > maxColor)
+                maxColor = _imageBuffer[i][j].color.b;
+        }
+    }
+
+    for (int i = 0; i < _EditorData.width; i++)
+    {
+        for (int j = 0; j < _EditorData.height; j++)
+        {
+            _imageBuffer[i][j].color.r /= maxColor;
+            _imageBuffer[i][j].color.g /= maxColor;
+            _imageBuffer[i][j].color.b /= maxColor;
+        }
+    }
 }
 
 void raytracer::Editor::handleEvents()
