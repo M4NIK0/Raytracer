@@ -23,8 +23,12 @@
 #include "Output/PPMOutput.hpp"
 #include "Parser/Parser.hpp"
 
-int main()
+int main(int ac, char **av)
 {
+    if (ac != 2) {
+        std::cerr << "Usage: " << av[0] << " <config_file>" << std::endl;
+        return 84;
+    }
     raytracer::Camera camera(WIDTH, HEIGHT);
     raytracer::Renderer renderer(camera);
     renderer.camera.move(raytracer::Vector3D(0, 0, 2));
@@ -37,7 +41,7 @@ int main()
     renderer.renderData.initRenderBuffer();
 
     Parser parser;
-    parser.parseConfig("info.txt");
+    parser.parseConfig(av[1]);
     parser.parseObjects();
     auto obj1 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0.5, -101, -4), 100, raytracer::Color(1, 1, 1));
     auto obj2 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0, 0, -4), 1, raytracer::Color(1, 0, 1));
