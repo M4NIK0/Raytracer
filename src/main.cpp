@@ -37,7 +37,7 @@ int main()
     renderer.renderData.initRenderBuffer();
 
     Parser parser;
-    parser.parseConfig("./info.txt");
+    parser.parseConfig("info.txt");
     parser.parseObjects();
     auto obj1 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0.5, -101, -4), 100, raytracer::Color(1, 1, 1));
     auto obj2 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0, 0, -4), 1, raytracer::Color(1, 0, 1));
