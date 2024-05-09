@@ -111,6 +111,25 @@ raytracer::RenderRay raytracer::Renderer::traceRay(int x, int y)
     return finalRay;
 }
 
+raytracer::RenderRay raytracer::Renderer::traceEditorRay(int x, int y)
+{
+    Ray3D ray = camera.getRay(x, y);
+    RenderPoint point;
+
+    point.hitNearestObject(renderData.objects, ray);
+
+    if (!point.object)
+    {
+        return {Ray3D(Point3D(0, 0, 0), Vector3D(0, 0, 0))};
+    }
+
+    RenderRay directLight = getDirectLight(point, renderData);
+
+    RenderRay finalRay = directLight;
+
+    return finalRay;
+}
+
 void raytracer::Renderer::initMotions()
 {
     for (auto &object: renderData.objects)
