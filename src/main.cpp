@@ -3,13 +3,14 @@
 #include "Objects/Primitives/Sphere.hpp"
 #include "Objects/Primitives/Plane.hpp"
 #include "Objects/Primitives/Cube.hpp"
+#include "Objects/Primitives/Triangle.hpp"
 
 #include "sfml/sfml.hpp"
 #include "Render/RenderProcessWrapper.hpp"
 #include "Light/Objects/PointLight.hpp"
 
-#define WIDTH 1920
-#define HEIGHT 1080
+#define WIDTH 1280
+#define HEIGHT 720
 
 #define CHUNK_SIZE_X 64
 #define CHUNK_SIZE_Y 64
@@ -22,7 +23,7 @@
 
 int main()
 {
-    raytracer::RenderProcessWrapper renderer(WIDTH, HEIGHT, 8);
+    raytracer::RenderProcessWrapper renderer(WIDTH, HEIGHT, 30);
     renderer.renderer.camera.move(raytracer::Vector3D(0, 1, 2));
     renderer.renderer.camera.rotate(raytracer::Vector3D(-10, 0, 0));
     renderer.renderer.camera.sensitivity = 250;
@@ -43,6 +44,7 @@ int main()
     auto obj5 = std::make_shared<raytracer::Plane>(raytracer::Point3D(-6, 0, -5), raytracer::Vector3D(1, 1, 0), raytracer::Color(1, 1, 1));
     auto obj6 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(3, 0, -4), 1, raytracer::Color(0, 0, 0));
     auto obj7 = std::make_shared<raytracer::Cube>(raytracer::Point3D(0, 0, -5), 2, raytracer::Color(1, 1, 1));
+    auto obj8 = std::make_shared<raytracer::Triangle>(raytracer::Point3D(0, 3, -3), raytracer::Point3D(0.5, 1, -2), raytracer::Point3D(3, 1, -2), raytracer::Color(1, 1, 1));
 
     obj7->rotate(raytracer::Vector3D(0, 0, 45));
 
@@ -63,7 +65,8 @@ int main()
     renderer.renderer.addObject(obj4);
     renderer.renderer.addObject(obj5);
     renderer.renderer.addObject(obj6);
-    renderer.renderer.addObject(obj7);
+//    renderer.renderer.addObject(obj7);
+    renderer.renderer.addObject(obj8);
 
     renderer.renderer.addLight(
             std::make_shared<raytracer::PointLight>(raytracer::Color(255, 0, 0), raytracer::Point3D(-5, 200, 50),
