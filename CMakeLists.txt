@@ -47,7 +47,9 @@ add_executable(raytracer src/main.cpp
         src/Output/PPMOutput.hpp
         src/Render/RenderProcessWrapper.cpp
         src/Render/RenderProcessWrapper.hpp
+        src/Render/Editor/Editor.cpp
+        src/Render/Editor/Editor.hpp
 )
-
+u
 # Link SFML
 target_link_libraries(raytracer sfml-graphics sfml-window sfml-system)

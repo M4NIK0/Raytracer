@@ -3,7 +3,7 @@
 #include "Objects/Primitives/Sphere.hpp"
 #include "Objects/Primitives/Plane.hpp"
 #include "Objects/Primitives/Cube.hpp"
-
+#include "Render/Editor/Editor.hpp"
 #include "sfml/sfml.hpp"
 #include "Render/RenderProcessWrapper.hpp"
 #include "Light/Objects/PointLight.hpp"
@@ -75,7 +75,8 @@ int main()
             std::make_shared<raytracer::PointLight>(raytracer::Color(0, 0, 255), raytracer::Point3D(5, 200, 50),
                                                     40000));
 
-    renderer.renderImageDisplay(80);
+    raytracer::Editor editor(renderer.renderer, 800);
+    editor.run();
 
     // Create PPM Output
     raytracer::PPMOutput output("./output.ppm", WIDTH, HEIGHT);

@@ -2,15 +2,12 @@
 ** EPITECH PROJECT, 2024
 ** Raytracer
 ** File description:
-** editor
+** Editor
 */
 
 #include "Editor.hpp"
 
-raytracer::editor::editor(Renderer renderer, sfml *display) : _editorCamera(renderer.camera), _rendererCamera(renderer.camera), _editorData(renderer.renderData), _rendererData(renderer.renderData), _renderer(renderer), _display(display)
-{}
-
-void raytracer::editor::run(int windowSize)
+raytracer::Editor::Editor(Renderer &renderer, int windowSize) : _EditorCamera(renderer.camera), _rendererCamera(renderer.camera), _EditorData(renderer.renderData), _rendererData(renderer.renderData), _renderer(renderer), _display(&sfml())
 {
     if (windowSize > 0)
     {
@@ -21,7 +18,10 @@ void raytracer::editor::run(int windowSize)
         _display->initImage(_renderer.camera.width, _renderer.camera.height);
         _display->initWindow((int) (realWidth * windowSize), (int) (realHeight * windowSize));
     }
+}
 
+void raytracer::Editor::run()
+{
     auto begin = std::chrono::steady_clock::now();
 
     _renderer.initMotions();
@@ -32,13 +32,13 @@ void raytracer::editor::run(int windowSize)
     }
 }
 
-void raytracer::editor::render()
+void raytracer::Editor::render()
 {
     double maxColor = 0;
 
-    for (int i = 0; i < _editorData.width; i++)
+    for (int i = 0; i < _EditorData.width; i++)
     {
-        for (int j = 0; j < _editorData.height; j++)
+        for (int j = 0; j < _EditorData.height; j++)
         {
             _imageBuffer[i][j] = _renderer.traceEditorRay(i, j);
 
@@ -51,9 +51,9 @@ void raytracer::editor::render()
         }
     }
 
-    for (int i = 0; i < _editorData.width; i++)
+    for (int i = 0; i < _EditorData.width; i++)
     {
-        for (int j = 0; j < _editorData.height; j++)
+        for (int j = 0; j < _EditorData.height; j++)
         {
             _imageBuffer[i][j].color.r /= maxColor;
             _imageBuffer[i][j].color.g /= maxColor;
@@ -62,7 +62,7 @@ void raytracer::editor::render()
     }
 }
 
-void raytracer::editor::handleEvents()
+void raytracer::Editor::handleEvents()
 {
     int event = _display->getEvent();
     if (event == 1) {
@@ -74,29 +74,29 @@ void raytracer::editor::handleEvents()
     handleMouseWheelEvents();
 }
 
-void raytracer::editor::handleKeyboardEvents()
+void raytracer::Editor::handleKeyboardEvents()
 {
 
 }
 
-void raytracer::editor::handleMouseEvents()
+void raytracer::Editor::handleMouseEvents()
 {
 
 }
 
-void raytracer::editor::handleMouseWheelEvents()
+void raytracer::Editor::handleMouseWheelEvents()
 {
 
 }
 
-void raytracer::editor::_initImage()
+void raytracer::Editor::_initImage()
 {
     _imageBuffer.clear();
 
-    for (int i = 0; i < _editorData.width; i++)
+    for (int i = 0; i < _EditorData.width; i++)
     {
         _imageBuffer.emplace_back();
-        for (int j = 0; j < _editorData.width; j++)
+        for (int j = 0; j < _EditorData.width; j++)
         {
             _imageBuffer[i].emplace_back();
         }

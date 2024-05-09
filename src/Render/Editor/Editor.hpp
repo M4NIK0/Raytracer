@@ -11,11 +11,11 @@
 #include "../../sfml/sfml.hpp"
 
 namespace raytracer {
-    class editor {
+    class Editor {
         public:
-            editor(Renderer renderer, sfml *display);
-            ~editor() = default;
-            void run(int windowSize);
+            Editor(Renderer &renderer, int windowSize);
+            ~Editor() = default;
+            void run();
             void render();
             void handleEvents();
             void handleKeyboardEvents();
@@ -27,9 +27,9 @@ namespace raytracer {
 
             std::vector<std::vector<RenderRay>> _imageBuffer = {};
 
-            Camera _editorCamera;
+            Camera _EditorCamera;
             Camera _rendererCamera;
-            RenderData _editorData = {};
+            RenderData _EditorData = {};
             RenderData _rendererData = {};
 
             raytracer::Renderer _renderer;
