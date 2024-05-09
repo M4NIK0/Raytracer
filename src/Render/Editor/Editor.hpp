@@ -23,11 +23,7 @@ namespace raytracer {
             void handleMouseWheelEvents();
 
         private:
-            void _initImage();
-
-            std::vector<std::vector<RenderRay>> _imageBuffer = {};
-
-            Camera _EditorCamera;
+            Camera _editorCamera;
             Camera _rendererCamera;
             RenderData _EditorData = {};
             RenderData _rendererData = {};
