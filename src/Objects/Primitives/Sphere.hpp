@@ -33,8 +33,6 @@ namespace raytracer
             Sphere(raytracer::Point3D pos, double r, Color surfaceReflexion) : _radius(r), _position(pos), _surfaceAbsorbtion(surfaceReflexion), _volumeAbsorbtion(Color(0, 0, 0)) {}
             ~Sphere();
 
-            void parseSphere(libconfig::Setting &sphere);
-
             Point3D hit(const Ray3D &ray) override;
 
             Vector3D getSurfaceNormal(const Point3D &point) override;

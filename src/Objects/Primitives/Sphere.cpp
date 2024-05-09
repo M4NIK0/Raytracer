@@ -40,27 +40,6 @@ raytracer::Point3D raytracer::Sphere::hit(const Ray3D &ray)
     }
 }
 
-void raytracer::Sphere::parseSphere(libconfig::Setting& sphere) {
-    double radius = sphere["radius"];
-    libconfig::Setting& position = sphere["position"];
-    double x = position[0];
-    double y = position[1];
-    double z = position[2];
-    double scale = sphere["scale"];
-    double reflectivity = sphere["reflectivity"];
-    double roughness = sphere["roughness"];
-    if (roughness < 0 || roughness > 1)
-        throw ParserError("Roughness must be between 0 and 1");
-    libconfig::Setting& color = sphere["color"];
-    int r_color = color["r"];
-    int g_color = color["g"];
-    int b_color = color["b"];
-    bool glass = sphere["glass"];
-    if (glass) {
-        double refraction_index = sphere["refraction_index"];
-    }
-}
-
 raytracer::Vector3D raytracer::Sphere::getSurfaceNormal(const Point3D &point)
 {
     return (point - _position).normalize();
@@ -187,5 +166,29 @@ void raytracer::Sphere::stepMotion()
 
 void raytracer::Sphere::parseData(libconfig::Setting &config)
 {
-
+    _radius = config["radius"];
+    if (_radius <= 0)
+        throw Error("Radius must be > 0");
+    libconfig::Setting& position = config["position"];
+    _position.x = position[0];
+    _position.y = position[1];
+    _position.z = position[2];
+    _reflexionIndex = config["reflexion"];
+    if (_reflexionIndex < 0 || _reflexionIndex > 1)
+        throw Error("Reflexion must be between 0 and 1");
+    _surfaceRoughness = config["roughness"];
+    if (_surfaceRoughness < 0 || _surfaceRoughness > 1)
+        throw Error("Roughness must be between 0 and 1");
+    libconfig::Setting& color = config["color"];
+    _surfaceAbsorbtion.r = (255.0 - (double)color[0]) / 255.0;
+    _surfaceAbsorbtion.g = (255.0 - (double)color[1]) / 255.0;
+    _surfaceAbsorbtion.b = (255.0 - (double)color[2]) / 255.0;
+    if (_surfaceAbsorbtion.r < 0 || _surfaceAbsorbtion.r > 1 || _surfaceAbsorbtion.g < 0 || _surfaceAbsorbtion.g > 1 || _surfaceAbsorbtion.b < 0 || _surfaceAbsorbtion.b > 1)
+        throw Error("color must be between 0 & 255");
+    _isGlass = config["glass"];
+    if (_isGlass) {
+        _refractionIndex = config["refraction_index"];
+        if (_refractionIndex < 1)
+            throw Error("refraction need to be > 1 when the object is glass");
+    }
 }
