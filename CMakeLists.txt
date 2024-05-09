@@ -49,6 +49,8 @@ add_executable(raytracer src/main.cpp
         src/Render/RenderProcessWrapper.hpp
         src/Objects/Primitives/Triangle.cpp
         src/Objects/Primitives/Triangle.hpp
+        src/Objects/Advanced/WavefontObject.cpp
+        src/Objects/Advanced/WavefontObject.hpp
 )
 
 # Link SFML
