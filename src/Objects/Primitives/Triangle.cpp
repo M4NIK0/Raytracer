@@ -1,3 +1,5 @@
+#include "Triangle.hpp"
+
 /*
 ** EPITECH PROJECT, 2024
 ** Triangle.cpp
@@ -5,7 +7,12 @@
 ** raytracer
 */
 
-#include "Triangle.hpp"
+raytracer::Triangle::Triangle(raytracer::Point3D a, raytracer::Point3D b, raytracer::Point3D c, Color surfaceAbsorbtion) : _a(a), _b(b), _c(c), _surfaceAbsorbtion(surfaceAbsorbtion)
+{
+    _aBackup = a;
+    _bBackup = b;
+    _cBackup = c;
+}
 
 raytracer::Triangle::Triangle() = default;
 

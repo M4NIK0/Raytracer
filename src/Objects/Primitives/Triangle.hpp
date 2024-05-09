@@ -15,8 +15,9 @@ namespace raytracer
     {
         public:
             Triangle();
+            Triangle(Point3D a, Point3D b, Point3D c, Color surfaceAbsorbtion);
 
-            ~Triangle();
+            ~Triangle() override;
 
             Point3D hit(const Ray3D &ray) override;
             Vector3D getSurfaceNormal(const Point3D &point) override;
