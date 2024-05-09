@@ -59,7 +59,7 @@ int main()
     renderer.renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(0, 255, 0), raytracer::Point3D(0, 200, -25), 40000));
     renderer.renderer.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(0, 0, 255), raytracer::Point3D(50, 200, -25), 40000));
 
-    raytracer::editor editor(renderer.renderer, &renderer.display);
+    raytracer::editor editor(renderer.renderer, 800);
     editor.run(800);
 
     // Create PPM Output
