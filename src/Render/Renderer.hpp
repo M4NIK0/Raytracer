@@ -34,6 +34,7 @@ namespace raytracer
             void render();
 
             raytracer::RenderRay traceRay(int x, int y);
+            raytracer::RenderRay traceEditorRay(int x, int y);
 
             void initMotions();
             void stepMotions();
