@@ -41,6 +41,8 @@ namespace raytracer
                     std::string _message;
             };
 
+            raytracer::Matrix transpose();
+
         private:
             std::vector<std::vector<double>> matrix;
     };
