@@ -13,61 +13,13 @@ Parser::~Parser() {
 }
 
 void Parser::parseConfig(const char* path) {
-    cfg->readFile(path);
-}
-
-void Parser::parsePlane(libconfig::Setting &plane) {
-    std::string axis = plane["axis"];
-    double position = plane["position"];
-    double scale = plane["scale"];
-    double reflectivity = plane["reflectivity"];
-    double roughness = plane["roughness"];
-    libconfig::Setting& color = plane["color"];
-    int r_color = color["r"];
-    int g_color = color["g"];
-    int b_color = color["b"];
-    bool glass = plane["glass"];
-    if (glass) {
-        double refraction_index = plane["refraction_index"];
-    }
-}
-
-void Parser::parseCube(libconfig::Setting &cube) {
-    libconfig::Setting& position = cube["position"];
-    double x = position[0];
-    double y = position[1];
-    double z = position[2];
-    double size = cube["size"];
-    double scale = cube["scale"];
-    double reflectivity = cube["reflectivity"];
-    double roughness = cube["roughness"];
-    libconfig::Setting& color = cube["color"];
-    int r_color = color["r"];
-    int g_color = color["g"];
-    int b_color = color["b"];
-    bool glass = cube["glass"];
-    if (glass) {
-        double refraction_index = cube["refraction_index"];
-    }
-}
-
-void Parser::parseCylinder(libconfig::Setting &cylinder) {
-    libconfig::Setting& position = cylinder["position"];
-    double x = position[0];
-    double y = position[1];
-    double z = position[2];
-    double radius = cylinder["radius"];
-    double height = cylinder["height"];
-    double scale = cylinder["scale"];
-    double reflectivity = cylinder["reflectivity"];
-    double roughness = cylinder["roughness"];
-    libconfig::Setting& color = cylinder["color"];
-    int r_color = color["r"];
-    int g_color = color["g"];
-    int b_color = color["b"];
-    bool glass = cylinder["glass"];
-    if (glass) {
-        double refraction_index = cylinder["refraction_index"];
+    try {
+        cfg->readFile(path);
+    } catch (const libconfig::FileIOException &fioex) {
+        std::cerr << "I/O error while reading file: " << path << std::endl;
+    } catch (const libconfig::ParseException &pex) {
+        std::cerr << "Parse error at " << pex.getFile() << ":" << pex.getLine()
+                  << " - " << pex.getError() << std::endl;
     }
 }
 
@@ -79,15 +31,9 @@ void Parser::parseObjects() {
 
         std::string type = object["type"];
         if (type == "sphere") {
-            parseSphere(object);
-        }
-        else if (type == "plane") {
-            parsePlane(object);
-        } else if (type == "cube") {
-            parseCube(object);
-        } else if (type == "cylinder") {
-            parseCylinder(object);
-        }
+            raytracer::Sphere sphere;
+            sphere.parseData(object);
+        } // else if plugins objects
     }
 }
 

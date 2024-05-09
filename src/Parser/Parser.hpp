@@ -6,6 +6,7 @@
 #define RAYTRACER_PARSER_H
 
 #include <libconfig.h++>
+#include "../Objects/Primitives/Sphere.hpp"
 
 class Parser{
     public:
@@ -27,10 +28,6 @@ class Parser{
         ~Parser();
         void parseConfig(const char* path);
         void parseObjects();
-        void parseSphere(libconfig::Setting& sphere);
-        void parseCube(libconfig::Setting& cube);
-        void parseCylinder(libconfig::Setting& cylinder);
-        void parsePlane(libconfig::Setting& plane);
         void parseCamera();
         void parseScreen();
         void parseRenderer();
