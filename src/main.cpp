@@ -14,7 +14,7 @@
 #define CHUNK_SIZE_X 1
 #define CHUNK_SIZE_Y HEIGHT
 
-#define MAX_SAMPLES 15
+#define MAX_SAMPLES 2
 
 #include <chrono>
 #include "Render/Threads.hpp"
@@ -23,7 +23,8 @@
 int main()
 {
     raytracer::RenderProcessWrapper renderer(WIDTH, HEIGHT, 30);
-    renderer.renderer.camera.move(raytracer::Vector3D(0, 0, 2));
+    renderer.renderer.camera.move(raytracer::Vector3D(0, 1, 2));
+    renderer.renderer.camera.rotate(raytracer::Vector3D(-10, 0, 0));
     renderer.renderer.camera.sensitivity = 250;
     renderer.renderer.camera.exposure = 0.1;
 
@@ -33,7 +34,7 @@ int main()
 
     auto obj1 = std::make_shared<raytracer::Plane>(raytracer::Point3D(20, -1, 0), raytracer::Vector3D(0, 1, 0),
                                                     raytracer::Color(1, 1, 1));
-    auto obj2 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0, 0.5, -5), 1,
+    auto obj2 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0, 1.5, -5), 0.5,
                                                     raytracer::Color(1, 0, 1));
     auto obj3 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0.5, 1.7, -4), 0.1,
                                                     raytracer::Color(1, 1, 1));
@@ -65,13 +66,13 @@ int main()
     renderer.renderer.addObject(obj7);
 
     renderer.renderer.addLight(
-            std::make_shared<raytracer::PointLight>(raytracer::Color(255, 0, 0), raytracer::Point3D(-5 - 50, 200, 50),
+            std::make_shared<raytracer::PointLight>(raytracer::Color(255, 0, 0), raytracer::Point3D(-5, 200, 50),
                                                     40000));
     renderer.renderer.addLight(
-            std::make_shared<raytracer::PointLight>(raytracer::Color(0, 255, 0), raytracer::Point3D(0 - 50, 200, 50),
+            std::make_shared<raytracer::PointLight>(raytracer::Color(0, 255, 0), raytracer::Point3D(0, 200, 50),
                                                     40000));
     renderer.renderer.addLight(
-            std::make_shared<raytracer::PointLight>(raytracer::Color(0, 0, 255), raytracer::Point3D(5 - 50, 200, 50),
+            std::make_shared<raytracer::PointLight>(raytracer::Color(0, 0, 255), raytracer::Point3D(5, 200, 50),
                                                     40000));
 
     renderer.renderImageDisplay();

@@ -53,6 +53,8 @@ raytracer::Point3D raytracer::Cube::hit(const Ray3D &ray)
         return {INFINITY, INFINITY, INFINITY};
     if (tzmin > tmin)
         tmin = tzmin;
+    if (tzmin > tmin)
+        tmin = tzmin;
     if (tzmax < tmax)
         tmax = tzmax;
 
@@ -61,23 +63,7 @@ raytracer::Point3D raytracer::Cube::hit(const Ray3D &ray)
 
 raytracer::Vector3D raytracer::Cube::getSurfaceNormal(const Point3D &point)
 {
-    Vector3D normal;
-    Point3D center = _position + Vector3D(_sideLength / 2, _sideLength / 2, _sideLength / 2);
-
-    double dx = std::abs(point.x - center.x);
-    double dy = std::abs(point.y - center.y);
-    double dz = std::abs(point.z - center.z);
-
-    double max_dist = std::max({dx, dy, dz});
-
-    if (max_dist == dx)
-        normal.x = (point.x - center.x > 0) ? 1 : -1;
-    else if (max_dist == dy)
-        normal.y = (point.y - center.y > 0) ? 1 : -1;
-    else
-        normal.z = (point.z - center.z > 0) ? 1 : -1;
-
-    return normal;
+    return (point - _position);
 }
 
 raytracer::Vector3D raytracer::Cube::getVolumeNormal(const Point3D &point)
