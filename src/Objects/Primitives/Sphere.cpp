@@ -166,29 +166,72 @@ void raytracer::Sphere::stepMotion()
 
 void raytracer::Sphere::parseData(libconfig::Setting &config)
 {
-    _radius = config["radius"];
-    if (_radius <= 0)
-        throw Error("Radius must be > 0");
-    libconfig::Setting& position = config["position"];
-    _position.x = position[0];
-    _position.y = position[1];
-    _position.z = position[2];
-    _reflexionIndex = config["reflexion"];
-    if (_reflexionIndex < 0 || _reflexionIndex > 1)
-        throw Error("Reflexion must be between 0 and 1");
-    _surfaceRoughness = config["roughness"];
-    if (_surfaceRoughness < 0 || _surfaceRoughness > 1)
-        throw Error("Roughness must be between 0 and 1");
-    libconfig::Setting& color = config["color"];
-    _surfaceAbsorbtion.r = (255.0 - (double)color[0]) / 255.0;
-    _surfaceAbsorbtion.g = (255.0 - (double)color[1]) / 255.0;
-    _surfaceAbsorbtion.b = (255.0 - (double)color[2]) / 255.0;
-    if (_surfaceAbsorbtion.r < 0 || _surfaceAbsorbtion.r > 1 || _surfaceAbsorbtion.g < 0 || _surfaceAbsorbtion.g > 1 || _surfaceAbsorbtion.b < 0 || _surfaceAbsorbtion.b > 1)
-        throw Error("color must be between 0 & 255");
-    _isGlass = config["glass"];
+    try {
+        _radius = config["radius"];
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Error("radius is missing");
+    } catch (libconfig::SettingTypeException &e) {
+        throw Error("radius must be a double");
+    }
+
+    try {
+        libconfig::Setting& position = config["position"];
+        _position.x = position[0];
+        _position.y = position[1];
+        _position.z = position[2];
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Error("position is missing");
+    } catch (libconfig::SettingTypeException &e) {
+        throw Error("position must be a vector of double");
+    }
+
+    try {
+        _reflexionIndex = config["reflexion"];
+        if (_reflexionIndex < 0 || _reflexionIndex > 1)
+            throw Error("reflexion must be between 0 and 1");
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Error("reflexion is missing");
+    } catch (libconfig::SettingTypeException &e) {
+        throw Error("reflexion must be a double");
+    }
+
+    try {
+        _surfaceRoughness = config["roughness"];
+        if (_surfaceRoughness < 0 || _surfaceRoughness > 1)
+            throw Error("roughness must be between 0 and 1");
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Error("roughness is missing");
+    } catch (libconfig::SettingTypeException &e) {
+        throw Error("roughness must be a double");
+    }
+    try {
+        libconfig::Setting& color = config["color"];
+        _surfaceAbsorbtion.r = (255.0 - (double)color[0]) / 255.0;
+        _surfaceAbsorbtion.g = (255.0 - (double)color[1]) / 255.0;
+        _surfaceAbsorbtion.b = (255.0 - (double)color[2]) / 255.0;
+        if (_surfaceAbsorbtion.r < 0 || _surfaceAbsorbtion.r > 1 || _surfaceAbsorbtion.g < 0 || _surfaceAbsorbtion.g > 1 || _surfaceAbsorbtion.b < 0 || _surfaceAbsorbtion.b > 1)
+            throw Error("color must be between 0 & 255");
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Error("color is missing");
+    } catch (libconfig::SettingTypeException &e) {
+        throw Error("color must be a vector of double");
+    }
+    try {
+        _isGlass = config["glass"];
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Error("glass is missing");
+    } catch (libconfig::SettingTypeException &e) {
+        throw Error("glass must be a boolean");
+    }
     if (_isGlass) {
-        _refractionIndex = config["refraction_index"];
-        if (_refractionIndex < 1)
-            throw Error("refraction need to be > 1 when the object is glass");
+        try {
+            _refractionIndex = config["refraction_index"];
+            if (_refractionIndex < 1)
+                throw Error("refraction_index need to be > 1 when the object is glass");
+        } catch (libconfig::SettingNotFoundException &e) {
+            throw Error("refraction_index is missing");
+        } catch (libconfig::SettingTypeException &e) {
+            throw Error("refraction_index must be a double");
+        }
     }
 }
