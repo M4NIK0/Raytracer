@@ -7,7 +7,12 @@
 
 #include "Editor.hpp"
 
-raytracer::Editor::Editor(Renderer &renderer, int windowSize) : _EditorCamera(renderer.camera), _rendererCamera(renderer.camera), _EditorData(renderer.renderData), _rendererData(renderer.renderData), _renderer(renderer), _display(&sfml())
+void raytracer::Editor::renderObject()
+{
+
+}
+
+raytracer::Editor::Editor(Renderer &renderer, int windowSize) : _EditorCamera(renderer.camera), _rendererCamera(renderer.camera), _EditorData(renderer.renderData), _rendererData(renderer.renderData), _renderer(renderer), _display(sfml())
 {
     if (windowSize > 0)
     {
@@ -15,8 +20,8 @@ raytracer::Editor::Editor(Renderer &renderer, int windowSize) : _EditorCamera(re
         double realWidth = (double) _renderer.camera.width / (double) maxSize;
         double realHeight = (double) _renderer.camera.height / (double) maxSize;
 
-        _display->initImage(_renderer.camera.width, _renderer.camera.height);
-        _display->initWindow((int) (realWidth * windowSize), (int) (realHeight * windowSize));
+        _display.initImage(_renderer.camera.width, _renderer.camera.height);
+        _display.initWindow((int) (realWidth * windowSize), (int) (realHeight * windowSize));
     }
 }
 
@@ -25,7 +30,7 @@ void raytracer::Editor::run()
     auto begin = std::chrono::steady_clock::now();
 
     _renderer.initMotions();
-    _display->initWindow(800, 600);
+    _display.initWindow(800, 600);
     while (_isRunning) {
         handleEvents();
         render();
@@ -62,11 +67,12 @@ void raytracer::Editor::render()
     }
 }
 
+
 void raytracer::Editor::handleEvents()
 {
-    int event = _display->getEvent();
+    int event = _display.getEvent();
     if (event == 1) {
-        _display->endWindow();
+        _display.endWindow();
         _isRunning = false;
     }
     handleKeyboardEvents();
