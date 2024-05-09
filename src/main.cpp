@@ -75,7 +75,7 @@ int main()
             std::make_shared<raytracer::PointLight>(raytracer::Color(0, 0, 255), raytracer::Point3D(5, 200, 50),
                                                     40000));
 
-    raytracer::editor editor(renderer.renderer, &renderer.display);
+    raytracer::Editor editor(renderer.renderer, 800);
     editor.run(800);
 
     // Create PPM Output

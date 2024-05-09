@@ -15,15 +15,17 @@ namespace raytracer {
         public:
             Editor(Renderer &renderer, int windowSize = 800);
             ~Editor() = default;
-            void run(int windowSize);
+            void run();
             void render();
             void handleEvents();
             void handleKeyboardEvents();
             void handleMouseEvents();
             void handleMouseWheelEvents();
 
+            void _initImage();
+
         private:
-            Camera _editorCamera;
+            Camera _EditorCamera;
             Camera _rendererCamera;
             RenderData _EditorData = {};
             RenderData _rendererData = {};

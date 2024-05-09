@@ -24,7 +24,8 @@ raytracer::Editor::Editor(Renderer &renderer, int windowSize) : _EditorCamera(re
         _display.initWindow((int) (realWidth * windowSize), (int) (realHeight * windowSize));
     }
 }
-
+void raytracer::Editor::run()
+{
     auto begin = std::chrono::steady_clock::now();
 
     _renderer.initMotions();
@@ -37,10 +38,10 @@ raytracer::Editor::Editor(Renderer &renderer, int windowSize) : _EditorCamera(re
 
 void raytracer::Editor::render()
 {
-    _display->clearWindow();
+    _display.clearWindow();
 }
 
-void raytracer::editor::handleEvents()
+void raytracer::Editor::handleEvents()
 {
     int event = _display.getEvent();
     if (event == 1) {
