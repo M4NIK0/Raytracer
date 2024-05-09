@@ -169,7 +169,7 @@ bool raytracer::Cube::getGlassState(const Point3D &point)
     return _isGlass;
 }
 
-double raytracer::Cube::getRefractionxionIndex()
+double raytracer::Cube::getRefractionIndex()
 {
     return _refractionIndex;
 }
@@ -205,5 +205,55 @@ raytracer::Matrix raytracer::Cube::vectorToMatrix(raytracer::Vector3D vector3D)
 
 raytracer::Vector3D raytracer::Cube::matrixToVector(raytracer::Matrix matrix)
 {
-    return Vector3D(matrix.get(0, 0), matrix.get(1, 0), matrix.get(2, 0));
+    return Vector3D(matrix.get(0, 0), matrix.get(0, 1), matrix.get(0, 2));
+}
+
+raytracer::Color raytracer::Cube::getSurfaceEmission(const raytracer::Point3D &point)
+{
+    return _emissionColor;
+}
+
+double raytracer::Cube::getSurfaceEmissionIntensity(const raytracer::Point3D &point)
+{
+    return _emissionIntensity;
+}
+
+void raytracer::Cube::setSurfaceEmission(raytracer::Color color)
+{
+    _emissionColor = color;
+}
+
+void raytracer::Cube::setSurfaceEmissionIntensity(double intensity)
+{
+    _emissionIntensity = intensity;
+}
+
+void raytracer::Cube::setMotion(raytracer::Vector3D &translation, raytracer::Vector3D &rotation)
+{
+    _translation = translation;
+    _rotation = rotation;
+}
+
+void raytracer::Cube::initiateMotion(double time, size_t steps)
+{
+    Vector3D totalTranslation = _translation * time;
+    Vector3D totalRotation = _rotation * time;
+
+    _translationStep = totalTranslation / steps;
+    _rotationStep = totalRotation / steps;
+
+    _position = _position - totalTranslation / 2;
+    _rotation = _rotation - totalRotation / 2;
+}
+
+void raytracer::Cube::resetMotion()
+{
+    _position = _positionBackup;
+    _rotation = {0, 0, 0};
+}
+
+void raytracer::Cube::stepMotion()
+{
+    _position = _position + _translationStep;
+    _rotation = _rotation + _rotationStep;
 }
