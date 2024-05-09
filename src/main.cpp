@@ -14,7 +14,7 @@
 #define CHUNK_SIZE_X 64
 #define CHUNK_SIZE_Y 64
 
-#define MAX_SAMPLES 20
+#define MAX_SAMPLES 2
 
 #include <chrono>
 #include "Render/Threads.hpp"
@@ -75,7 +75,7 @@ int main()
             std::make_shared<raytracer::PointLight>(raytracer::Color(0, 0, 255), raytracer::Point3D(5, 200, 50),
                                                     40000));
 
-    renderer.renderImageDisplay(80);
+    renderer.renderImageDisplay(800);
 
     // Create PPM Output
     raytracer::PPMOutput output("./output.ppm", WIDTH, HEIGHT);
