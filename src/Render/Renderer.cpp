@@ -68,7 +68,7 @@ std::vector<raytracer::Chunk> raytracer::Renderer::getChunks(int chunkSizeX, int
     std::default_random_engine g(seed);
 
 //     Shuffle the chunks
-//    std::shuffle(chunks.begin(), chunks.end(), g);
+    std::shuffle(chunks.begin(), chunks.end(), g);
 
     return chunks;
 }
