@@ -24,25 +24,27 @@
 
 int main(int ac, char **av)
 {
-    int width = 720;
-    int height = 720;
-    char path[] = "info.txt";
+    int width = WIDTH;
+    int height = HEIGHT;
+    std::string path = "info.txt";
 
-    raytracer::RenderProcessWrapper renderer(width, height, 30);
-    renderer.renderer.camera.move(raytracer::Vector3D(0, 1, 2));
-    renderer.renderer.camera.rotate(raytracer::Vector3D(-10, 0, 0));
-    renderer.renderer.camera.sensitivity = 250;
-    renderer.renderer.camera.exposure = 0.1;
+    raytracer::Renderer renderer(raytracer::Camera(width, height));
+    renderer.camera.move(raytracer::Vector3D(0, 1, 2));
+    renderer.camera.rotate(raytracer::Vector3D(-10, 0, 0));
+    renderer.camera.sensitivity = 250;
+    renderer.camera.exposure = 0.1;
 
-    renderer.renderer.renderData.chunkWidth = CHUNK_SIZE_X;
-    renderer.renderer.renderData.chunkHeight = CHUNK_SIZE_Y;
-    renderer.renderer.renderData.maxSamples = MAX_SAMPLES;
+    renderer.renderData.chunkWidth = CHUNK_SIZE_X;
+    renderer.renderData.chunkHeight = CHUNK_SIZE_Y;
+    renderer.renderData.maxSamples = MAX_SAMPLES;
 
     Parser parser;
-    parser.parseConfig(path);
-    renderer.renderer = parser.parseScene(width, height);
+    parser.parseConfig(path.c_str());
+    renderer = parser.parseScene(width, height);
 
-    renderer.renderImageDisplay(1024);
+    raytracer::RenderProcessWrapper renderProcessWrapper(renderer, 4);
+
+    renderProcessWrapper.renderImageDisplay(1024);
 
     // Create PPM Output
     raytracer::PPMOutput output("./output.ppm", width, height);
@@ -50,7 +52,7 @@ int main(int ac, char **av)
     {
         for (int x = 0; x < width; x++)
         {
-            raytracer::Color color = renderer.renderer.renderData.renderBuffer[x][y];
+            raytracer::Color color = renderProcessWrapper.renderer.renderData.renderBuffer[x][y];
             output.setPixel(x, y, color);
         }
     }

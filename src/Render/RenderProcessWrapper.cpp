@@ -7,12 +7,10 @@
 
 #include "RenderProcessWrapper.hpp"
 
-raytracer::RenderProcessWrapper::RenderProcessWrapper(int width, int height, size_t nbThreads): renderer(Renderer(Camera(width, height))), threads(Threads(renderer)), _width(width), _height(height), _nbThreads(nbThreads)
+raytracer::RenderProcessWrapper::RenderProcessWrapper(Renderer &rd, size_t nbThreads)
+        : renderer(rd), threads(Threads(renderer)), _width(renderer.renderData.width), _height(renderer.renderData.height), _nbThreads(nbThreads)
 {
-    renderer.renderData.width = width;
-    renderer.renderData.height = height;
-
-    renderer.renderData.initRenderBuffer();
+    rd.renderData.initRenderBuffer();
 }
 
 raytracer::RenderProcessWrapper::~RenderProcessWrapper() = default;
