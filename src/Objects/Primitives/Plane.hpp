@@ -16,6 +16,7 @@ namespace raytracer
     class Plane : public IObject
     {
         public:
+            Plane() : _normal({0, 0, 0}), _position(Point3D{0, 0, 0}), _surfaceAbsorbtion({0, 0, 0}), _volumeAbsorbtion({0, 0, 0}), _emissionColor({0, 0, 0}) {};
             Plane(raytracer::Point3D pos, raytracer::Vector3D normal, Color surfaceReflexion) : _normal(normal), _position(std::move(pos)), _surfaceAbsorbtion(surfaceReflexion), _volumeAbsorbtion(surfaceReflexion), _emissionColor({0, 0, 0}) { _surfaceAbsorbtion.normalize(); _volumeAbsorbtion.normalize(); };
             ~Plane();
 

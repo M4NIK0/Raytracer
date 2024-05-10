@@ -6,9 +6,10 @@
 #define RAYTRACER_PARSER_H
 
 #include <libconfig.h++>
-#include "../Objects/Primitives/Sphere.hpp"
 #include "../Render/Renderer.hpp"
 #include "../Light/Objects/PointLight.hpp"
+#include "../Objects/Primitives/Sphere.hpp"
+#include "../Objects/Primitives/Plane.hpp"
 
 class Parser{
     public:

@@ -38,7 +38,11 @@ void Parser::parseObjects(raytracer::Renderer &renderer) {
             raytracer::Sphere sphere;
             sphere.parseData(object);
             renderer.addObject(std::make_shared<raytracer::Sphere>(sphere));
-        } // else if plugins objects
+        } else if (type == "plane") {
+            raytracer::Plane plane;
+            plane.parseData(object);
+            renderer.addObject(std::make_shared<raytracer::Plane>(plane));
+        }
     }
 }
 
