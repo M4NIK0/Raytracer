@@ -8,9 +8,9 @@
 #include "RenderProcessWrapper.hpp"
 
 raytracer::RenderProcessWrapper::RenderProcessWrapper(Renderer &rd, size_t nbThreads)
-        : renderer(rd), threads(Threads(renderer)), _width(renderer.renderData.width), _height(renderer.renderData.height), _nbThreads(nbThreads)
+        : renderer(rd), threads(Threads(rd)), _width(rd.renderData.width), _height(rd.renderData.height), _nbThreads(nbThreads)
 {
-    rd.renderData.initRenderBuffer();
+    renderer.renderData.initRenderBuffer();
 }
 
 raytracer::RenderProcessWrapper::~RenderProcessWrapper() = default;
