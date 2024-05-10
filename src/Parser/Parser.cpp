@@ -35,9 +35,9 @@ void Parser::parseObjects(raytracer::Renderer &renderer) {
             throw Parser::Error("Object type not found");
         std::string type = object["type"];
         if (type == "sphere") {
-            raytracer::Sphere sphere;
-            sphere.parseData(object);
-            renderer.addObject(std::make_shared<raytracer::Sphere>(sphere));
+            std::shared_ptr<raytracer::Sphere> sphere = std::make_shared<raytracer::Sphere>();
+            sphere->parseData(object);
+            renderer.addObject(sphere);
         } else if (type == "plane") {
             raytracer::Plane plane;
             plane.parseData(object);
@@ -59,9 +59,9 @@ void Parser::parseLights(raytracer::Renderer &renderer)
             throw Parser::Error("Light type not found");
         std::string type = light["type"];
         if (type == "point") {
-            raytracer::PointLight pointLight;
-            pointLight.parseData(light);
-            renderer.addLight(std::make_shared<raytracer::PointLight>(pointLight));
+            std::shared_ptr<raytracer::PointLight> pointLight = std::make_shared<raytracer::PointLight>();
+            pointLight->parseData(light);
+            renderer.addLight(pointLight);
         } // else if plugins lights
     }
 }

@@ -42,6 +42,8 @@ int main(int ac, char **av)
     parser.parseConfig(path.c_str());
     renderer = parser.parseScene(width, height);
 
+    raytracer::Sphere sphere();
+
     raytracer::RenderProcessWrapper renderProcessWrapper(renderer, 4);
 
     renderProcessWrapper.renderImageDisplay(1024);
