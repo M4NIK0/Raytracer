@@ -244,4 +244,7 @@ void raytracer::Cube::stepMotion()
     _rotation = _rotation + _rotationStep;
 }
 
-void raytracer::Cube::parseData(libconfig::Setting &config) {}
+raytracer::Point3D raytracer::Cube::getCenter() const
+{
+    return _position;
+}

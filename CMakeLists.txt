@@ -45,12 +45,16 @@ add_executable(raytracer src/main.cpp
         src/Render/Threads.cpp
         src/Render/Threads.hpp
         src/Output/PPMOutput.cpp
-        src/Parser/Parser.cpp
-        src/Parser/Parser.hpp
-        src/LibHandler/LibHandler.cpp
         src/Output/PPMOutput.hpp
         src/Render/RenderProcessWrapper.cpp
         src/Render/RenderProcessWrapper.hpp
+        src/Objects/Primitives/Triangle.cpp
+        src/Objects/Primitives/Triangle.hpp
+        src/Objects/Advanced/WavefontObject.cpp
+        src/Objects/Advanced/WavefontObject.hpp
+        src/Parser/Parser.cpp
+        src/Parser/Parser.hpp
+        src/LibHandler/LibHandler.cpp
 )
 
 # Link SFML

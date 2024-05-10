@@ -21,6 +21,7 @@ namespace raytracer
     class Renderer
     {
         public:
+            Renderer(Camera camera) : camera(camera), renderData(RenderData()) {}
             class Error : public std::exception
             {
                 public:
@@ -36,7 +37,6 @@ namespace raytracer
                     std::string _message;
             };
 
-            Renderer(Camera camera) : camera(camera) {}
             ~Renderer();
 
             void addObject(const std::shared_ptr<IObject>& object);

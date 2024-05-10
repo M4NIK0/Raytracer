@@ -17,7 +17,7 @@ namespace raytracer
 {
     class Color {
         public:
-            Color(double r, double g, double b) : r(r), g(g), b(b) {}
+            Color(double r = 0, double g = 0, double b = 0) : r(r), g(g), b(b) {}
 
             double r;
             double g;

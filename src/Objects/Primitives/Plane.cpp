@@ -145,4 +145,7 @@ void raytracer::Plane::stepMotion()
     _rotation = _rotation + _rotationStep;
 }
 
-void raytracer::Plane::parseData(libconfig::Setting &config) {}
+raytracer::Point3D raytracer::Plane::getCenter() const
+{
+    return _position;
+}
