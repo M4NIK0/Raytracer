@@ -35,7 +35,7 @@ int main()
 
     auto obj1 = std::make_shared<raytracer::Plane>(raytracer::Point3D(20, -1, 0), raytracer::Vector3D(0, 1, 0),
                                                     raytracer::Color(1, 1, 1));
-    auto obj2 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0, 1.5, -5), 0.5,
+    auto obj2 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0, 1, 0.5), 0.1,
                                                     raytracer::Color(1, 0, 1));
     auto obj3 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0.5, 1.7, -4), 0.1,
                                                     raytracer::Color(1, 1, 1));
@@ -43,7 +43,9 @@ int main()
                                                     raytracer::Color(1, 1, 1));
     auto obj5 = std::make_shared<raytracer::Plane>(raytracer::Point3D(-6, 0, -5), raytracer::Vector3D(1, 1, 0), raytracer::Color(1, 1, 1));
     auto obj6 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(3, 0, -4), 1, raytracer::Color(0, 0, 0));
-    auto obj8 = std::make_shared<raytracer::WavefontObject>("untitled.obj", raytracer::Point3D(0, 1, -3), raytracer::Color(1, 1, 1));
+    auto obj8 = std::make_shared<raytracer::WavefontObject>("untitled.obj", raytracer::Point3D(0, 1, -3), raytracer::Color(1, 0.25, 1));
+
+    obj8->setReflexionIndex(0.5);
 
     raytracer::Vector3D motion = raytracer::Vector3D(10, 0, 0);
     raytracer::Vector3D rotation = raytracer::Vector3D(0, 0, 0);
