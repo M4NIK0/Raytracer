@@ -21,6 +21,8 @@ raytracer::Editor::Editor(Renderer &renderer, int windowSize) : _EditorCamera(re
 
     _rendererCamera = _renderer.camera;
     _EditorCamera = _renderer.camera;
+
+    _initImage();
 }
 
 void raytracer::Editor::run()
@@ -38,8 +40,6 @@ void raytracer::Editor::render()
 {
     double maxColor = 0;
 
-    _initImage();
-
     for (int i = 0; i < _EditorData.width; i++)
     {
         for (int j = 0; j < _EditorData.height; j++)
@@ -54,8 +54,6 @@ void raytracer::Editor::render()
                 maxColor = _imageBuffer[i][j].color.b;
         }
     }
-
-
     for (int i = 0; i < _EditorData.width; i++)
     {
         for (int j = 0; j < _EditorData.height; j++)
@@ -74,16 +72,21 @@ void raytracer::Editor::handleEvents()
         _display.endWindow();
         _isRunning = false;
     }
-    handleKeyboardEvents();
-    handleMouseEvents();
+    handleKeyboardEvents(event);
+    handleMouseEvents(event);
 }
 
-void raytracer::Editor::handleKeyboardEvents()
+void raytracer::Editor::handleKeyboardEvents(int event)
 {
-
+    if (event == 3) {
+        _renderer.camera.move(Vector3D(0, 0, -1));
+        _display.initImage(_renderer.camera.width, _renderer.camera.height);
+    }
+    if (event == 0)
+        _display.initImage(_renderer.camera.width, _renderer.camera.height);
 }
 
-void raytracer::Editor::handleMouseEvents()
+void raytracer::Editor::handleMouseEvents(int event)
 {
 
 }
@@ -111,6 +114,13 @@ void raytracer::Editor::_displayImage()
             _display.drawPixel(i, j, _imageBuffer[i][j].color);
         }
     }
-
     _display.displayScreen();
+}
+
+void raytracer::Editor::changeResolution(int width, int height)
+{
+    _renderer.camera.width = width;
+    _renderer.camera.height = height;
+    _display.initImage(width, height);
+    _initImage();
 }
