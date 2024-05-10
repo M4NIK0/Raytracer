@@ -41,8 +41,6 @@ namespace raytracer
             virtual Color getSurfaceAbsorbtion(const Point3D &point) = 0;
             virtual double getSurfaceRoughness(const Point3D &point) = 0;
             virtual double getSurfaceTransparency(const Point3D &point) = 0;
-            virtual Color getSurfaceEmission(const Point3D &point) = 0;
-            virtual double getSurfaceEmissionIntensity(const Point3D &point) = 0;
 
             virtual Color getVolumeAbsorbtion() = 0;
             virtual double getVolumeAbsorbtionCoeff() = 0;
@@ -58,14 +56,11 @@ namespace raytracer
             virtual void setReflexionIndex(double index) = 0;
             virtual void setRefractionIndex(double index) = 0;
             virtual void setGlassState(bool state) = 0;
-            virtual void setSurfaceEmission(Color color) = 0;
-            virtual void setSurfaceEmissionIntensity(double intensity) = 0;
 
             virtual void setMotion(Vector3D &translation, Vector3D &rotation) = 0;
 
             virtual void initiateMotion(double time, size_t steps) = 0;
             virtual void stepMotion() = 0;
-            virtual void resetMotion() = 0;
 
             virtual void parseData(libconfig::Setting &config) = 0;
     };

@@ -28,7 +28,7 @@ namespace raytracer
                 private:
                     std::string _message;
             };
-            PointLight();
+
             PointLight(Color color, Point3D position, double intensity = 1) : _color(color), _position(position), _intensity(intensity) {_color.normalize();};
             ~PointLight();
 
