@@ -8,6 +8,7 @@
 #pragma once
 
 #include "../IObject.hpp"
+#include "../../Math/Matrix.hpp"
 
 namespace raytracer
 {

@@ -9,13 +9,13 @@
 #include "Render/RenderProcessWrapper.hpp"
 #include "Light/Objects/PointLight.hpp"
 
-#define WIDTH 256
-#define HEIGHT 256
+#define WIDTH 512
+#define HEIGHT 512
 
 #define CHUNK_SIZE_X 16
 #define CHUNK_SIZE_Y 16
 
-#define MAX_SAMPLES 2
+#define MAX_SAMPLES 1
 
 #include <chrono>
 #include "Render/Threads.hpp"
@@ -32,9 +32,12 @@ int main()
     renderer.renderer.renderData.maxSamples = MAX_SAMPLES;
 
     auto obj1 = std::make_shared<raytracer::Plane>(raytracer::Point3D(0, 0, 0), raytracer::Vector3D(0, 1, 0), raytracer::Color(1, 1, 1));
-    auto obj2 = std::make_shared<raytracer::WavefontObject>("./untitled.obj", raytracer::Point3D(0.5, 0.5, -3), raytracer::Color(1, 0, 1));
+    auto obj2 = std::make_shared<raytracer::WavefontObject>("./untitled.obj", raytracer::Point3D(0.5, 0.5, -3), raytracer::Color(1, 0.6, 0));
+//    auto obj2 = std::make_shared<raytracer::Triangle>(raytracer::Point3D(0, 0.2, -1), raytracer::Point3D(1, 0.2, -1), raytracer::Point3D(1, 0.2, -2), raytracer::Color(1, 0, 1));
 
-    obj2->rotate(raytracer::Vector3D(0, 10, 0));
+    obj2->rotate(raytracer::Vector3D(0, 45, 0));
+    obj2->rotate(raytracer::Vector3D(0, 0, 45));
+
 
     raytracer::Vector3D motion = raytracer::Vector3D(10, 0, 0);
     raytracer::Vector3D rotation = raytracer::Vector3D(0, 0, 0);
@@ -44,7 +47,7 @@ int main()
 //    renderer.renderer.addObject(obj8);
 
     renderer.renderer.addLight(
-            std::make_shared<raytracer::PointLight>(raytracer::Color(255, 255, 255), raytracer::Point3D(-5, 200, 50), 80000));
+            std::make_shared<raytracer::PointLight>(raytracer::Color(255, 255, 255), raytracer::Point3D(-5, 200, 50), 60000));
 
     renderer.renderImageDisplay(1024);
 
