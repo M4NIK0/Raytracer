@@ -1,6 +1,6 @@
 /*
 ** EPITECH PROJECT, 2024
-** Sphere.hpp
+** WavefontObject.hpp
 ** File description:
 ** raytracer
 */
@@ -8,32 +8,18 @@
 #pragma once
 
 #include "../IObject.hpp"
-#include <libconfig.h++>
+#include "../Primitives/Triangle.hpp"
+#include "../Primitives/Sphere.hpp"
+#include "../../Render/RenderPoint.hpp"
 
 namespace raytracer
 {
-    class Sphere : public IObject
+    class WavefontObject : public IObject
     {
         public:
-            Sphere();
-            Sphere(raytracer::Point3D pos, double r, Color surfaceReflexion) : _radius(r), _position(pos),
-                                                                               _positionBackup(pos), _surfaceAbsorbtion(surfaceReflexion), _volumeAbsorbtion(Color(0, 0, 0)), _emissionColor(Color(0, 0, 0)) {}
-            class Error : public std::exception
-            {
-                public:
-                    Error(std::string const &message) :
-                            _message(message) {};
-
-                    const char *what() const noexcept override
-                    {
-                        return _message.c_str();
-                    }
-
-                private:
-                    std::string _message;
-            };
-
-            ~Sphere();
+            WavefontObject();
+            WavefontObject(const std::string &path, const Point3D& position, Color surfaceAbsorbtion);
+            ~WavefontObject() override;
 
             Point3D hit(const Ray3D &ray) override;
 
@@ -70,10 +56,11 @@ namespace raytracer
             void stepMotion() override;
 
             Point3D getCenter() const override;
-            void parseData(libconfig::Setting &config) override;
 
         private:
-            double _radius;
+            std::vector<std::shared_ptr<IObject>> _triangles = {};
+            Sphere _boundingSphere;
+
             Point3D _position;
             Point3D _positionBackup;
 
@@ -81,17 +68,24 @@ namespace raytracer
             Color _surfaceAbsorbtion;
             Color _volumeAbsorbtion;
             double _volumeAbsorbtionCoeff = 0;
+
+            double _refractionIndex = 1;
+            double _reflexionIndex = 0;
+            bool _isGlass = false;
+
             Color _emissionColor;
             double _emissionIntensity = 0;
-
-            bool _isGlass = false;
-            double _reflexionIndex = 0;
-            double _refractionIndex = 1.5;
 
             Vector3D _translation = {0, 0, 0};
             Vector3D _rotation = {0, 0, 0};
 
             Vector3D _translationStep = {0, 0, 0};
             Vector3D _rotationStep = {0, 0, 0};
+
+            void _loadWavefont(const std::string &path);
+            void _createBoundingSphere(std::vector<Point3D> &points);
+
+            static Point3D _getPointFromLine(const std::string &line);
+            static Triangle _createTriangleFromLine(const std::string &line, const std::vector<Point3D> &points);
     };
 }

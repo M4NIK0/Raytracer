@@ -3,7 +3,7 @@ project(raytracer)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic -O3")
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wextra -pedantic -g3 -O0 -fsanitize=address,leak,undefined -fno-omit-frame-pointer")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wextra -pedantic -g3 -O0 -fno-omit-frame-pointer")
 
 # Find SFML
 find_package(SFML 2.5 COMPONENTS graphics window system REQUIRED)
@@ -35,12 +35,23 @@ add_executable(raytracer src/main.cpp
         src/Math/Matrix.hpp
         src/Render/RenderPoint.cpp
         src/Render/RenderPoint.hpp
+        src/Objects/Primitives/Cube.hpp
+        src/Objects/Primitives/Cube.cpp
+        src/Objects/Primitives/Plane.hpp
+        src/Objects/Primitives/Plane.cpp
         src/Render/Chunk.hpp
         src/Render/RenderData.cpp
         src/Render/RenderData.hpp
         src/Render/Threads.cpp
         src/Render/Threads.hpp
         src/Output/PPMOutput.cpp
+        src/Output/PPMOutput.hpp
+        src/Render/RenderProcessWrapper.cpp
+        src/Render/RenderProcessWrapper.hpp
+        src/Objects/Primitives/Triangle.cpp
+        src/Objects/Primitives/Triangle.hpp
+        src/Objects/Advanced/WavefontObject.cpp
+        src/Objects/Advanced/WavefontObject.hpp
         src/Parser/Parser.cpp
         src/Parser/Parser.hpp
         src/LibHandler/LibHandler.cpp

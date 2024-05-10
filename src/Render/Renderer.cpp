@@ -63,8 +63,9 @@ std::vector<raytracer::Chunk> raytracer::Renderer::getChunks(int chunkSizeX, int
         x_max += chunkSizeX;
     }
 
-    std::random_device rd;
-    std::mt19937 g(rd());
+    // use time as seed
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    std::default_random_engine g(seed);
 
 //     Shuffle the chunks
     std::shuffle(chunks.begin(), chunks.end(), g);
@@ -82,6 +83,11 @@ void raytracer::Renderer::renderChunk(const Chunk &chunk)
             renderData.renderBuffer[x + (chunk.x * renderData.chunkWidth)][y + (chunk.y * renderData.chunkHeight)] += tempColor;
         }
     }
+}
+
+void raytracer::Renderer::render()
+{
+
 }
 
 raytracer::RenderRay raytracer::Renderer::traceRay(int x, int y)
@@ -106,6 +112,29 @@ raytracer::RenderRay raytracer::Renderer::traceRay(int x, int y)
     return finalRay;
 }
 
+raytracer::RenderRay raytracer::Renderer::traceEditorRay(int x, int y)
+{
+    Ray3D ray = camera.getRay(x, y);
+    RenderPoint point;
+
+    point.hitNearestObject(renderData.objects, ray);
+
+    if (!point.object)
+    {
+        return {Ray3D(Point3D(0, 0, 0), Vector3D(0, 0, 0))};
+    }
+
+    return getDirectLight(point, renderData);
+}
+
+void raytracer::Renderer::initMotions()
+{
+    for (auto &object: renderData.objects)
+    {
+        object->initiateMotion(camera.exposure, renderData.maxSamples);
+    }
+}
+
 void raytracer::Renderer::stepMotions()
 {
     for (auto &object: renderData.objects)
@@ -114,12 +143,20 @@ void raytracer::Renderer::stepMotions()
     }
 }
 
+void raytracer::Renderer::resetMotions()
+{
+    for (auto &object: renderData.objects)
+    {
+        object->resetMotion();
+    }
+}
+
 raytracer::Vector3D raytracer::Renderer::getRandomRayFromCone(const raytracer::Vector3D &normal, double angle)
 {
     // Generate two random numbers
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_real_distribution<> dis(0.0, 1.0);
+    unsigned seed = std::chrono::system_clock::now().time_since_epoch().count();
+    std::default_random_engine gen(seed);
+    std::uniform_real_distribution<double> dis(0, 1);
 
     double u = dis(gen);
     double v = dis(gen);
@@ -166,7 +203,10 @@ raytracer::Renderer::getDirectLight(const RenderPoint &point, const RenderData &
             RenderPoint shadowHitPoint;
 
             // If the shadow ray hits something before reaching the light source, continue to the next light source
-            if (shadowHitPoint.hitsSomething(data.objects, shadowRay))
+            RenderPoint shadowPoint;
+            shadowPoint.ray = shadowRay;
+            shadowPoint.hitNearestObject(data.objects, shadowRay);
+            if (!(shadowPoint.hitPoint == Point3D(INFINITY, INFINITY, INFINITY)) && shadowPoint.distance < Point3D::distance(point.hitPoint, light->getPosition()))
             {
                 continue;
             }
@@ -227,8 +267,12 @@ raytracer::Renderer::getReflexionsLight(const RenderPoint &point, const RenderDa
     // Get the refractions light
     RenderRay refractionsLight = getRefractionsLight(reflectionPoint, data, bounces - 1);
 
+    // Get the emission light
+    RenderRay emissionLight;
+    emissionLight.color = point.object->getSurfaceEmission(point.hitPoint) * point.object->getSurfaceEmissionIntensity(point.hitPoint) * point.surfaceNormal.dot(reflection);
+
     // Mix the direct, reflection and diffuse light
-    RenderRay ray = directLight + reflectionLight + diffuseLight + refractionsLight;
+    RenderRay ray = directLight + reflectionLight + diffuseLight + refractionsLight + emissionLight;
 
     ray.color = ray.color * point.object->getReflexionIndex(point.hitPoint);
 
@@ -268,8 +312,13 @@ raytracer::RenderRay raytracer::Renderer::getDiffuseLight(const RenderPoint &poi
         // Get the reflection light
         RenderRay reflectionLight = getReflexionsLight(randomPoint, data, bounces - 1);
 
+        // Get the emission light
+        RenderRay emissionLight;
+        emissionLight.color = point.object->getSurfaceEmission(randomPoint.hitPoint) * point.object->getSurfaceEmissionIntensity(randomPoint.hitPoint) * point.surfaceNormal.dot(randomRay);
+
         // Mix the direct and diffuse light
-        RenderRay ray = directLight + diffuseLight + reflectionLight;
+        RenderRay ray = directLight + diffuseLight + reflectionLight + emissionLight;
+
         ray.color = ray.color * point.object->getSurfaceAbsorbtion(point.hitPoint);
 
         // Add the color of this ray to the total color
@@ -331,8 +380,10 @@ raytracer::RenderRay raytracer::Renderer::getRefractionsLight(const RenderPoint 
     RenderRay reflectionLight = getReflexionsLight(refractedPoint, data, bounces);
     RenderRay diffuseLight = getDiffuseLight(refractedPoint, data, bounces);
     RenderRay refractionsLight = getRefractionsLight(refractedPoint, data, bounces);
+    RenderRay emissionLight;
+    emissionLight.color = point.object->getSurfaceEmission(point.hitPoint) * point.object->getSurfaceEmissionIntensity(point.hitPoint);
 
-    RenderRay finalRay = directLight + reflectionLight + diffuseLight + refractionsLight;
+    RenderRay finalRay = directLight + reflectionLight + diffuseLight + refractionsLight + emissionLight;
 
     return finalRay;
 }

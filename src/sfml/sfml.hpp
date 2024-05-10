@@ -17,7 +17,7 @@ namespace raytracer
 {
     class Color {
         public:
-            Color(double r, double g, double b) : r(r), g(g), b(b) {}
+            Color(double r = 0, double g = 0, double b = 0) : r(r), g(g), b(b) {}
 
             double r;
             double g;
@@ -97,6 +97,7 @@ namespace raytracer
 
 class sfml : public raytracer::IDisplay {
     public:
+        sfml();
         ~sfml() override = default;
 
         void initWindow(int width = 800, int height = 600) override;
@@ -110,9 +111,9 @@ class sfml : public raytracer::IDisplay {
 
     private:
         std::unique_ptr<sf::RenderWindow> _window;
-        sf::Image _image;
-        sf::Texture _texture;
-        sf::Sprite _sprite;
+        std::unique_ptr<sf::Image> _image;
+        std::unique_ptr<sf::Texture> _texture;
+        std::unique_ptr<sf::Sprite> _sprite;
 };
 
 #endif //RAYTRACER_SFML_HPP

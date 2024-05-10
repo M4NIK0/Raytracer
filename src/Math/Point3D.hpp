@@ -21,6 +21,7 @@ namespace raytracer
             Point3D(double x = 0, double y = 0, double z = 0) : x(x), y(y), z(z) {};
             Point3D(const Point3D &other) : x(other.x), y(other.y), z(other.z) {};
             Point3D(Point3D&& other) : x(other.x), y(other.y), z(other.z) {};
+            Point3D(Vector3D vector3D) : x(vector3D.x), y(vector3D.y), z(vector3D.z) {};
 
             Point3D& operator=(const Point3D &other);
 

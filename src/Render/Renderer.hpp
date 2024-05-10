@@ -21,6 +21,7 @@ namespace raytracer
     class Renderer
     {
         public:
+            Renderer(Camera camera) : camera(camera), renderData(RenderData()) {}
             class Error : public std::exception
             {
                 public:
@@ -36,7 +37,6 @@ namespace raytracer
                     std::string _message;
             };
 
-            Renderer(Camera camera) : camera(camera) {}
             ~Renderer();
 
             void addObject(const std::shared_ptr<IObject>& object);
@@ -46,9 +46,14 @@ namespace raytracer
 
             void renderChunk(const Chunk &chunk);
 
-            raytracer::RenderRay traceRay(int x, int y);
+            void render();
 
+            raytracer::RenderRay traceRay(int x, int y);
+            raytracer::RenderRay traceEditorRay(int x, int y);
+
+            void initMotions();
             void stepMotions();
+            void resetMotions();
 
             static Vector3D getRandomRayFromCone(const Vector3D &normal, double angle);
 
@@ -58,7 +63,6 @@ namespace raytracer
             static RenderRay getRefractionsLight(const RenderPoint &point, const RenderData &data, size_t bounces);
 
             Camera camera;
-            RenderData renderData;
-            double cameraExposure = 2;
+            RenderData renderData = {};
     };
 }
