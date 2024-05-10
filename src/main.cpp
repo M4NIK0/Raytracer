@@ -76,7 +76,8 @@ int main()
                                                     40000));
 
     raytracer::Editor editor(renderer.renderer, 800);
-    editor.run(800);    
+    editor.run();
+
     // Create PPM Output
     raytracer::PPMOutput output("./output.ppm", WIDTH, HEIGHT);
     for (int y = 0; y < HEIGHT; y++)

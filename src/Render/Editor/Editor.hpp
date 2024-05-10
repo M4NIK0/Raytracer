@@ -13,9 +13,9 @@
 namespace raytracer {
     class Editor {
         public:
-            Editor(Renderer &renderer, int windowSize = 800);
+            Editor(Renderer &renderer, int windowSize);
             ~Editor() = default;
-            void run(int windowSize);
+            void run();
             void render();
             void handleEvents();
             void handleKeyboardEvents();
@@ -23,15 +23,14 @@ namespace raytracer {
 
         private:
             void _initImage();
-
-            std::vector<std::vector<RenderRay>> _imageBuffer = {};
-
             Camera _EditorCamera;
             Camera _rendererCamera;
             RenderData _EditorData = {};
             RenderData _rendererData = {};
 
-            raytracer::Renderer _renderer;
+            std::vector<std::vector<RenderRay>> _imageBuffer = {};
+
+            raytracer::Renderer &_renderer;
             sfml _display;
             bool _isRunning = true;
     };

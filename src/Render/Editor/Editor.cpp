@@ -20,13 +20,12 @@ raytracer::Editor::Editor(Renderer &renderer, int windowSize) : _EditorCamera(re
     }
 }
 
-void raytracer::Editor::run(int windowSize)
+void raytracer::Editor::run()
 {
     auto begin = std::chrono::steady_clock::now();
 
     _renderer.initMotions();
     _display.initWindow(800, 600);
-    _initImage();
     while (_isRunning) {
         handleEvents();
         render();
