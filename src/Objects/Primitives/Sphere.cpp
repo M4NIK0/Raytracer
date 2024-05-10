@@ -9,20 +9,15 @@
 #include <iostream>
 
 raytracer::Sphere::Sphere() : _radius(1), _position(Point3D(0, 0, 0)), _surfaceRoughness(0), _surfaceAbsorbtion(Color(0, 0, 0)),
-                               _volumeAbsorbtion(Color(0, 0, 0)), _volumeAbsorbtionCoeff(0), _emissionColor(Color(0, 0, 0)),
-                               _emissionIntensity(0), _isGlass(false), _reflexionIndex(0), _refractionIndex(1) {}
-
-raytracer::Sphere::Sphere() : _radius(1), _position(Point3D(0, 0, 0)), _surfaceRoughness(0),
-                              _surfaceAbsorbtion(Color(1, 1, 1)), _volumeAbsorbtion(Color(0, 0, 0)), _volumeAbsorbtionCoeff(0),
-                              _isGlass(false), _reflexionIndex(0), _refractionIndex(0), _translation(Vector3D(0, 0, 0)),
-                              _rotation(Vector3D(0, 0, 0)) {}
+                              _volumeAbsorbtion(Color(0, 0, 0)), _volumeAbsorbtionCoeff(0), _emissionColor(Color(0, 0, 0)),
+                              _emissionIntensity(0), _isGlass(false), _reflexionIndex(0), _refractionIndex(1) {}
 
 raytracer::Sphere::~Sphere() = default;
 
 raytracer::Point3D raytracer::Sphere::hit(const Ray3D &ray)
 {
     Vector3D oc = ray.
-    origin - _position;
+            origin - _position;
     double a = ray.direction.dot(ray.direction);
     double b = 2.0 * oc.dot(ray.direction);
     double c = oc.dot(oc) - _radius * _radius;
@@ -79,9 +74,20 @@ double raytracer::Sphere::getVolumeAbsorbtionCoeff()
     return _volumeAbsorbtionCoeff;
 }
 
+raytracer::Color raytracer::Sphere::getSurfaceEmission(const Point3D &point)
+{
+    return _emissionColor;
+}
+
+double raytracer::Sphere::getSurfaceEmissionIntensity(const Point3D &point)
+{
+    return _emissionIntensity;
+}
+
 void raytracer::Sphere::move(Vector3D vec)
 {
     _position = _position + vec;
+    _positionBackup = _position;
 }
 
 void raytracer::Sphere::rotate(Vector3D vec)
@@ -118,6 +124,16 @@ void raytracer::Sphere::setGlassState(bool state)
     _isGlass = state;
 }
 
+void raytracer::Sphere::setSurfaceEmission(raytracer::Color color)
+{
+    _emissionColor = color;
+}
+
+void raytracer::Sphere::setSurfaceEmissionIntensity(double intensity)
+{
+    _emissionIntensity = intensity;
+}
+
 void raytracer::Sphere::setMotion(Vector3D &translation, Vector3D &rotation)
 {
     _translation = translation;
@@ -134,6 +150,11 @@ void raytracer::Sphere::initiateMotion(double time, size_t steps)
 
     _position = _position - totalTranslation / 2;
     _rotation = _rotation - totalRotation / 2;
+}
+
+void raytracer::Sphere::resetMotion()
+{
+    _position = _positionBackup;
 }
 
 void raytracer::Sphere::stepMotion()

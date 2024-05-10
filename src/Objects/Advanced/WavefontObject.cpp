@@ -294,3 +294,8 @@ raytracer::Triangle raytracer::WavefontObject::_createTriangleFromLine(const std
 
     return Triangle(points[std::stoi(coordinates[0]) - 1], points[std::stoi(coordinates[1]) - 1], points[std::stoi(coordinates[2]) - 1], Color());
 }
+
+void raytracer::WavefontObject::parseData(libconfig::Setting &config)
+{
+
+}

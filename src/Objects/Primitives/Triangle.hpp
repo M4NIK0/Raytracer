@@ -54,6 +54,8 @@ namespace raytracer
 
             Point3D getCenter() const override;
 
+            void parseData(libconfig::Setting &config) override;
+
         private:
             Point3D _a;
             Point3D _b;

@@ -27,8 +27,8 @@ namespace raytracer
         Color getSurfaceAbsorbtion(const Point3D &point) override;
         double getSurfaceRoughness(const Point3D &point) override;
         double getSurfaceTransparency(const Point3D &point) override;
-        Color getSurfaceEmission(const Point3D &point) override;
-        double getSurfaceEmissionIntensity(const Point3D &point) override;
+        Color getSurfaceEmission(const Point3D &point);
+        double getSurfaceEmissionIntensity(const Point3D &point);
 
         Color getVolumeAbsorbtion() override;
         double getVolumeAbsorbtionCoeff() override;
@@ -44,12 +44,12 @@ namespace raytracer
         void setReflexionIndex(double index) override;
         void setRefractionIndex(double index) override;
         void setGlassState(bool state) override;
-        void setSurfaceEmission(Color color) override;
-        void setSurfaceEmissionIntensity(double intensity) override;
+        void setSurfaceEmission(Color color);
+        void setSurfaceEmissionIntensity(double intensity);
 
         void setMotion(Vector3D &translation, Vector3D &rotation) override;
         void initiateMotion(double time, size_t steps) override;
-        void resetMotion() override;
+        void resetMotion();
 
         void stepMotion() override;
 

@@ -34,48 +34,9 @@ int main(int ac, char **av)
     renderer.renderer.renderData.chunkHeight = CHUNK_SIZE_Y;
     renderer.renderer.renderData.maxSamples = MAX_SAMPLES;
 
-    auto obj1 = std::make_shared<raytracer::Plane>(raytracer::Point3D(20, -1, 0), raytracer::Vector3D(0, 1, 0),
-                                                    raytracer::Color(1, 1, 1));
-    auto obj2 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0, 1, 0.5), 0.1,
-                                                    raytracer::Color(1, 0, 1));
-    auto obj3 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0.5, 1.7, -4), 0.1,
-                                                    raytracer::Color(1, 1, 1));
-    auto obj4 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(-1.5, -0.3, -3), 0.7,
-                                                    raytracer::Color(1, 1, 1));
-    auto obj5 = std::make_shared<raytracer::Plane>(raytracer::Point3D(-6, 0, -5), raytracer::Vector3D(1, 1, 0), raytracer::Color(1, 1, 1));
-    auto obj6 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(3, 0, -4), 1, raytracer::Color(0, 0, 0));
-    auto obj8 = std::make_shared<raytracer::WavefontObject>("untitled.obj", raytracer::Point3D(0, 1, -3), raytracer::Color(1, 0.25, 1));
-
-    obj8->setReflexionIndex(0.5);
-
-    raytracer::Vector3D motion = raytracer::Vector3D(10, 0, 0);
-    raytracer::Vector3D rotation = raytracer::Vector3D(0, 0, 0);
-
-//    obj2->setMotion(motion, rotation);
-    obj6->setReflexionIndex(1);
-
-    obj1->setReflexionIndex(0.5);
-
-
-    obj4->setGlassState(true);
-
-    renderer.renderer.addObject(obj1);
-    renderer.renderer.addObject(obj2);
-    renderer.renderer.addObject(obj3);
-    renderer.renderer.addObject(obj4);
-    renderer.renderer.addObject(obj5);
-    renderer.renderer.addObject(obj6);
-    renderer.renderer.addObject(obj8);
-
-    renderer.renderer.addLight(
-            std::make_shared<raytracer::PointLight>(raytracer::Color(255, 0, 0), raytracer::Point3D(-5, 200, 50),
-                                                    40000));
-    renderer.renderer.addLight(
-            std::make_shared<raytracer::PointLight>(raytracer::Color(0, 255, 0), raytracer::Point3D(0, 200, 50),
-                                                    40000));
-    renderer.renderer.addLight(
-            std::make_shared<raytracer::PointLight>(raytracer::Color(0, 0, 255), raytracer::Point3D(5, 200, 50),
-                                                    40000));
+    Parser parser;
+    parser.parseConfig("info.txt");
+    renderer.renderer = parser.parseScene();
 
     renderer.renderImageDisplay(1024);
 

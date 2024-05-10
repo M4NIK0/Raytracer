@@ -149,3 +149,7 @@ raytracer::Point3D raytracer::Plane::getCenter() const
 {
     return _position;
 }
+
+void raytracer::Plane::parseData(libconfig::Setting &config)
+{
+}

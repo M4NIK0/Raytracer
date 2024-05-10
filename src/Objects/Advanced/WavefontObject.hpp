@@ -87,5 +87,7 @@ namespace raytracer
 
             static Point3D _getPointFromLine(const std::string &line);
             static Triangle _createTriangleFromLine(const std::string &line, const std::vector<Point3D> &points);
+
+            void parseData(libconfig::Setting &config) override;
     };
 }

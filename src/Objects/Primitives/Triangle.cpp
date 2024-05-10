@@ -175,3 +175,8 @@ raytracer::Point3D raytracer::Triangle::getCenter() const
 
     return center;
 }
+
+void raytracer::Triangle::parseData(libconfig::Setting &config)
+{
+
+}
