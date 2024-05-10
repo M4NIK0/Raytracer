@@ -23,7 +23,7 @@ namespace raytracer
 
             void renderImageCLI();
 
-            Renderer renderer;
+            Renderer &renderer;
             Threads threads;
             sfml display;
 

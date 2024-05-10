@@ -10,13 +10,23 @@
 raytracer::RenderProcessWrapper::RenderProcessWrapper(Renderer &rd, size_t nbThreads)
         : renderer(rd), threads(Threads(rd)), _width(rd.renderData.width), _height(rd.renderData.height), _nbThreads(nbThreads)
 {
-    renderer.renderData.initRenderBuffer();
+    std::cout << "RenderProcessWrapper created" << std::endl;
+    for (auto &object : renderer.renderData.objects)
+    {
+        std::cout << "Object added" << std::endl;
+    }
+    for (auto &light : renderer.renderData.lights)
+    {
+        std::cout << "Light added" << std::endl;
+    }
 }
 
 raytracer::RenderProcessWrapper::~RenderProcessWrapper() = default;
 
 void raytracer::RenderProcessWrapper::renderImageDisplay(int windowSize)
 {
+    renderer.renderData.initRenderBuffer();
+
     if (windowSize > 0)
     {
         int maxSize = std::max(_width, _height);
@@ -104,6 +114,7 @@ void raytracer::RenderProcessWrapper::renderImageCLI()
 {
     auto begin = std::chrono::steady_clock::now();
 
+    renderer.renderData.initRenderBuffer();
     renderer.initMotions();
 
     for (int i = 0; i < renderer.renderData.maxSamples; i++)
