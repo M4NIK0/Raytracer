@@ -24,7 +24,6 @@ void raytracer::Editor::run()
 {
     auto begin = std::chrono::steady_clock::now();
 
-    _renderer.initMotions();
     _display.initWindow(800, 600);
     while (_isRunning) {
         handleEvents();
@@ -36,6 +35,8 @@ void raytracer::Editor::run()
 void raytracer::Editor::render()
 {
     double maxColor = 0;
+
+    _initImage();
 
     for (int i = 0; i < _EditorData.width; i++)
     {
