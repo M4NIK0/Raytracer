@@ -27,7 +27,6 @@ void raytracer::Editor::run()
 {
     auto begin = std::chrono::steady_clock::now();
 
-    _display.initWindow(800, 600);
     while (_isRunning) {
         render();
         _displayImage();
