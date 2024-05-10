@@ -112,8 +112,8 @@ void raytracer::WavefontObject::rotate(Vector3D vec)
         Point3D center = triangle->getCenter();
         Point3D newCenter = Point3D::rotateAroundCenter(center, _position, vec.x, vec.y, vec.z);
 
-        triangle->rotate(vec);
         triangle->move(newCenter - center);
+        triangle->rotate(vec);
     }
 }
 
