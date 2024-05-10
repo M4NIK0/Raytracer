@@ -10,8 +10,8 @@
 #include "Render/RenderProcessWrapper.hpp"
 #include "Light/Objects/PointLight.hpp"
 
-#define WIDTH 720
-#define HEIGHT 720
+#define WIDTH 120
+#define HEIGHT 120
 
 #define CHUNK_SIZE_X 16
 #define CHUNK_SIZE_Y 16

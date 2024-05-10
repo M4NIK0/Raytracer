@@ -23,6 +23,7 @@ namespace raytracer {
 
         private:
             void _initImage();
+            void _displayImage();
             Camera _EditorCamera;
             Camera _rendererCamera;
             RenderData _EditorData = {};

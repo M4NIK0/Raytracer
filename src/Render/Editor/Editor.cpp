@@ -18,6 +18,9 @@ raytracer::Editor::Editor(Renderer &renderer, int windowSize) : _EditorCamera(re
         _display.initImage(_renderer.camera.width, _renderer.camera.height);
         _display.initWindow((int) (realWidth * windowSize), (int) (realHeight * windowSize));
     }
+
+    _rendererCamera = _renderer.camera;
+    _EditorCamera = _renderer.camera;
 }
 
 void raytracer::Editor::run()
@@ -26,9 +29,8 @@ void raytracer::Editor::run()
 
     _display.initWindow(800, 600);
     while (_isRunning) {
-        handleEvents();
         render();
-        _display.displayScreen();
+        _displayImage();
     }
 }
 
@@ -53,13 +55,14 @@ void raytracer::Editor::render()
         }
     }
 
+
     for (int i = 0; i < _EditorData.width; i++)
     {
         for (int j = 0; j < _EditorData.height; j++)
         {
-            _imageBuffer[i][j].color.r /= maxColor;
-            _imageBuffer[i][j].color.g /= maxColor;
-            _imageBuffer[i][j].color.b /= maxColor;
+            _imageBuffer[i][j].color.r = _imageBuffer[i][j].color.r / maxColor * 255;
+            _imageBuffer[i][j].color.g = _imageBuffer[i][j].color.g / maxColor * 255;
+            _imageBuffer[i][j].color.b = _imageBuffer[i][j].color.b / maxColor * 255;
         }
     }
 }
@@ -97,4 +100,17 @@ void raytracer::Editor::_initImage()
             _imageBuffer[i].emplace_back();
         }
     }
+}
+
+void raytracer::Editor::_displayImage()
+{
+    for (int i = 0; i < _EditorData.width; i++)
+    {
+        for (int j = 0; j < _EditorData.height; j++)
+        {
+            _display.drawPixel(i, j, _imageBuffer[i][j].color);
+        }
+    }
+
+    _display.displayScreen();
 }
