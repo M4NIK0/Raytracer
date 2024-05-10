@@ -37,6 +37,8 @@ void raytracer::Editor::render()
 {
     double maxColor = 0;
 
+    _initImage();
+
     for (int i = 0; i < _EditorData.width; i++)
     {
         for (int j = 0; j < _EditorData.height; j++)
