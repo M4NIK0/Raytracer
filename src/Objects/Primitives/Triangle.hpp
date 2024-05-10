@@ -1,6 +1,6 @@
 /*
 ** EPITECH PROJECT, 2024
-** Sphere.hpp
+** Triangle.hpp
 ** File description:
 ** raytracer
 */
@@ -11,16 +11,15 @@
 
 namespace raytracer
 {
-    class Sphere : public IObject
+    class Triangle: public IObject
     {
         public:
-            Sphere();
-            Sphere(raytracer::Point3D pos, double r, Color surfaceReflexion) : _radius(r), _position(pos),
-                                                                               _positionBackup(pos), _surfaceAbsorbtion(surfaceReflexion), _volumeAbsorbtion(Color(0, 0, 0)), _emissionColor(Color(0, 0, 0)) {}
-            ~Sphere();
+            Triangle();
+            Triangle(Point3D a, Point3D b, Point3D c, Color surfaceAbsorbtion);
+
+            ~Triangle() override;
 
             Point3D hit(const Ray3D &ray) override;
-
             Vector3D getSurfaceNormal(const Point3D &point) override;
             Vector3D getVolumeNormal(const Point3D &point) override;
 
@@ -56,20 +55,26 @@ namespace raytracer
             Point3D getCenter() const override;
 
         private:
-            double _radius;
-            Point3D _position;
-            Point3D _positionBackup;
+            Point3D _a;
+            Point3D _b;
+            Point3D _c;
 
+            Point3D _aBackup;
+            Point3D _bBackup;
+            Point3D _cBackup;
+
+            Vector3D _normal;
             double _surfaceRoughness = 1;
+
             Color _surfaceAbsorbtion;
             Color _volumeAbsorbtion;
             double _volumeAbsorbtionCoeff = 0;
             Color _emissionColor;
             double _emissionIntensity = 0;
 
-            bool _isGlass = false;
+            bool _glassState = false;
+            double _refractionIndex = 1;
             double _reflexionIndex = 0;
-            double _refractionIndex = 1.5;
 
             Vector3D _translation = {0, 0, 0};
             Vector3D _rotation = {0, 0, 0};
