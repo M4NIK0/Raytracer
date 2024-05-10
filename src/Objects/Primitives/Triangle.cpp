@@ -165,3 +165,13 @@ void raytracer::Triangle::stepMotion()
     _b = _b + _translationStep;
     _c = _c + _translationStep;
 }
+
+raytracer::Point3D raytracer::Triangle::getCenter() const
+{
+    Point3D center;
+    center.x = (_a.x + _b.x + _c.x) / 3;
+    center.y = (_a.y + _b.y + _c.y) / 3;
+    center.z = (_a.z + _b.z + _c.z) / 3;
+
+    return center;
+}

@@ -144,3 +144,8 @@ void raytracer::Plane::stepMotion()
     _position = _position + _translationStep;
     _rotation = _rotation + _rotationStep;
 }
+
+raytracer::Point3D raytracer::Plane::getCenter() const
+{
+    return _position;
+}

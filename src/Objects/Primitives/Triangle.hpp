@@ -52,6 +52,8 @@ namespace raytracer
 
             void stepMotion() override;
 
+            Point3D getCenter() const override;
+
         private:
             Point3D _a;
             Point3D _b;

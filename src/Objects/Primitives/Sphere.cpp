@@ -5,8 +5,12 @@
 ** raytracer
 */
 
-#include <iostream>
 #include "Sphere.hpp"
+#include <iostream>
+
+raytracer::Sphere::Sphere() : _radius(1), _position(Point3D(0, 0, 0)), _surfaceRoughness(0), _surfaceAbsorbtion(Color(0, 0, 0)),
+                               _volumeAbsorbtion(Color(0, 0, 0)), _volumeAbsorbtionCoeff(0), _emissionColor(Color(0, 0, 0)),
+                               _emissionIntensity(0), _isGlass(false), _reflexionIndex(0), _refractionIndex(1) {}
 
 raytracer::Sphere::~Sphere() = default;
 
@@ -157,4 +161,9 @@ void raytracer::Sphere::stepMotion()
 {
     _position = _position + _translationStep;
     _rotation = _rotation + _rotationStep;
+}
+
+raytracer::Point3D raytracer::Sphere::getCenter() const
+{
+    return _position;
 }

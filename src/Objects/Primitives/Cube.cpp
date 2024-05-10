@@ -243,3 +243,8 @@ void raytracer::Cube::stepMotion()
     _position = _position + _translationStep;
     _rotation = _rotation + _rotationStep;
 }
+
+raytracer::Point3D raytracer::Cube::getCenter() const
+{
+    return _position;
+}
