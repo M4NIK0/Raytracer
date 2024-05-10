@@ -24,7 +24,10 @@
 
 int main(int ac, char **av)
 {
-    raytracer::RenderProcessWrapper renderer(WIDTH, HEIGHT, 30);
+    int width = 720;
+    int height = 720;
+
+    raytracer::RenderProcessWrapper renderer(width, height, 30);
     renderer.renderer.camera.move(raytracer::Vector3D(0, 1, 2));
     renderer.renderer.camera.rotate(raytracer::Vector3D(-10, 0, 0));
     renderer.renderer.camera.sensitivity = 250;
@@ -41,10 +44,10 @@ int main(int ac, char **av)
     renderer.renderImageDisplay(1024);
 
     // Create PPM Output
-    raytracer::PPMOutput output("./output.ppm", WIDTH, HEIGHT);
-    for (int y = 0; y < HEIGHT; y++)
+    raytracer::PPMOutput output("./output.ppm", width, height);
+    for (int y = 0; y < height; y++)
     {
-        for (int x = 0; x < WIDTH; x++)
+        for (int x = 0; x < width; x++)
         {
             raytracer::Color color = renderer.renderer.renderData.renderBuffer[x][y];
             output.setPixel(x, y, color);
