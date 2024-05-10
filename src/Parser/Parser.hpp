@@ -31,9 +31,9 @@ class Parser{
         void parseConfig(const char* path);
         void parseObjects(raytracer::Renderer &renderer);
         void parseLights(raytracer::Renderer &renderer);
-        raytracer::Camera parseCamera();
-        raytracer::Renderer parseScene();
-        raytracer::Renderer parseRenderer();
+        raytracer::Camera parseCamera(int width, int height);
+        raytracer::Renderer parseScene(int width, int height);
+        raytracer::Renderer parseRenderer(int width, int height);
     private:
         libconfig::Config* cfg;
 };

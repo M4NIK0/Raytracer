@@ -26,6 +26,7 @@ int main(int ac, char **av)
 {
     int width = 720;
     int height = 720;
+    char path[] = "info.txt";
 
     raytracer::RenderProcessWrapper renderer(width, height, 30);
     renderer.renderer.camera.move(raytracer::Vector3D(0, 1, 2));
@@ -38,8 +39,8 @@ int main(int ac, char **av)
     renderer.renderer.renderData.maxSamples = MAX_SAMPLES;
 
     Parser parser;
-    parser.parseConfig("info.txt");
-    renderer.renderer = parser.parseScene();
+    parser.parseConfig(path);
+    renderer.renderer = parser.parseScene(width, height);
 
     renderer.renderImageDisplay(1024);
 

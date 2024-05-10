@@ -62,28 +62,45 @@ void Parser::parseLights(raytracer::Renderer &renderer)
     }
 }
 
-raytracer::Camera Parser::parseCamera() {
+raytracer::Camera Parser::parseCamera(int width, int height) {
     if (!cfg->exists("Camera"))
         throw Parser::Error("Camera not found");
     libconfig::Setting& camera = cfg->lookup("Camera");
 
+    raytracer::Camera tmp(width, height);
     try {
-        raytracer::Camera tmp(camera["width"], camera["height"]);
-        return tmp;
+        tmp.origin = raytracer::Vector3D(camera["position"][0], camera["position"][1], camera["position"][2]);
     } catch (libconfig::SettingNotFoundException &e) {
-        throw Parser::Error("Camera width or height not found");
+        throw Parser::Error("position not found");
     } catch (libconfig::SettingTypeException &e) {
-        throw Parser::Error("Camera width or height must be an integer");
+        throw Parser::Error("position must be an array of 3 double");
     }
+    try {
+        tmp.exposure = camera["exposure"];
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Parser::Error("exposure not found");
+    } catch (libconfig::SettingTypeException &e) {
+        throw Parser::Error("exposure must be a double");
+    }
+    try {
+        tmp.sensitivity = camera["sensitivity"];
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Parser::Error("sensitivity not found");
+    } catch (libconfig::SettingTypeException &e) {
+        throw Parser::Error("sensitivity must be a double");
+    }
+    return tmp;
 }
 
-raytracer::Renderer Parser::parseRenderer() {
+raytracer::Renderer Parser::parseRenderer(int width, int height) {
     if (!cfg->exists("Renderer"))
         throw Parser::Error("Renderer not found");
     libconfig::Setting& renderer = cfg->lookup("Renderer");
-    raytracer::Camera camera = parseCamera();
+    raytracer::Camera camera = parseCamera(width, height);
 
     raytracer::Renderer render(camera);
+    render.renderData.width = width;
+    render.renderData.height = height;
     try {
         render.renderData.diffuseRays = renderer["diffusion"].TypeInt64;
         if (render.renderData.diffuseRays > 2048)
@@ -143,31 +160,11 @@ raytracer::Renderer Parser::parseRenderer() {
     } catch (libconfig::SettingTypeException &e) {
         throw Parser::Error("samples must be an int");
     }
-
-    try {
-        render.renderData.width = renderer["width"];
-        if (render.renderData.width < 1)
-            throw Parser::Error("width must be greater than 0");
-    } catch (libconfig::SettingNotFoundException &e) {
-        throw Parser::Error("width not found");
-    } catch (libconfig::SettingTypeException &e) {
-        throw Parser::Error("width must be an int");
-    }
-
-    try {
-        render.renderData.height = renderer["height"];
-        if (render.renderData.height < 1)
-            throw Parser::Error("height must be greater than 0");
-    } catch (libconfig::SettingNotFoundException &e) {
-        throw Parser::Error("height not found");
-    } catch (libconfig::SettingTypeException &e) {
-        throw Parser::Error("height must be an int");
-    }
     return render;
 }
 
-raytracer::Renderer Parser::parseScene() {
-    raytracer::Renderer renderer = parseRenderer();
+raytracer::Renderer Parser::parseScene(int width, int height) {
+    raytracer::Renderer renderer = parseRenderer(width, height);
     parseObjects(renderer);
     parseLights(renderer);
     return renderer;
