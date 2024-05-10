@@ -11,7 +11,7 @@
 raytracer::Sphere::Sphere() : _radius(1), _position(Point3D(0, 0, 0)), _surfaceRoughness(0),
                               _surfaceAbsorbtion(Color(1, 1, 1)), _volumeAbsorbtion(Color(0, 0, 0)), _volumeAbsorbtionCoeff(0),
                               _isGlass(false), _reflexionIndex(0), _refractionIndex(0), _translation(Vector3D(0, 0, 0)),
-                              _rotation(Vector3D(0, 0, 0)) {}
+                              _rotation(Vector3D(0, 0, 0)), _emissionColor(Color(0, 0, 0)), _emissionIntensity(0) {}
 
 raytracer::Sphere::~Sphere() = default;
 

@@ -80,6 +80,7 @@ void raytracer::Renderer::renderChunk(const Chunk &chunk)
         for (int y = 0; y < chunk.height; y++)
         {
             Color tempColor = traceRay(x + (chunk.x * renderData.chunkWidth), y + (chunk.y * renderData.chunkHeight)).color / renderData.maxSamples;
+
             renderData.renderBuffer[x + (chunk.x * renderData.chunkWidth)][y + (chunk.y * renderData.chunkHeight)] += tempColor;
         }
     }

@@ -24,11 +24,15 @@ void Parser::parseConfig(const char* path) {
 }
 
 void Parser::parseObjects(raytracer::Renderer &renderer) {
+    if (!cfg->exists("Objects"))
+        throw Parser::Error("Objects not found");
     libconfig::Setting& Objects = cfg->lookup("Objects");
 
     for(int i = 0; i < Objects.getLength(); ++i) {
         libconfig::Setting& object = Objects[i];
 
+        if (!object.exists("type"))
+            throw Parser::Error("Object type not found");
         std::string type = object["type"];
         if (type == "sphere") {
             raytracer::Sphere sphere;
@@ -38,8 +42,30 @@ void Parser::parseObjects(raytracer::Renderer &renderer) {
     }
 }
 
+void Parser::parseLights(raytracer::Renderer &renderer)
+{
+    if (!cfg->exists("Lights"))
+        throw Parser::Error("Lights not found");
+    libconfig::Setting& Lights = cfg->lookup("Lights");
+
+    for(int i = 0; i < Lights.getLength(); ++i) {
+        libconfig::Setting& light = Lights[i];
+
+        if (!light.exists("type"))
+            throw Parser::Error("Light type not found");
+        std::string type = light["type"];
+        if (type == "point") {
+            raytracer::PointLight pointLight;
+            pointLight.parseData(light);
+            renderer.addLight(std::make_shared<raytracer::PointLight>(pointLight));
+        } // else if plugins lights
+    }
+}
+
 raytracer::Camera Parser::parseCamera() {
-    libconfig::Setting& camera = cfg->lookup("camera");
+    if (!cfg->exists("Camera"))
+        throw Parser::Error("Camera not found");
+    libconfig::Setting& camera = cfg->lookup("Camera");
 
     try {
         raytracer::Camera tmp(camera["width"], camera["height"]);
@@ -52,12 +78,14 @@ raytracer::Camera Parser::parseCamera() {
 }
 
 raytracer::Renderer Parser::parseRenderer() {
-    libconfig::Setting& renderer = cfg->lookup("renderer");
+    if (!cfg->exists("Renderer"))
+        throw Parser::Error("Renderer not found");
+    libconfig::Setting& renderer = cfg->lookup("Renderer");
     raytracer::Camera camera = parseCamera();
 
     raytracer::Renderer render(camera);
     try {
-        render.renderData.diffuseRays = renderer["diffusion"];
+        render.renderData.diffuseRays = renderer["diffusion"].TypeInt64;
         if (render.renderData.diffuseRays > 2048)
             throw Parser::Error("diffusion must be between 0 and 2048");
     } catch (libconfig::SettingNotFoundException &e) {
@@ -67,7 +95,7 @@ raytracer::Renderer Parser::parseRenderer() {
     }
 
     try {
-        render.renderData.maxBounces = renderer["bounces"];
+        render.renderData.maxBounces = renderer["bounces"].TypeInt64;
         if (render.renderData.maxBounces > 2048)
             throw Parser::Error("bounces must be between 0 and 2048");
     } catch (libconfig::SettingNotFoundException &e) {
@@ -77,7 +105,7 @@ raytracer::Renderer Parser::parseRenderer() {
     }
 
     try {
-        render.renderData.reflexionsRays = renderer["reflexions"];
+        render.renderData.reflexionsRays = renderer["reflexions"].TypeInt64;
         if (render.renderData.reflexionsRays > 2048)
             throw Parser::Error("reflexions must be between 0 and 2048");
     } catch (libconfig::SettingNotFoundException &e) {
@@ -141,5 +169,6 @@ raytracer::Renderer Parser::parseRenderer() {
 raytracer::Renderer Parser::parseScene() {
     raytracer::Renderer renderer = parseRenderer();
     parseObjects(renderer);
+    parseLights(renderer);
     return renderer;
 }

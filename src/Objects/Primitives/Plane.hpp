@@ -19,39 +19,41 @@ namespace raytracer
             Plane(raytracer::Point3D pos, raytracer::Vector3D normal, Color surfaceReflexion) : _normal(normal), _position(std::move(pos)), _surfaceAbsorbtion(surfaceReflexion), _volumeAbsorbtion(surfaceReflexion), _emissionColor({0, 0, 0}) { _surfaceAbsorbtion.normalize(); _volumeAbsorbtion.normalize(); };
             ~Plane();
 
-            Point3D hit(const Ray3D &ray) override;
+        Point3D hit(const Ray3D &ray) override;
 
-            Vector3D getSurfaceNormal(const Point3D &point) override;
-            Vector3D getVolumeNormal(const Point3D &point) override;
+        Vector3D getSurfaceNormal(const Point3D &point) override;
+        Vector3D getVolumeNormal(const Point3D &point) override;
 
-            Color getSurfaceAbsorbtion(const Point3D &point) override;
-            double getSurfaceRoughness(const Point3D &point) override;
-            double getSurfaceTransparency(const Point3D &point) override;
-            Color getSurfaceEmission(const Point3D &point) override;
-            double getSurfaceEmissionIntensity(const Point3D &point) override;
+        Color getSurfaceAbsorbtion(const Point3D &point) override;
+        double getSurfaceRoughness(const Point3D &point) override;
+        double getSurfaceTransparency(const Point3D &point) override;
+        Color getSurfaceEmission(const Point3D &point) override;
+        double getSurfaceEmissionIntensity(const Point3D &point) override;
 
-            Color getVolumeAbsorbtion() override;
-            double getVolumeAbsorbtionCoeff() override;
+        Color getVolumeAbsorbtion() override;
+        double getVolumeAbsorbtionCoeff() override;
 
-            void move(Vector3D vec) override;
-            void rotate(Vector3D vec) override;
+        void move(Vector3D vec) override;
+        void rotate(Vector3D vec) override;
 
-            bool getGlassState(const Point3D &point) override;
+        bool getGlassState(const Point3D &point) override;
 
-            double getRefractionIndex() override;
-            double getReflexionIndex(const Point3D &point) override;
+        double getRefractionIndex() override;
+        double getReflexionIndex(const Point3D &point) override;
 
-            void setReflexionIndex(double index) override;
-            void setRefractionIndex(double index) override;
-            void setGlassState(bool state) override;
-            void setSurfaceEmission(Color color) override;
-            void setSurfaceEmissionIntensity(double intensity) override;
+        void setReflexionIndex(double index) override;
+        void setRefractionIndex(double index) override;
+        void setGlassState(bool state) override;
+        void setSurfaceEmission(Color color) override;
+        void setSurfaceEmissionIntensity(double intensity) override;
 
-            void setMotion(Vector3D &translation, Vector3D &rotation) override;
-            void initiateMotion(double time, size_t steps) override;
-            void resetMotion() override;
+        void setMotion(Vector3D &translation, Vector3D &rotation) override;
+        void initiateMotion(double time, size_t steps) override;
+        void resetMotion() override;
 
-            void stepMotion() override;
+        void stepMotion() override;
+
+        void parseData(libconfig::Setting &config) override;
 
         private:
             Vector3D _normal;

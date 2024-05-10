@@ -144,3 +144,5 @@ void raytracer::Plane::stepMotion()
     _position = _position + _translationStep;
     _rotation = _rotation + _rotationStep;
 }
+
+void raytracer::Plane::parseData(libconfig::Setting &config) {}

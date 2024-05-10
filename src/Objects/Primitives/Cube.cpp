@@ -243,3 +243,5 @@ void raytracer::Cube::stepMotion()
     _position = _position + _translationStep;
     _rotation = _rotation + _rotationStep;
 }
+
+void raytracer::Cube::parseData(libconfig::Setting &config) {}

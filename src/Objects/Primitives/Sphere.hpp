@@ -30,7 +30,7 @@ namespace raytracer
                     std::string _message;
             };
             Sphere();
-            Sphere(raytracer::Point3D pos, double r, Color surfaceReflexion) : _radius(r), _position(pos), _surfaceAbsorbtion(surfaceReflexion), _volumeAbsorbtion(Color(0, 0, 0)) {}
+            Sphere(raytracer::Point3D pos, double r, Color surfaceReflexion) : _radius(r), _position(pos), _surfaceAbsorbtion(surfaceReflexion), _volumeAbsorbtion(Color(0, 0, 0)), _emissionColor(Color(0, 0, 0)), _emissionIntensity(0) {};
             ~Sphere();
 
             Point3D hit(const Ray3D &ray) override;
