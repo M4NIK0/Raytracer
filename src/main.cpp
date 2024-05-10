@@ -44,9 +44,7 @@ int main()
                                                     raytracer::Color(1, 1, 1));
     auto obj5 = std::make_shared<raytracer::Plane>(raytracer::Point3D(-6, 0, -5), raytracer::Vector3D(1, 1, 0), raytracer::Color(1, 1, 1));
     auto obj6 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(3, 0, -4), 1, raytracer::Color(0, 0, 0));
-    auto obj8 = std::make_shared<raytracer::WavefontObject>("untitled.obj", raytracer::Point3D(0, 1, -3), raytracer::Color(1, 0.25, 1));
 
-    obj8->setReflexionIndex(0.5);
 
     raytracer::Vector3D motion = raytracer::Vector3D(10, 0, 0);
     raytracer::Vector3D rotation = raytracer::Vector3D(0, 0, 0);
@@ -65,7 +63,6 @@ int main()
     renderer.renderer.addObject(obj4);
     renderer.renderer.addObject(obj5);
     renderer.renderer.addObject(obj6);
-    renderer.renderer.addObject(obj8);
 
     renderer.renderer.addLight(
             std::make_shared<raytracer::PointLight>(raytracer::Color(255, 0, 0), raytracer::Point3D(-5, 200, 50),
