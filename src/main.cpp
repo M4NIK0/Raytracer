@@ -20,8 +20,9 @@
 #include <chrono>
 #include "Render/Threads.hpp"
 #include "Output/PPMOutput.hpp"
+#include "Parser/Parser.hpp"
 
-int main()
+int main(int ac, char **av)
 {
     raytracer::RenderProcessWrapper renderer(WIDTH, HEIGHT, 30);
     renderer.renderer.camera.move(raytracer::Vector3D(0, 1, 2));

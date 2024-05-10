@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include <libconfig.h++>
 #include "../Math/Ray3D.hpp"
 #include "../sfml/sfml.hpp"
 
@@ -15,6 +16,21 @@ namespace raytracer
     class IObject
     {
         public:
+            class Error : public std::exception
+            {
+                public:
+                    Error(std::string const &message) :
+                        _message(message) {};
+
+                    const char *what() const noexcept override
+                    {
+                        return _message.c_str();
+                    }
+
+                private:
+                    std::string _message;
+            };
+
             virtual ~IObject() = default;
 
             virtual Point3D hit(const Ray3D &ray) = 0;
@@ -52,5 +68,7 @@ namespace raytracer
             virtual void resetMotion() = 0;
 
             virtual Point3D getCenter() const = 0;
+
+            virtual void parseData(libconfig::Setting &config) = 0;
     };
 }
