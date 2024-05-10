@@ -18,8 +18,9 @@ namespace raytracer {
             void run();
             void render();
             void handleEvents();
-            void handleKeyboardEvents();
-            void handleMouseEvents();
+            void handleKeyboardEvents(int event);
+            void handleMouseEvents(int event);
+            void changeResolution(int width, int height);
 
         private:
             void _initImage();
