@@ -31,13 +31,15 @@ int main()
     renderer.renderer.renderData.chunkHeight = CHUNK_SIZE_Y;
     renderer.renderer.renderData.maxSamples = MAX_SAMPLES;
 
+//    renderer.renderer.camera.move(raytracer::Vector3D(0, 10, 0));
+//    renderer.renderer.camera.rotate(raytracer::Vector3D(-90, 0, 0));
+
     auto obj1 = std::make_shared<raytracer::Plane>(raytracer::Point3D(0, 0, 0), raytracer::Vector3D(0, 1, 0), raytracer::Color(1, 1, 1));
-    auto obj2 = std::make_shared<raytracer::WavefontObject>("./untitled.obj", raytracer::Point3D(0.5, 0.5, -1), raytracer::Color(1, 0.6, 0));
+    auto obj2 = std::make_shared<raytracer::WavefontObject>("./untitled.obj", raytracer::Point3D(0.5, 0.5, -2), raytracer::Color(1, 0.6, 0));
 //    auto obj2 = std::make_shared<raytracer::Triangle>(raytracer::Point3D(0, 0.2, -1), raytracer::Point3D(1, 0.2, -1), raytracer::Point3D(1, 0.2, -2), raytracer::Color(1, 0, 1));
 
     obj2->rotate(raytracer::Vector3D(0, 45, 0));
-    obj2->rotate(raytracer::Vector3D(0, 0, 45));
-//    obj2->rotate(raytracer::Vector3D(45, 0, 0));
+    obj2->rotate(raytracer::Vector3D(45, 0, 0));
 
 
     raytracer::Vector3D motion = raytracer::Vector3D(10, 0, 0);

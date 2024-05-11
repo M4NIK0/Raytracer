@@ -10,6 +10,7 @@
 #include <utility>
 #include <iostream>
 #include "Vector3D.hpp"
+#include "Matrix.hpp"
 
 namespace raytracer
 {
