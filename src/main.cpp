@@ -9,13 +9,15 @@
 #include "Render/RenderProcessWrapper.hpp"
 #include "Light/Objects/PointLight.hpp"
 
-#define WIDTH 1280
-#define HEIGHT 720
+#define WIDTH 640
+#define HEIGHT 360
 
-#define CHUNK_SIZE_X 32
-#define CHUNK_SIZE_Y 32
+#define CHUNK_SIZE_X 16
+#define CHUNK_SIZE_Y 16
 
-#define MAX_SAMPLES 2
+#define MAX_SAMPLES 1
+
+#define MAX_THREADS 8
 
 #include <chrono>
 #include "Render/Threads.hpp"
@@ -39,6 +41,7 @@ int main(int ac, char **av)
     parser.parseConfig(path.c_str());
     parser.parseScene(width, height, renderProcessWrapper);
 
+    renderProcessWrapper.initRenderData(chunkSizeX, chunkSizeY, maxSamples);
     renderProcessWrapper.renderImageDisplay(1024);
 
     // Create PPM Output

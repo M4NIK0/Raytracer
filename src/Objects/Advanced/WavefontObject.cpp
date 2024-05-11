@@ -13,7 +13,6 @@ raytracer::WavefontObject::WavefontObject(const std::string &path, const Point3D
     _loadWavefont(path);
 
     move(Vector3D(position.x, position.y, position.z));
-    _boundingSphere.move(Vector3D(position.x, position.y, position.z));
 
     _surfaceAbsorbtion = surfaceAbsorbtion;
     _surfaceAbsorbtion.normalize();
@@ -106,6 +105,7 @@ void raytracer::WavefontObject::move(Vector3D vec)
 {
     _position = _position + vec;
     _positionBackup = _position;
+    _boundingSphere.move(vec);
 
     for (auto &triangle : _triangles)
         triangle->move(vec);
@@ -183,6 +183,7 @@ void raytracer::WavefontObject::initiateMotion(double time, size_t steps)
 
 void raytracer::WavefontObject::resetMotion()
 {
+    move(_positionBackup - _position);
     _position = _positionBackup;
 }
 
@@ -327,9 +328,9 @@ void raytracer::WavefontObject::parseData(libconfig::Setting &config)
 
     try {
         libconfig::Setting &color = config["color"];
-        _surfaceAbsorbtion.r = (255.0 - (double)color[0]) / 255.0;
-        _surfaceAbsorbtion.g = (255.0 - (double)color[1]) / 255.0;
-        _surfaceAbsorbtion.b = (255.0 - (double)color[2]) / 255.0;
+        _surfaceAbsorbtion.r = ((double)color[0]) / 255.0;
+        _surfaceAbsorbtion.g = ((double)color[1]) / 255.0;
+        _surfaceAbsorbtion.b = ((double)color[2]) / 255.0;
     } catch (libconfig::SettingNotFoundException &e) {
         throw Error("color not found");
     } catch (libconfig::SettingTypeException &e) {
