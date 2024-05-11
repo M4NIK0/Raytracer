@@ -17,6 +17,7 @@ class ParseArg {
         std::pair<int, int> getChunkSize() const { return _chunkSize; }
         std::string getOutputFile() const { return _outputFile; }
         std::string getConfigFile() const { return _configFile; }
+        int getWindowSize() const { return _windowSize; }
         int getThreads() const { return _threads; }
         int getSamples() const { return _samples; }
         int getBounces() const { return _bounces; }
@@ -29,6 +30,7 @@ class ParseArg {
         std::string _configFile;
         std::pair<int, int> _imageSize = {800, 600};
         std::pair<int, int> _chunkSize = {16, 16};
+        int _windowSize = 800;
         int _threads = 1;
         int _samples = 3;
         int _bounces = 2;

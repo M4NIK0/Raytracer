@@ -24,6 +24,8 @@ ParseArg::ParseArg(int ac, char **av) : _imageSize(800, 600), _chunkSize(16, 16)
             _chunkSize = std::make_pair(std::stoi(av[++i]), std::stoi(av[++i]));
         } else if (arg == "-t" && i + 1 < ac) {
             _threads = std::stoi(av[++i]);
+        } else if (arg == "-ws" && i + 1 < ac) {
+            _windowSize = std::stoi(av[++i]);
         } else if (arg == "-s" && i + 1 < ac) {
             _samples = std::stoi(av[++i]);
         } else if (arg == "-b" && i + 1 < ac) {

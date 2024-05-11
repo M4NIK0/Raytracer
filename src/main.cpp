@@ -45,6 +45,7 @@ int main(int ac, char **av)
     int height = parseArg.getImageSize().second;
     int chunkSizeX = parseArg.getChunkSize().first;
     int chunkSizeY = parseArg.getChunkSize().second;
+    int windowSize = parseArg.getWindowSize();
     int threads = parseArg.getThreads();
     int maxSamples = parseArg.getSamples();
     int bounces = parseArg.getBounces();
