@@ -19,19 +19,39 @@
 
 #define MAX_THREADS 8
 
+#define MAX_BOUNCES 2
+
+#define MAX_DIFFUSE 2
+
+#define MAX_REFLEXIONS 2
+
+#define BASE_COMMAND_LINE false
+
+
 #include <chrono>
 #include "Render/Threads.hpp"
 #include "Output/PPMOutput.hpp"
 #include "Parser/Parser.hpp"
+#include "Parser/ParseArg.hpp"
 
 int main(int ac, char **av)
 {
-    int width = WIDTH;
-    int height = HEIGHT;
-    int chunkSizeX = CHUNK_SIZE_X;
-    int chunkSizeY = CHUNK_SIZE_Y;
-    int maxSamples = MAX_SAMPLES;
-    int threads = MAX_THREADS;
+
+    ParseArg parseArg(ac, av);
+
+    std::string configFile = parseArg.getConfigFile();
+    std::string outputFile = parseArg.getOutputFile();
+    int width = parseArg.getImageSize().first;
+    int height = parseArg.getImageSize().second;
+    int chunkSizeX = parseArg.getChunkSize().first;
+    int chunkSizeY = parseArg.getChunkSize().second;
+    int threads = parseArg.getThreads();
+    int maxSamples = parseArg.getSamples();
+    int bounces = parseArg.getBounces();
+    int diffusionRays = parseArg.getDiffusionRays();
+    int reflectionRays = parseArg.getReflectionRays();
+    bool cli = parseArg.isCli();
+    bool ne = parseArg.isNe();
 
     std::string path = "info.txt";
 

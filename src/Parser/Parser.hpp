@@ -38,7 +38,6 @@ class Parser{
         void parseLights(raytracer::Renderer &renderer);
         void parseCamera(int width, int height, raytracer::RenderProcessWrapper &rendererWrapper);
         void parseScene(int width, int height, raytracer::RenderProcessWrapper &rendererWrapper);
-        void parseRenderer(int width, int height, raytracer::RenderProcessWrapper &rendererWrapper);
     private:
         libconfig::Config* cfg;
 };
