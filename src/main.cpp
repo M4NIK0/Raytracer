@@ -48,11 +48,21 @@ int main(int ac, char **av)
     {
         if (!ne)
         {
-            raytracer::Editor editor(renderProcessWrapper.renderer, windowSize);
-            editor.run();
+            try {
+                raytracer::Editor editor(renderProcessWrapper.renderer, windowSize);
+                editor.run();
+            } catch (const std::exception &e) {
+                std::cerr << e.what() << std::endl;
+                return 84;
+            }
         }
 
-        renderProcessWrapper.renderImageDisplay(windowSize);
+        try {
+            renderProcessWrapper.renderImageDisplay(windowSize);
+        } catch (const std::exception &e) {
+            std::cerr << e.what() << std::endl;
+            return 84;
+        }
     }
     else
     {
