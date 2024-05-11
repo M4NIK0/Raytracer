@@ -4,17 +4,29 @@
 
 #include "Factory.hpp"
 
-std::shared_ptr<raytracer::ILight> Factory::createLight(const std::string& type, libconfig::Setting& config)
+std::shared_ptr<raytracer::ILight> raytracer::Factory::createLight(const std::string& type, libconfig::Setting& config)
 {
     if (type == "point") {
         std::shared_ptr<raytracer::PointLight> pointLight = std::make_shared<raytracer::PointLight>();
         pointLight->parseData(config);
         return pointLight;
+    } else {
+        try {
+            std::string plugin = config["plugin"];
+            std::string light = "Light";
+            raytracer::LibHandler libHandler(plugin);
+            libHandler.openLib();
+            libHandler.getObject<raytracer::ILight>(light);
+            std::shared_ptr<raytracer::ILight> obj = libHandler.getObject<raytracer::ILight>(light);
+            obj->parseData(config);
+            return obj;
+        } catch (std::exception &e) {
+            throw Error("Cannot load plugin: " + std::string(e.what()));
+        }
     }
-    return nullptr;
 }
 
-std::shared_ptr<raytracer::IObject> Factory::createObject(const std::string& type, libconfig::Setting& config)
+std::shared_ptr<raytracer::IObject> raytracer::Factory::createObject(const std::string& type, libconfig::Setting& config)
 {
     if (type == "sphere") {
         std::shared_ptr<raytracer::Sphere> sphere = std::make_shared<raytracer::Sphere>();
@@ -32,6 +44,18 @@ std::shared_ptr<raytracer::IObject> Factory::createObject(const std::string& typ
         std::shared_ptr<raytracer::WavefontObject> wavefontObject = std::make_shared<raytracer::WavefontObject>(config["path"]);
         wavefontObject->parseData(config);
         return wavefontObject;
+    } else {
+        try {
+            std::string plugin = config["plugin"];
+            std::string object = "Object";
+            raytracer::LibHandler libHandler(plugin);
+            libHandler.openLib();
+            libHandler.getObject<raytracer::IObject>(object);
+            std::shared_ptr<raytracer::IObject> obj = libHandler.getObject<raytracer::IObject>(object);
+            obj->parseData(config);
+            return obj;
+        } catch (std::exception &e) {
+            throw Error("Cannot load plugin: " + std::string(e.what()));
+        }
     }
-    return nullptr;
 }

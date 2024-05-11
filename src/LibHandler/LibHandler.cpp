@@ -1,42 +1,42 @@
 /*
 ** EPITECH PROJECT, 2024
-** arcade
+** raytracer
 ** File description:
 ** LibHandler
 */
 
 #include "LibHandler.hpp"
 
-void arcade::LibHandler::openLib(void)
+void raytracer::LibHandler::openLib(void)
 {
     _openLib();
 }
 
-arcade::LibHandler::~LibHandler()
+raytracer::LibHandler::~LibHandler()
 {
     closeLib();
 }
 
-void arcade::LibHandler::closeLib(void)
+void raytracer::LibHandler::closeLib(void)
 {
     _closeLib();
 }
 
-bool arcade::LibHandler::checkSymbol(const std::string &symbol)
+bool raytracer::LibHandler::checkSymbol(const std::string &symbol)
 {
     return _checkSymbol(symbol);
 }
 
-void arcade::LibHandler::_openLib()
+void raytracer::LibHandler::_openLib()
 {
     _handle = dlopen(_path.c_str(), RTLD_LAZY);
 
     if (!_handle) {
-        throw arcade::LibHandler::Error("Cannot open library: " + std::string(dlerror()));
+        throw raytracer::LibHandler::Error("Cannot open library: " + std::string(dlerror()));
     }
 }
 
-void arcade::LibHandler::_closeLib()
+void raytracer::LibHandler::_closeLib()
 {
     if (_handle)
     {
@@ -45,7 +45,7 @@ void arcade::LibHandler::_closeLib()
     }
 }
 
-bool arcade::LibHandler::_checkSymbol(const std::string &symbol)
+bool raytracer::LibHandler::_checkSymbol(const std::string &symbol)
 {
     void *sym = dlsym(_handle, symbol.c_str());
 

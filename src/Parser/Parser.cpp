@@ -32,7 +32,7 @@ void Parser::parseObjects(raytracer::Renderer &renderer) {
         throw Parser::Error("Objects not found");
     libconfig::Setting& Objects = cfg->lookup("Objects");
 
-    Factory factory;
+    raytracer::Factory factory;
 
     for(int i = 0; i < Objects.getLength(); ++i) {
         libconfig::Setting& object = Objects[i];
@@ -41,7 +41,7 @@ void Parser::parseObjects(raytracer::Renderer &renderer) {
             throw Parser::Error("Object type not found");
         std::string type = object["type"];
 
-        std::shared_ptr<raytracer::IObject> obj = Factory::createObject(type, object);
+        std::shared_ptr<raytracer::IObject> obj = raytracer::Factory::createObject(type, object);
         if (obj != nullptr) {
             renderer.addObject(obj);
         }
@@ -61,7 +61,7 @@ void Parser::parseLights(raytracer::Renderer &renderer)
             throw Parser::Error("Light type not found");
         std::string type = light["type"];
 
-        std::shared_ptr<raytracer::ILight> obj = Factory::createLight(type, light);
+        std::shared_ptr<raytracer::ILight> obj = raytracer::Factory::createLight(type, light);
         if (obj != nullptr) {
             renderer.addLight(obj);
         }
