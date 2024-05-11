@@ -13,6 +13,7 @@
 #include "../Objects/Primitives/Triangle.hpp"
 #include "../Objects/Advanced/WavefontObject.hpp"
 #include "../Render/RenderProcessWrapper.hpp"
+#include "../Factory/Factory.hpp"
 
 class Parser{
     public:
