@@ -39,6 +39,7 @@ void raytracer::Editor::run()
     render();
     _displayImage();
 
+    changeResolution(_EditorCamera.width, _EditorCamera.height);
     while (_isRunning) {
         handleEvents();
         if (_EditorCamera.width != _renderer.camera.width) {
