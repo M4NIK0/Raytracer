@@ -44,6 +44,7 @@ void raytracer::PointLight::parseData(libconfig::Setting &config)
     try {
         libconfig::Setting &color = config["color"];
         _color = raytracer::Color(color[0], color[1], color[2]);
+        _color.normalize();
 
     } catch (libconfig::SettingNotFoundException &e) {
         throw Error("color not found");

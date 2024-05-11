@@ -10,6 +10,7 @@
 #include "../Light/Objects/PointLight.hpp"
 #include "../Objects/Primitives/Sphere.hpp"
 #include "../Objects/Primitives/Plane.hpp"
+#include "../Objects/Primitives/Triangle.hpp"
 
 class Parser{
     public:

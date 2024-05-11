@@ -42,6 +42,11 @@ void Parser::parseObjects(raytracer::Renderer &renderer) {
             raytracer::Plane plane;
             plane.parseData(object);
             renderer.addObject(std::make_shared<raytracer::Plane>(plane));
+        } else if (type == "triangle") {
+            raytracer::Triangle triangle;
+            triangle.parseData(object);
+            renderer.addObject(std::make_shared<raytracer::Triangle>(triangle));
+        }
         }
     }
 }
