@@ -20,49 +20,57 @@ ParseArg::ParseArg(int ac, char **av) : _imageSize(800, 600), _chunkSize(16, 16)
             displayHelp(av[0]);
         } else if (arg == "-is" && i + 2 < ac) {
             try {
-                _imageSize = std::make_pair(std::stoi(av[++i]), std::stoi(av[++i]));
+                _imageSize = std::make_pair(std::stoi(av[i + 1]), std::stoi(av[i + 2]));
+                i += 2;
             } catch (std::exception &e) {
                 throw Error("-is argument must be followed by two integers");
             }
         } else if (arg == "-cs" && i + 2 < ac) {
             try {
-                _chunkSize = std::make_pair(std::stoi(av[++i]), std::stoi(av[++i]));
+                _chunkSize = std::make_pair(std::stoi(av[i + 1]), std::stoi(av[i + 2]));
+                i += 2;
             } catch (std::exception &e) {
                 throw Error("-cs argument must be followed by two integers");
             }
         } else if (arg == "-t" && i + 1 < ac) {
             try {
-                _threads = std::stoi(av[++i]);
+                _threads = std::stoi(av[i + 1]);
+                i += 1;
             } catch (std::exception &e) {
                 throw Error("-t argument must be followed by an integer");
             }
         } else if (arg == "-ws" && i + 1 < ac) {
             try {
-                _windowSize = std::stoi(av[++i]);
+                _windowSize = std::stoi(av[i + 1]);
+                i += 1;
             } catch (std::exception &e) {
                 throw Error("-ws argument must be followed by an integer");
             }
         } else if (arg == "-s" && i + 1 < ac) {
             try {
-                _samples = std::stoi(av[++i]);
+                _samples = std::stoi(av[i + 1]);
+                i += 1;
             } catch (std::exception &e) {
                 throw Error("-s argument must be followed by an integer");
             }
         } else if (arg == "-b" && i + 1 < ac) {
             try {
-                _bounces = std::stoi(av[++i]);
+                _bounces = std::stoi(av[i + 1]);
+                i += 1;
             } catch (std::exception &e) {
                 throw Error("-b argument must be followed by an integer");
             }
         } else if (arg == "-dr" && i + 1 < ac) {
             try {
-                _diffusionRays = std::stoi(av[++i]);
+                _diffusionRays = std::stoi(av[i + 1]);
+                i += 1;
             } catch (std::exception &e) {
                 throw Error("-dr argument must be followed by an integer");
             }
         } else if (arg == "-rr" && i + 1 < ac) {
             try {
-                _reflectionRays = std::stoi(av[++i]);
+                _reflectionRays = std::stoi(av[i + 1]);
+                i += 1;
             } catch (std::exception &e) {
                 throw Error("-rr argument must be followed by an integer");
             }
