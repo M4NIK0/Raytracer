@@ -3,6 +3,7 @@
 //
 
 #include "Parser.hpp"
+#include <fstream>
 
 Parser::Parser() {
     cfg = new libconfig::Config();
@@ -13,6 +14,11 @@ Parser::~Parser() {
 }
 
 void Parser::parseConfig(const char* path) {
+    std::ifstream infile(path);
+    if (!infile.good()) {
+        throw Error("File does not exist: " + std::string(path));
+    }
+
     try {
         cfg->readFile(path);
     } catch (const libconfig::FileIOException &fioex) {

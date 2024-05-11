@@ -39,7 +39,7 @@ ParseArg::ParseArg(int ac, char **av) : _imageSize(800, 600), _chunkSize(16, 16)
         } else if (arg == "-ne") {
             _ne = true;
         } else {
-            std::cerr << "Unrecognized argument: " << arg << std::endl;
+            throw Error("Unrecognized argument");
         }
     }
 }
