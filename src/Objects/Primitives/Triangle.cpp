@@ -180,3 +180,112 @@ raytracer::Point3D raytracer::Triangle::getCenter() const
 
     return center;
 }
+
+void raytracer::Triangle::parseData(libconfig::Setting &config)
+{
+try {
+        libconfig::Setting &a = config["a"];
+        _a = raytracer::Point3D(a["x"], a["y"], a["z"]);
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Error("a not found");
+    } catch (libconfig::SettingTypeException &e) {
+        throw Error("a need to be an array of double");
+    }
+
+    try {
+        libconfig::Setting &b = config["b"];
+        _b = raytracer::Point3D(b["x"], b["y"], b["z"]);
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Error("b not found");
+    } catch (libconfig::SettingTypeException &e) {
+        throw Error("b need to be an array of double");
+    }
+
+    try {
+        libconfig::Setting &c = config["c"];
+        _c = raytracer::Point3D(c["x"], c["y"], c["z"]);
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Error("c not found");
+    } catch (libconfig::SettingTypeException &e) {
+        throw Error("c need to be an array of double");
+    }
+
+    try {
+        libconfig::Setting &color = config["color"];
+        _surfaceAbsorbtion.r = (255.0 - (double)color[0]) / 255.0;
+        _surfaceAbsorbtion.g = (255.0 - (double)color[1]) / 255.0;
+        _surfaceAbsorbtion.b = (255.0 - (double)color[2]) / 255.0;
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Error("color not found");
+    } catch (libconfig::SettingTypeException &e) {
+        throw Error("color need to be an array of double");
+    }
+
+    try {
+        libconfig::Setting &surfaceRoughness = config["surfaceRoughness"];
+        _surfaceRoughness = surfaceRoughness;
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Error("surfaceRoughness not found");
+    } catch (libconfig::SettingTypeException &e) {
+        throw Error("surfaceRoughness need to be a double");
+    }
+
+    try {
+        libconfig::Setting &volumeAbsorbtion = config["volumeAbsorbtion"];
+        _volumeAbsorbtion = raytracer::Color(volumeAbsorbtion[0], volumeAbsorbtion[1], volumeAbsorbtion[2]);
+        _volumeAbsorbtion.normalize();
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Error("volumeAbsorbtion not found");
+    } catch (libconfig::SettingTypeException &e) {
+        throw Error("volumeAbsorbtion need to be an array of double");
+    }
+
+    try {
+        _reflexionIndex = config["reflexion"];
+        if (_reflexionIndex < 0 || _reflexionIndex > 1)
+            throw Error("reflexion must be between 0 and 1");
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Error("reflexion is missing");
+    } catch (libconfig::SettingTypeException &e) {
+        throw Error("reflexion must be a double");
+    }
+
+    try {
+        _emissionColor = raytracer::Color(config["emissionColor"][0], config["emissionColor"][1], config["emissionColor"][2]);
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Error("emissionColor not found");
+    } catch (libconfig::SettingTypeException &e) {
+        throw Error("emissionColor must be an array of double");
+    }
+
+    try {
+        _rotation = raytracer::Vector3D(config["rotation"][0], config["rotation"][1], config["rotation"][2]);
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Error("rotation not found");
+    } catch (libconfig::SettingTypeException &e) {
+        throw Error("rotation must be an array of double");
+    }
+
+    try {
+        _rotationStep = raytracer::Vector3D(config["rotationSpeed"][0], config["rotationSpeed"][1], config["rotationSpeed"][2]);
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Error("rotationSpeed not found");
+    } catch (libconfig::SettingTypeException &e) {
+        throw Error("rotationSpeed must be an array of double");
+    }
+
+    try {
+        _translation = raytracer::Vector3D(config["translation"][0], config["translation"][1], config["translation"][2]);
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Error("translation not found");
+    } catch (libconfig::SettingTypeException &e) {
+        throw Error("translation must be an array of double");
+    }
+
+    try {
+        _translationStep = raytracer::Vector3D(config["translationSpeed"][0], config["translationSpeed"][1], config["translationSpeed"][2]);
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Error("translationSpeed not found");
+    } catch (libconfig::SettingTypeException &e) {
+        throw Error("translationSpeed must be an array of double"); }
+}

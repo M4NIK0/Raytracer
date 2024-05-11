@@ -8,6 +8,7 @@
 #pragma once
 
 #include "../IObject.hpp"
+#include <libconfig.h++>
 
 namespace raytracer
 {
@@ -17,6 +18,21 @@ namespace raytracer
             Sphere();
             Sphere(raytracer::Point3D pos, double r, Color surfaceReflexion) : _radius(r), _position(pos),
                                                                                _positionBackup(pos), _surfaceAbsorbtion(surfaceReflexion), _volumeAbsorbtion(Color(0, 0, 0)), _emissionColor(Color(0, 0, 0)) {}
+            class Error : public std::exception
+            {
+                public:
+                    Error(std::string const &message) :
+                            _message(message) {};
+
+                    const char *what() const noexcept override
+                    {
+                        return _message.c_str();
+                    }
+
+                private:
+                    std::string _message;
+            };
+
             ~Sphere();
 
             Point3D hit(const Ray3D &ray) override;
@@ -54,6 +70,7 @@ namespace raytracer
             void stepMotion() override;
 
             Point3D getCenter() const override;
+            void parseData(libconfig::Setting &config) override;
 
         private:
             double _radius;

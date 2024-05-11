@@ -149,3 +149,79 @@ raytracer::Point3D raytracer::Plane::getCenter() const
 {
     return _position;
 }
+
+void raytracer::Plane::parseData(libconfig::Setting &config)
+{
+    try {
+        _position = {config["position"][0], config["position"][1], config["position"][2]};
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Error("position not found");
+    } catch (libconfig::SettingTypeException &e) {
+        throw Error("position must be an array of 3 double");
+    }
+
+    try {
+        _normal = {config["normal"][0], config["normal"][1], config["normal"][2]};
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Error("normal not found");
+    } catch (libconfig::SettingTypeException &e) {
+        throw Error("normal must be an array of 3 double"); }
+
+    try {
+        _translation = {config["translation"][0], config["translation"][1], config["translation"][2]};
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Error("translation not found");
+    } catch (libconfig::SettingTypeException &e) {
+        throw Error("translation must be an array of 3 double");
+    }
+
+    try {
+        _translationStep = {config["translationSpeed"][0], config["translationSpeed"][1], config["translationSpeed"][2]};
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Error("translationSpeed not found");
+    } catch (libconfig::SettingTypeException &e) {
+        throw Error("translationSpeed must be an array of 3 double");
+    }
+
+    try {
+        _emissionColor = {config["emission"][0], config["emission"][1], config["emission"][2]};
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Error("emission not found");
+    } catch (libconfig::SettingTypeException &e) {
+        throw Error("emission must be an array of 3 double");
+    }
+
+    try {
+        _emissionIntensity = config["emissionIntensity"];
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Error("emissionIntensity not found");
+    } catch (libconfig::SettingTypeException &e) {
+        throw Error("emissionIntensity must be a double");
+    }
+
+    try {
+        _reflexionIndex = config["reflexionIndex"];
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Error("reflexionIndex not found");
+    } catch (libconfig::SettingTypeException &e) {
+        throw Error("reflexionIndex must be a double");
+    }
+
+    try {
+        _surfaceRoughness = config["roughness"];
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Error("roughness not found");
+    } catch (libconfig::SettingTypeException &e) {
+        throw Error("roughness must be a double");
+    }
+    try {
+        libconfig::Setting& color = config["color"];
+        _surfaceAbsorbtion.r = (255.0 - (double)color[0]) / 255.0;
+        _surfaceAbsorbtion.g = (255.0 - (double)color[1]) / 255.0;
+        _surfaceAbsorbtion.b = (255.0 - (double)color[2]) / 255.0;
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Error("color not found");
+    } catch (libconfig::SettingTypeException &e) {
+        throw Error("color must be an array of 3 double");
+    }
+}

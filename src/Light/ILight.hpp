@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include <libconfig.h++>
 #include "../sfml/sfml.hpp"
 #include "../Math/Point3D.hpp"
 #include "../Math/Ray3D.hpp"
@@ -27,5 +28,7 @@ namespace raytracer
 
             virtual void setPosition(const Point3D &position) = 0;
             virtual void move(Vector3D vec) = 0;
+
+            virtual void parseData(libconfig::Setting &config) = 0;
     };
 }

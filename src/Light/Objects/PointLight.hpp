@@ -14,7 +14,21 @@ namespace raytracer
     class PointLight : public ILight
     {
         public:
-            PointLight(Color color, Point3D position, double intensity = 1) : _color(color), _intensity(intensity), _position(position) {_color.normalize();};
+            class Error : public std::exception
+            {
+                public:
+                    Error(std::string const &message) noexcept
+                        : _message(message) {}
+
+                    const char *what() const noexcept override
+                    {
+                        return _message.c_str();
+                    }
+
+                private:
+                    std::string _message;
+            };
+            PointLight(): _color({255, 255, 255}), _intensity(1), _position(Point3D(0,0,0)) {_color.normalize();}
             ~PointLight();
 
             std::vector<Ray3D> getLightRays(const Point3D &hitPoint) override;
@@ -30,6 +44,8 @@ namespace raytracer
             void setPosition(const Point3D &position) override { _position = position; }
 
             void move(Vector3D vec) override { _position = _position + vec; }
+
+            void parseData(libconfig::Setting &config) override;
 
         private:
             Color _color;
