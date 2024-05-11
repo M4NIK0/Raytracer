@@ -9,18 +9,23 @@
 
 raytracer::Editor::Editor(Renderer &renderer, int windowSize) : _EditorCamera(renderer.camera), _rendererCamera(renderer.camera), _EditorData(renderer.renderData), _rendererData(renderer.renderData), _renderer(renderer), _display(sfml())
 {
-    if (windowSize > 0)
-    {
-        int maxSize = std::max(_renderer.camera.width, _renderer.camera.height);
-        double realWidth = (double) _renderer.camera.width / (double) maxSize;
-        double realHeight = (double) _renderer.camera.height / (double) maxSize;
-
-        _display.initImage(_renderer.camera.width, _renderer.camera.height);
-        _display.initWindow((int) (realWidth * windowSize), (int) (realHeight * windowSize));
-    }
+    int maxSize = std::max(_renderer.camera.width, _renderer.camera.height);
+    double realWidth = (double) _renderer.camera.width / (double) maxSize;
+    double realHeight = (double) _renderer.camera.height / (double) maxSize;
 
     _rendererCamera = _renderer.camera;
     _EditorCamera = _renderer.camera;
+    _EditorCamera.width = (double)128 * realWidth;
+    _EditorCamera.height = (double)128 * realHeight;
+
+    _EditorData.width = _EditorCamera.width;
+    _EditorData.height = _EditorCamera.height;
+
+    if (windowSize > 0)
+    {
+        _display.initImage(_EditorData.width, _EditorData.height);
+        _display.initWindow((int) (realWidth * windowSize), (int) (realHeight * windowSize));
+    }
 
     _initImage();
 }
@@ -36,7 +41,7 @@ void raytracer::Editor::run()
 
     while (_isRunning) {
         handleEvents();
-        if (_rendererCamera.width != _renderer.camera.width) {
+        if (_EditorCamera.width != _renderer.camera.width) {
             render();
             _displayImage();
         }
@@ -88,60 +93,60 @@ void raytracer::Editor::handleEvents()
 
 void raytracer::Editor::handleKeyboardEvents(int event)
 {
-    int decreaseRes = 32;
+    int decreaseRes = 16;
     if (event == 3) {
         _renderer.camera.move(Vector3D(0, 0, -0.1));
-        changeResolution(_rendererCamera.width / decreaseRes, _rendererCamera.height / decreaseRes);
+        changeResolution(_EditorCamera.width / decreaseRes, _EditorCamera.height / decreaseRes);
     }
     if (event == 2) {
         _renderer.camera.move(Vector3D(0, 0, 0.1));
-        changeResolution(_rendererCamera.width / decreaseRes, _rendererCamera.height / decreaseRes);
+        changeResolution(_EditorCamera.width / decreaseRes, _EditorCamera.height / decreaseRes);
     }
     if (event == 4) {
         _renderer.camera.move(Vector3D(-0.1, 0, 0));
-        changeResolution(_rendererCamera.width / decreaseRes, _rendererCamera.height / decreaseRes);
+        changeResolution(_EditorCamera.width / decreaseRes, _EditorCamera.height / decreaseRes);
     }
     if (event == 5) {
         _renderer.camera.move(Vector3D(0.1, 0, 0));
-        changeResolution(_rendererCamera.width / decreaseRes, _rendererCamera.height / decreaseRes);
+        changeResolution(_EditorCamera.width / decreaseRes, _EditorCamera.height / decreaseRes);
     }
     if (event == 6) {
         _renderer.camera.move(Vector3D(0, -0.1, 0));
-        changeResolution(_rendererCamera.width / decreaseRes, _rendererCamera.height / decreaseRes);
+        changeResolution(_EditorCamera.width / decreaseRes, _EditorCamera.height / decreaseRes);
     }
     if (event == 7) {
         _renderer.camera.move(Vector3D(0, 0.1, 0));
-        changeResolution(_rendererCamera.width / decreaseRes, _rendererCamera.height / decreaseRes);
+        changeResolution(_EditorCamera.width / decreaseRes, _EditorCamera.height / decreaseRes);
     }
     if (event == 15) {
         _renderer.camera.rotate(Vector3D(-0.5, 0, 0));
-        changeResolution(_rendererCamera.width / decreaseRes, _rendererCamera.height / decreaseRes);
+        changeResolution(_EditorCamera.width / decreaseRes, _EditorCamera.height / decreaseRes);
     }
     if (event == 14) {
         _renderer.camera.rotate(Vector3D(0.5, 0, 0));
-        changeResolution(_rendererCamera.width / decreaseRes, _rendererCamera.height / decreaseRes);
+        changeResolution(_EditorCamera.width / decreaseRes, _EditorCamera.height / decreaseRes);
     }
     if (event == 13) {
         _renderer.camera.rotate(Vector3D(0, 0, -0.5));
-        changeResolution(_rendererCamera.width / decreaseRes, _rendererCamera.height / decreaseRes);
+        changeResolution(_EditorCamera.width / decreaseRes, _EditorCamera.height / decreaseRes);
     }
     if (event == 12) {
         _renderer.camera.rotate(Vector3D(0, 0, 0.5));
-        changeResolution(_rendererCamera.width / decreaseRes, _rendererCamera.height / decreaseRes);
+        changeResolution(_EditorCamera.width / decreaseRes, _EditorCamera.height / decreaseRes);
     }
     if (event == 11) {
         _renderer.camera.rotate(Vector3D(0, -0.5, 0));
-        changeResolution(_rendererCamera.width / decreaseRes, _rendererCamera.height / decreaseRes);
+        changeResolution(_EditorCamera.width / decreaseRes, _EditorCamera.height / decreaseRes);
     }
     if (event == 10) {
         _renderer.camera.rotate(Vector3D(0, 0.5, 0));
-        changeResolution(_rendererCamera.width / decreaseRes, _rendererCamera.height / decreaseRes);
+        changeResolution(_EditorCamera.width / decreaseRes, _EditorCamera.height / decreaseRes);
     }
     if (event == 0)
-        if (_renderer.camera.width < _rendererCamera.width && _renderer.camera.height < _rendererCamera.height)
+        if (_renderer.camera.width < _EditorCamera.width && _renderer.camera.height < _EditorCamera.height)
             changeResolution(_renderer.camera.width + 20, _renderer.camera.height + 10);
         else
-            changeResolution(_rendererCamera.width, _rendererCamera.height);
+            changeResolution(_EditorData.width, _EditorData.height);
 }
 
 void raytracer::Editor::handleMouseEvents(int event)
