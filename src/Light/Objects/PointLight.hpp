@@ -29,7 +29,6 @@ namespace raytracer
                     std::string _message;
             };
             PointLight(): _color({255, 255, 255}), _intensity(1), _position(Point3D(0,0,0)) {_color.normalize();}
-            PointLight(Color color, Point3D position, double intensity = 1) : _color(color), _position(position), _intensity(intensity) {_color.normalize();};
             ~PointLight();
 
             std::vector<Ray3D> getLightRays(const Point3D &hitPoint) override;

@@ -11,6 +11,7 @@
 #include "../Primitives/Triangle.hpp"
 #include "../Primitives/Sphere.hpp"
 #include "../../Render/RenderPoint.hpp"
+#include "../../Math/Matrix.hpp"
 
 namespace raytracer
 {

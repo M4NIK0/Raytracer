@@ -32,6 +32,8 @@ namespace raytracer
             Matrix operator=(const Matrix& other);
             Matrix operator=(const std::vector<std::vector<double>>& other);
 
+            std::vector<double>& operator[](std::size_t index) { return matrix[index]; }
+
             class Error : public std::exception
             {
                 public:

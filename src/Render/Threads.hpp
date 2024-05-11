@@ -16,6 +16,7 @@ namespace raytracer
     class Threads
     {
         public:
+            Threads();
             class Error : public std::exception
             {
                 public:
@@ -34,12 +35,11 @@ namespace raytracer
             Threads(Renderer &renderer);
             ~Threads();
 
-            void startThreads(size_t nbThreads, int chunkWidth, int chunkHeight);
+            void startThreads(size_t nbThreads, int chunkWidth, int chunkHeight, Renderer &renderer);
             void stopThreads();
             size_t getRemainingChunks() { return _chunks.size(); }
 
         private:
-            Renderer &_renderer;
             std::vector<Chunk> _chunks;
             std::vector<std::thread> _threads;
             std::mutex _chunksMutex;

@@ -10,6 +10,7 @@
 #include <utility>
 #include <iostream>
 #include "Vector3D.hpp"
+#include "Matrix.hpp"
 
 namespace raytracer
 {
@@ -33,5 +34,6 @@ namespace raytracer
             bool operator==(const Point3D& other) const { return x == other.x && y == other.y && z == other.z; }
 
             static double distance(Point3D a, Point3D b) { return (a - b).length(); }
+            static Point3D rotateAroundCenter(Point3D &point, Point3D &center, double rx, double ry, double rz);
     };
 }

@@ -98,6 +98,11 @@ void raytracer::Triangle::move(raytracer::Vector3D vec)
 
 void raytracer::Triangle::rotate(raytracer::Vector3D vec)
 {
+    Point3D center = getCenter();
+
+    _a = Point3D::rotateAroundCenter(_a, center, vec.x, vec.y, vec.z);
+    _b = Point3D::rotateAroundCenter(_b, center, vec.x, vec.y, vec.z);
+    _c = Point3D::rotateAroundCenter(_c, center, vec.x, vec.y, vec.z);
 }
 
 bool raytracer::Triangle::getGlassState(const raytracer::Point3D &point)
