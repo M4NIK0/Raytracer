@@ -20,14 +20,23 @@ namespace raytracer
             ~RenderProcessWrapper();
 
             void renderImageDisplay(int windowSize = 800);
-
             void renderImageCLI();
 
+            // Mediator methods
+            void startThreads();
+            void stopThreads();
+            void initMotions();
+            void stepMotions();
+            void resetMotions();
+            void drawPixel(int x, int y, Color color);
+            void displayScreen();
+            void endWindow();
+
+        private:
             Renderer renderer;
             Threads threads;
             sfml display;
 
-        private:
             int _width, _height;
             size_t _nbThreads;
     };
