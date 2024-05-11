@@ -84,7 +84,7 @@ void raytracer::Editor::handleEvents()
 
 void raytracer::Editor::handleKeyboardEvents(int event)
 {
-    int decreaseRes = 4;
+    int decreaseRes = 32;
     if (event == 3) {
         _renderer.camera.move(Vector3D(0, 0, -0.1));
         changeResolution(_rendererCamera.width / decreaseRes, _rendererCamera.height / decreaseRes);

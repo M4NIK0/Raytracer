@@ -44,7 +44,7 @@ int main(int ac, char **av)
 
     renderProcessWrapper.initRenderData(chunkSizeX, chunkSizeY, maxSamples);
 
-    raytracer::Editor editor(renderProcessWrapper.renderer, 800);
+    raytracer::Editor editor(renderProcessWrapper.renderer, 1024);
     editor.run();
 
     renderProcessWrapper.renderImageDisplay(1024);
