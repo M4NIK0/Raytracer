@@ -66,10 +66,20 @@ int main(int ac, char **av)
 
     renderProcessWrapper.initRenderData(chunkSizeX, chunkSizeY, maxSamples);
 
-    raytracer::Editor editor(renderProcessWrapper.renderer, 1024);
-    editor.run();
+    if (!cli)
+    {
+        if (!ne)
+        {
+            raytracer::Editor editor(renderProcessWrapper.renderer, windowSize);
+            editor.run();
+        }
 
-    renderProcessWrapper.renderImageDisplay(1024);
+        renderProcessWrapper.renderImageDisplay(windowSize);
+    }
+    else
+    {
+        renderProcessWrapper.renderImageCLI();
+    }
 
     // Create PPM Output
     raytracer::PPMOutput output(outputFile, width, height);
