@@ -24,7 +24,8 @@ class ParseArg {
         private:
             std::string _message;
         };
-        ParseArg(int ac, char** av);
+        ParseArg();
+        void ParseArgument(int ac, char **av);
         ~ParseArg() = default;
         static void displayHelp(const std::string& name);
         std::pair<int, int> getImageSize() const { return _imageSize; }

@@ -7,7 +7,11 @@
 #include "ParseArg.hpp"
 
 
-ParseArg::ParseArg(int ac, char **av) : _imageSize(800, 600), _chunkSize(16, 16), _threads(1), _samples(3), _bounces(2), _diffusionRays(1), _reflectionRays(1), _cli(false), _ne(false)
+ParseArg::ParseArg() : _imageSize(800, 600), _chunkSize(16, 16), _threads(1), _samples(3), _bounces(2), _diffusionRays(1), _reflectionRays(1), _cli(false), _ne(false)
+{
+}
+
+void ParseArg::ParseArgument(int ac, char **av)
 {
     if (ac < 3) {
         displayHelp(av[0]);

@@ -10,7 +10,8 @@
 
 int main(int ac, char **av)
 {
-    ParseArg parseArg(ac, av);
+    ParseArg parseArg;
+    parseArg.ParseArgument(ac, av);
 
     std::string configFile = parseArg.getConfigFile();
     std::string outputFile = parseArg.getOutputFile();
