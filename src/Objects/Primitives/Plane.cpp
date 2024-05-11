@@ -216,9 +216,9 @@ void raytracer::Plane::parseData(libconfig::Setting &config)
     }
     try {
         libconfig::Setting& color = config["color"];
-        _surfaceAbsorbtion.r = (255.0 - (double)color[0]) / 255.0;
-        _surfaceAbsorbtion.g = (255.0 - (double)color[1]) / 255.0;
-        _surfaceAbsorbtion.b = (255.0 - (double)color[2]) / 255.0;
+        _surfaceAbsorbtion.r = ((double)color[0]) / 255.0;
+        _surfaceAbsorbtion.g = ((double)color[1]) / 255.0;
+        _surfaceAbsorbtion.b = ((double)color[2]) / 255.0;
     } catch (libconfig::SettingNotFoundException &e) {
         throw Error("color not found");
     } catch (libconfig::SettingTypeException &e) {
