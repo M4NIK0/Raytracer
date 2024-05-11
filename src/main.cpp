@@ -43,10 +43,11 @@ int main(int ac, char **av)
     parser.parseScene(width, height, renderProcessWrapper);
 
     renderProcessWrapper.initRenderData(chunkSizeX, chunkSizeY, maxSamples);
-    renderProcessWrapper.renderImageDisplay(1024);
 
     raytracer::Editor editor(renderProcessWrapper.renderer, 800);
     editor.run();
+
+    renderProcessWrapper.renderImageDisplay(1024);
 
     // Create PPM Output
     raytracer::PPMOutput output("./output.ppm", width, height);
