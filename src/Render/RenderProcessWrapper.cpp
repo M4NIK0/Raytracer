@@ -18,6 +18,7 @@ raytracer::RenderProcessWrapper::~RenderProcessWrapper() = default;
 
 void raytracer::RenderProcessWrapper::renderImageDisplay(int windowSize)
 {
+    display = std::make_unique<sfml>();
     renderer.renderData.initRenderBuffer();
 
     if (windowSize > 0)
@@ -26,8 +27,8 @@ void raytracer::RenderProcessWrapper::renderImageDisplay(int windowSize)
         double realWidth = (double) _width / (double) maxSize;
         double realHeight = (double) _height / (double) maxSize;
 
-        display.initImage(_width, _height);
-        display.initWindow((int) (realWidth * windowSize), (int) (realHeight * windowSize));
+        display->initImage(_width, _height);
+        display->initWindow((int) (realWidth * windowSize), (int) (realHeight * windowSize));
     }
 
     auto begin = std::chrono::steady_clock::now();
@@ -52,20 +53,20 @@ void raytracer::RenderProcessWrapper::renderImageDisplay(int windowSize)
                     raytracer::Color color = renderer.renderData.renderBuffer[x][y];
                     color = color * renderer.camera.sensitivity;
                     color.cap();
-                    display.drawPixel(x, y, color);
+                    display->drawPixel(x, y, color);
                 }
             }
-            int event = display.getEvent();
+            int event = display->getEvent();
             if (event == 1)
             {
                 threads.stopThreads();
-                display.endWindow();
+                display->endWindow();
                 return;
             }
-            display.displayScreen();
+            display->displayScreen();
         }
 
-        display.displayScreen();
+        display->displayScreen();
         threads.stopThreads();
 
         renderer.stepMotions();
@@ -81,7 +82,7 @@ void raytracer::RenderProcessWrapper::renderImageDisplay(int windowSize)
             color = color * renderer.camera.sensitivity;
             color.cap();
             renderer.renderData.renderBuffer[x][y] = color;
-            display.drawPixel(x, y, color);
+            display->drawPixel(x, y, color);
         }
     }
 
@@ -92,15 +93,15 @@ void raytracer::RenderProcessWrapper::renderImageDisplay(int windowSize)
     while (loop)
     {
 
-        int event = display.getEvent();
+        int event = display->getEvent();
         if (event == 1)
         {
             loop = false;
         }
-        display.displayScreen();
+        display->displayScreen();
     }
 
-    display.endWindow();
+    display->endWindow();
 }
 
 void raytracer::RenderProcessWrapper::renderImageCLI()
@@ -171,17 +172,17 @@ void raytracer::RenderProcessWrapper::resetMotions()
 
 void raytracer::RenderProcessWrapper::drawPixel(int x, int y, Color color)
 {
-    display.drawPixel(x, y, color);
+    display->drawPixel(x, y, color);
 }
 
 void raytracer::RenderProcessWrapper::displayScreen()
 {
-    display.displayScreen();
+    display->displayScreen();
 }
 
 void raytracer::RenderProcessWrapper::endWindow()
 {
-    display.endWindow();
+    display->endWindow();
 }
 
 void raytracer::RenderProcessWrapper::initCamera(int sensibility, int exposure, Point3D position, Vector3D rotation)
