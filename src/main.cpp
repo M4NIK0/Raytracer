@@ -14,8 +14,8 @@ int main(int ac, char **av)
 
     std::string configFile = parseArg.getConfigFile();
     std::string outputFile = parseArg.getOutputFile();
-    int width = parseArg.getImageSize().second;
-    int height = parseArg.getImageSize().first;
+    int width = parseArg.getImageSize().first;
+    int height = parseArg.getImageSize().second;
     int chunkSizeX = parseArg.getChunkSize().first;
     int chunkSizeY = parseArg.getChunkSize().second;
     int windowSize = parseArg.getWindowSize();
