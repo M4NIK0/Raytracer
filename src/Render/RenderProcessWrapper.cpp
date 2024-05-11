@@ -10,16 +10,6 @@
 
 raytracer::RenderProcessWrapper::RenderProcessWrapper(int width, int height, size_t nbThreads): renderer(Renderer(Camera(width, height))), threads(Threads()), _width(width), _height(height), _nbThreads(nbThreads)
 {
-    std::cout << "RenderProcessWrapper created" << std::endl;
-    for (auto &object : renderer.renderData.objects)
-    {
-        std::cout << "Object added" << std::endl;
-    }
-    for (auto &light : renderer.renderData.lights)
-    {
-        std::cout << "Light added" << std::endl;
-    }
-
     renderer.renderData.width = width;
     renderer.renderData.height = height;
 }

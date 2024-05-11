@@ -1,56 +1,66 @@
-#include <iostream>
 #include "Render/Camera.hpp"
 #include "Objects/Primitives/Sphere.hpp"
-#include "Objects/Primitives/Plane.hpp"
-#include "Objects/Primitives/Cube.hpp"
 #include "Objects/Advanced/WavefontObject.hpp"
-
 #include "Render/Editor/Editor.hpp"
 #include "sfml/sfml.hpp"
 #include "Render/RenderProcessWrapper.hpp"
-#include "Light/Objects/PointLight.hpp"
-
-#define WIDTH 640
-#define HEIGHT 360
-
-#define CHUNK_SIZE_X 16
-#define CHUNK_SIZE_Y 16
-
-#define MAX_SAMPLES 1
-
-#define MAX_THREADS 8
-
-#include <chrono>
-#include "Render/Threads.hpp"
 #include "Output/PPMOutput.hpp"
 #include "Parser/Parser.hpp"
+#include "Parser/ParseArg.hpp"
 
 int main(int ac, char **av)
 {
-    int width = WIDTH;
-    int height = HEIGHT;
-    int chunkSizeX = CHUNK_SIZE_X;
-    int chunkSizeY = CHUNK_SIZE_Y;
-    int maxSamples = MAX_SAMPLES;
-    int threads = MAX_THREADS;
+    ParseArg parseArg;
+    try {
+        parseArg.ParseArgument(ac, av);
+    } catch (const std::exception &e) {
+        std::cerr << e.what() << std::endl;
+        return 84;
+    }
 
-    std::string path = "info.txt";
+    std::string configFile = parseArg.getConfigFile();
+    std::string outputFile = parseArg.getOutputFile();
+    int width = parseArg.getImageSize().first;
+    int height = parseArg.getImageSize().second;
+    int chunkSizeX = parseArg.getChunkSize().first;
+    int chunkSizeY = parseArg.getChunkSize().second;
+    int windowSize = parseArg.getWindowSize();
+    int threads = parseArg.getThreads();
+    int maxSamples = parseArg.getSamples();
+    int bounces = parseArg.getBounces();
+    int diffusionRays = parseArg.getDiffusionRays();
+    int reflectionRays = parseArg.getReflectionRays();
+    bool cli = parseArg.isCli();
+    bool ne = parseArg.isNe();
 
     raytracer::RenderProcessWrapper renderProcessWrapper(width, height, threads);
+    renderProcessWrapper.renderer.renderData.maxBounces = bounces;
+    renderProcessWrapper.renderer.renderData.diffuseRays = diffusionRays;
+    renderProcessWrapper.renderer.renderData.reflexionsRays = reflectionRays;
 
     Parser parser;
-    parser.parseConfig(path.c_str());
+    parser.parseConfig(configFile.c_str());
     parser.parseScene(width, height, renderProcessWrapper);
 
     renderProcessWrapper.initRenderData(chunkSizeX, chunkSizeY, maxSamples);
 
-    raytracer::Editor editor(renderProcessWrapper.renderer, 1024);
-    editor.run();
+    if (!cli)
+    {
+        if (!ne)
+        {
+            raytracer::Editor editor(renderProcessWrapper.renderer, windowSize);
+            editor.run();
+        }
 
-    renderProcessWrapper.renderImageDisplay(1024);
+        renderProcessWrapper.renderImageDisplay(windowSize);
+    }
+    else
+    {
+        renderProcessWrapper.renderImageCLI();
+    }
 
     // Create PPM Output
-    raytracer::PPMOutput output("./output.ppm", width, height);
+    raytracer::PPMOutput output(outputFile, width, height);
     for (int y = 0; y < height; y++)
     {
         for (int x = 0; x < width; x++)

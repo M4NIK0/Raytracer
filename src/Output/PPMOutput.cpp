@@ -55,7 +55,7 @@ void raytracer::PPMOutput::writeToFile()
         return;
     }
 
-    std::cout << "File successfully written at : " << std::filesystem::current_path() << _filename << std::endl;
+    std::cout << "File successfully written at : " << _filename << std::endl;
 }
 
 void raytracer::PPMOutput::writePixels(std::ofstream &file)
