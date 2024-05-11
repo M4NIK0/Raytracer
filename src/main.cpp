@@ -5,6 +5,7 @@
 #include "Objects/Primitives/Cube.hpp"
 #include "Objects/Advanced/WavefontObject.hpp"
 
+#include "Render/Editor/Editor.hpp"
 #include "sfml/sfml.hpp"
 #include "Render/RenderProcessWrapper.hpp"
 #include "Light/Objects/PointLight.hpp"
@@ -42,6 +43,10 @@ int main(int ac, char **av)
     parser.parseScene(width, height, renderProcessWrapper);
 
     renderProcessWrapper.initRenderData(chunkSizeX, chunkSizeY, maxSamples);
+
+    raytracer::Editor editor(renderProcessWrapper.renderer, 1024);
+    editor.run();
+
     renderProcessWrapper.renderImageDisplay(1024);
 
     // Create PPM Output

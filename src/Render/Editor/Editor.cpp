@@ -2,15 +2,12 @@
 ** EPITECH PROJECT, 2024
 ** Raytracer
 ** File description:
-** editor
+** Editor
 */
 
 #include "Editor.hpp"
 
-raytracer::editor::editor(Renderer renderer, sfml *display) : _editorCamera(renderer.camera), _rendererCamera(renderer.camera), _editorData(renderer.renderData), _rendererData(renderer.renderData), _renderer(renderer), _display(display)
-{}
-
-void raytracer::editor::run(int windowSize)
+raytracer::Editor::Editor(Renderer &renderer, int windowSize) : _EditorCamera(renderer.camera), _rendererCamera(renderer.camera), _EditorData(renderer.renderData), _rendererData(renderer.renderData), _renderer(renderer), _display(sfml())
 {
     if (windowSize > 0)
     {
@@ -18,27 +15,44 @@ void raytracer::editor::run(int windowSize)
         double realWidth = (double) _renderer.camera.width / (double) maxSize;
         double realHeight = (double) _renderer.camera.height / (double) maxSize;
 
-        _display->initImage(_renderer.camera.width, _renderer.camera.height);
-        _display->initWindow((int) (realWidth * windowSize), (int) (realHeight * windowSize));
+        _display.initImage(_renderer.camera.width, _renderer.camera.height);
+        _display.initWindow((int) (realWidth * windowSize), (int) (realHeight * windowSize));
     }
 
-    auto begin = std::chrono::steady_clock::now();
+    _rendererCamera = _renderer.camera;
+    _EditorCamera = _renderer.camera;
 
-    _renderer.initMotions();
-    _display->initWindow(800, 600);
-    while (_isRunning) {
-        handleEvents();
-        render();
-    }
+    _initImage();
 }
 
-void raytracer::editor::render()
+void raytracer::Editor::run()
+{
+    auto begin = std::chrono::steady_clock::now();
+
+    _rendererCamera = _renderer.camera;
+    _renderer.camera = _EditorCamera;
+    render();
+    _displayImage();
+
+    while (_isRunning) {
+        handleEvents();
+        if (_rendererCamera.width != _renderer.camera.width) {
+            render();
+            _displayImage();
+        }
+    }
+
+    _EditorCamera = _renderer.camera;
+    _renderer.camera = _rendererCamera;
+}
+
+void raytracer::Editor::render()
 {
     double maxColor = 0;
 
-    for (int i = 0; i < _editorData.width; i++)
+    for (int i = 0; i < _EditorData.width; i++)
     {
-        for (int j = 0; j < _editorData.height; j++)
+        for (int j = 0; j < _EditorData.height; j++)
         {
             _imageBuffer[i][j] = _renderer.traceEditorRay(i, j);
 
@@ -50,55 +64,123 @@ void raytracer::editor::render()
                 maxColor = _imageBuffer[i][j].color.b;
         }
     }
-
-    for (int i = 0; i < _editorData.width; i++)
+    for (int i = 0; i < _EditorData.width; i++)
     {
-        for (int j = 0; j < _editorData.height; j++)
+        for (int j = 0; j < _EditorData.height; j++)
         {
-            _imageBuffer[i][j].color.r /= maxColor;
-            _imageBuffer[i][j].color.g /= maxColor;
-            _imageBuffer[i][j].color.b /= maxColor;
+            _imageBuffer[i][j].color.r = _imageBuffer[i][j].color.r / maxColor * 255;
+            _imageBuffer[i][j].color.g = _imageBuffer[i][j].color.g / maxColor * 255;
+            _imageBuffer[i][j].color.b = _imageBuffer[i][j].color.b / maxColor * 255;
         }
     }
 }
 
-void raytracer::editor::handleEvents()
+void raytracer::Editor::handleEvents()
 {
-    int event = _display->getEvent();
+    int event = _display.getEvent();
     if (event == 1) {
-        _display->endWindow();
+        _display.endWindow();
         _isRunning = false;
     }
-    handleKeyboardEvents();
-    handleMouseEvents();
-    handleMouseWheelEvents();
+    handleKeyboardEvents(event);
+    handleMouseEvents(event);
 }
 
-void raytracer::editor::handleKeyboardEvents()
+void raytracer::Editor::handleKeyboardEvents(int event)
+{
+    int decreaseRes = 32;
+    if (event == 3) {
+        _renderer.camera.move(Vector3D(0, 0, -0.1));
+        changeResolution(_rendererCamera.width / decreaseRes, _rendererCamera.height / decreaseRes);
+    }
+    if (event == 2) {
+        _renderer.camera.move(Vector3D(0, 0, 0.1));
+        changeResolution(_rendererCamera.width / decreaseRes, _rendererCamera.height / decreaseRes);
+    }
+    if (event == 4) {
+        _renderer.camera.move(Vector3D(-0.1, 0, 0));
+        changeResolution(_rendererCamera.width / decreaseRes, _rendererCamera.height / decreaseRes);
+    }
+    if (event == 5) {
+        _renderer.camera.move(Vector3D(0.1, 0, 0));
+        changeResolution(_rendererCamera.width / decreaseRes, _rendererCamera.height / decreaseRes);
+    }
+    if (event == 6) {
+        _renderer.camera.move(Vector3D(0, -0.1, 0));
+        changeResolution(_rendererCamera.width / decreaseRes, _rendererCamera.height / decreaseRes);
+    }
+    if (event == 7) {
+        _renderer.camera.move(Vector3D(0, 0.1, 0));
+        changeResolution(_rendererCamera.width / decreaseRes, _rendererCamera.height / decreaseRes);
+    }
+    if (event == 15) {
+        _renderer.camera.rotate(Vector3D(-0.5, 0, 0));
+        changeResolution(_rendererCamera.width / decreaseRes, _rendererCamera.height / decreaseRes);
+    }
+    if (event == 14) {
+        _renderer.camera.rotate(Vector3D(0.5, 0, 0));
+        changeResolution(_rendererCamera.width / decreaseRes, _rendererCamera.height / decreaseRes);
+    }
+    if (event == 13) {
+        _renderer.camera.rotate(Vector3D(0, 0, -0.5));
+        changeResolution(_rendererCamera.width / decreaseRes, _rendererCamera.height / decreaseRes);
+    }
+    if (event == 12) {
+        _renderer.camera.rotate(Vector3D(0, 0, 0.5));
+        changeResolution(_rendererCamera.width / decreaseRes, _rendererCamera.height / decreaseRes);
+    }
+    if (event == 11) {
+        _renderer.camera.rotate(Vector3D(0, -0.5, 0));
+        changeResolution(_rendererCamera.width / decreaseRes, _rendererCamera.height / decreaseRes);
+    }
+    if (event == 10) {
+        _renderer.camera.rotate(Vector3D(0, 0.5, 0));
+        changeResolution(_rendererCamera.width / decreaseRes, _rendererCamera.height / decreaseRes);
+    }
+    if (event == 0)
+        if (_renderer.camera.width < _rendererCamera.width && _renderer.camera.height < _rendererCamera.height)
+            changeResolution(_renderer.camera.width + 20, _renderer.camera.height + 10);
+        else
+            changeResolution(_rendererCamera.width, _rendererCamera.height);
+}
+
+void raytracer::Editor::handleMouseEvents(int event)
 {
 
 }
 
-void raytracer::editor::handleMouseEvents()
-{
-
-}
-
-void raytracer::editor::handleMouseWheelEvents()
-{
-
-}
-
-void raytracer::editor::_initImage()
+void raytracer::Editor::_initImage()
 {
     _imageBuffer.clear();
 
-    for (int i = 0; i < _editorData.width; i++)
+    for (int i = 0; i < _EditorData.width; i++)
     {
         _imageBuffer.emplace_back();
-        for (int j = 0; j < _editorData.width; j++)
+        for (int j = 0; j < _EditorData.width; j++)
         {
             _imageBuffer[i].emplace_back();
         }
     }
+}
+
+void raytracer::Editor::_displayImage()
+{
+    for (int i = 0; i < _EditorData.width; i++)
+    {
+        for (int j = 0; j < _EditorData.height; j++)
+        {
+            _display.drawPixel(i, j, _imageBuffer[i][j].color);
+        }
+    }
+    _display.displayScreen();
+}
+
+void raytracer::Editor::changeResolution(int width, int height)
+{
+    _renderer.camera.width = width;
+    _renderer.camera.height = height;
+    _EditorData.width = width;
+    _EditorData.height = height;
+    _display.initImage(width, height);
+    _initImage();
 }

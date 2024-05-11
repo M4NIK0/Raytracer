@@ -52,6 +52,8 @@ add_executable(raytracer src/main.cpp
         src/Objects/Primitives/Triangle.hpp
         src/Objects/Advanced/WavefontObject.cpp
         src/Objects/Advanced/WavefontObject.hpp
+        src/Render/Editor/Editor.cpp
+        src/Render/Editor/Editor.hpp
         src/Parser/Parser.cpp
         src/Parser/Parser.hpp
         src/LibHandler/LibHandler.cpp
