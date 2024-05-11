@@ -16,6 +16,7 @@ raytracer::WavefontObject::WavefontObject(const std::string &path, const Point3D
     _boundingSphere.move(Vector3D(position.x, position.y, position.z));
 
     _surfaceAbsorbtion = surfaceAbsorbtion;
+    _surfaceAbsorbtion.normalize();
 }
 
 raytracer::WavefontObject::WavefontObject() = default;
