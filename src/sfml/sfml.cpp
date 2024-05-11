@@ -60,12 +60,10 @@ void sfml::clearWindow()
 int sfml::getEvent()
 {
     sf::Event event;
-    while (_window->pollEvent(event))
-    {
+    while (_window->pollEvent(event)) {
         if (event.type == sf::Event::Closed)
             return 1;
     }
-
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Z))
         return 3;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
@@ -86,7 +84,14 @@ int sfml::getEvent()
         return 10;
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
         return 11;
-
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+        return 12;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::E))
+        return 13;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+        return 14;
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+        return 15;
     return 0;
 }
 
