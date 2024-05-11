@@ -9,13 +9,13 @@
 #include "Render/RenderProcessWrapper.hpp"
 #include "Light/Objects/PointLight.hpp"
 
-#define WIDTH 1024
-#define HEIGHT 1024
+#define WIDTH 1280
+#define HEIGHT 720
 
-#define CHUNK_SIZE_X 16
-#define CHUNK_SIZE_Y 16
+#define CHUNK_SIZE_X 32
+#define CHUNK_SIZE_Y 32
 
-#define MAX_SAMPLES 1
+#define MAX_SAMPLES 2
 
 #include <chrono>
 #include "Render/Threads.hpp"
@@ -23,36 +23,22 @@
 
 int main()
 {
-    raytracer::RenderProcessWrapper renderer(WIDTH, HEIGHT, 30);
-    renderer.renderer.camera.sensitivity = 250;
-    renderer.renderer.camera.exposure = 1;
-
-    renderer.renderer.renderData.chunkWidth = CHUNK_SIZE_X;
-    renderer.renderer.renderData.chunkHeight = CHUNK_SIZE_Y;
-    renderer.renderer.renderData.maxSamples = MAX_SAMPLES;
-
-//    renderer.renderer.camera.move(raytracer::Vector3D(0, 10, 0));
-//    renderer.renderer.camera.rotate(raytracer::Vector3D(-90, 0, 0));
+    raytracer::RenderProcessWrapper renderProcessWrapper(WIDTH, HEIGHT, 30);
+    renderProcessWrapper.initCamera(250, 1, raytracer::Point3D(0, 1, 0), raytracer::Vector3D(-45, 0, 0));
+    renderProcessWrapper.initRenderData(CHUNK_SIZE_X, CHUNK_SIZE_Y, MAX_SAMPLES);
 
     auto obj1 = std::make_shared<raytracer::Plane>(raytracer::Point3D(0, 0, 0), raytracer::Vector3D(0, 1, 0), raytracer::Color(1, 1, 1));
     auto obj2 = std::make_shared<raytracer::WavefontObject>("./untitled.obj", raytracer::Point3D(0.5, 0.5, -2), raytracer::Color(1, 0.6, 0));
-//    auto obj2 = std::make_shared<raytracer::Triangle>(raytracer::Point3D(0, 0.2, -1), raytracer::Point3D(1, 0.2, -1), raytracer::Point3D(1, 0.2, -2), raytracer::Color(1, 0, 1));
 
     obj2->rotate(raytracer::Vector3D(0, 45, 0));
     obj2->rotate(raytracer::Vector3D(45, 0, 0));
 
+    renderProcessWrapper.addObject(obj1);
+    renderProcessWrapper.addObject(obj2);
 
-    raytracer::Vector3D motion = raytracer::Vector3D(10, 0, 0);
-    raytracer::Vector3D rotation = raytracer::Vector3D(0, 0, 0);
+    renderProcessWrapper.addLight(std::make_shared<raytracer::PointLight>(raytracer::Color(255, 255, 255), raytracer::Point3D(-5, 200, 50), 60000));
 
-    renderer.renderer.addObject(obj1);
-    renderer.renderer.addObject(obj2);
-//    renderer.renderer.addObject(obj8);
-
-    renderer.renderer.addLight(
-            std::make_shared<raytracer::PointLight>(raytracer::Color(255, 255, 255), raytracer::Point3D(-5, 200, 50), 60000));
-
-    renderer.renderImageDisplay(1024);
+    renderProcessWrapper.renderImageDisplay(1024);
 
     // Create PPM Output
     raytracer::PPMOutput output("./output.ppm", WIDTH, HEIGHT);
@@ -60,7 +46,7 @@ int main()
     {
         for (int x = 0; x < WIDTH; x++)
         {
-            raytracer::Color color = renderer.renderer.renderData.renderBuffer[x][y];
+            raytracer::Color color = renderProcessWrapper.getPixelColor(x, y);
             output.setPixel(x, y, color);
         }
     }

@@ -20,6 +20,8 @@ raytracer::Camera::Camera(int width, int height) : origin(Point3D(0.5, 0.5, 1)),
     _screen.left_side = _screen.left_side * realHeight;
 
     _screen.origin = _screen.origin - _screen.bottom_side * 0.5 - _screen.left_side * 0.5;
+
+    move(Vector3D(-0.5, -0.5, -1));
 }
 
 raytracer::Camera::~Camera() = default;
