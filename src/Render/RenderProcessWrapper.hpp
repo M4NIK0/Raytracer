@@ -32,13 +32,15 @@ namespace raytracer
             void displayScreen();
             void endWindow();
 
-            void initCamera(int sensibility, int exposure)
+            void initCamera(int sensibility, int exposure, Point3D position, Vector3D rotation)
             {
                 Camera camera(_width, _height);
                 camera.sensitivity = sensibility;
                 camera.exposure = exposure;
 
                 renderer.camera = camera;
+                renderer.camera.move(Vector3D(position.x, position.y, position.z));
+                renderer.camera.rotate(Vector3D(rotation.x, rotation.y, rotation.z));
             }
 
             void initRenderData(int chunkSizeX, int chunkSizeY, int maxSamples)

@@ -24,7 +24,7 @@
 int main()
 {
     raytracer::RenderProcessWrapper renderProcessWrapper(WIDTH, HEIGHT, 30);
-    renderProcessWrapper.initCamera(250, 1);
+    renderProcessWrapper.initCamera(250, 1, raytracer::Point3D(0, 1, 0), raytracer::Vector3D(-45, 0, 0));
     renderProcessWrapper.initRenderData(CHUNK_SIZE_X, CHUNK_SIZE_Y, MAX_SAMPLES);
 
     auto obj1 = std::make_shared<raytracer::Plane>(raytracer::Point3D(0, 0, 0), raytracer::Vector3D(0, 1, 0), raytracer::Color(1, 1, 1));
