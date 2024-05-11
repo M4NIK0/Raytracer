@@ -24,29 +24,20 @@
 
 int main(int ac, char **av)
 {
-    raytracer::RenderProcessWrapper renderProcessWrapper(WIDTH, HEIGHT, 30);
-    renderProcessWrapper.initCamera(250, 1, raytracer::Point3D(0, 1, 0), raytracer::Vector3D(-45, 0, 0));
-    renderProcessWrapper.initRenderData(CHUNK_SIZE_X, CHUNK_SIZE_Y, MAX_SAMPLES);
-
     int width = WIDTH;
     int height = HEIGHT;
+    int chunkSizeX = CHUNK_SIZE_X;
+    int chunkSizeY = CHUNK_SIZE_Y;
+    int maxSamples = MAX_SAMPLES;
+    int threads = MAX_THREADS;
+
     std::string path = "info.txt";
 
-    raytracer::Renderer renderer(raytracer::Camera(width, height));
-    renderer.camera.move(raytracer::Vector3D(0, 1, 2));
-    renderer.camera.rotate(raytracer::Vector3D(-10, 0, 0));
-    renderer.camera.sensitivity = 250;
-    renderer.camera.exposure = 0.1;
-
-    renderer.renderData.height = HEIGHT;
-    renderer.renderData.width = WIDTH;
-    renderer.renderData.chunkWidth = CHUNK_SIZE_X;
-    renderer.renderData.chunkHeight = CHUNK_SIZE_Y;
-    renderer.renderData.maxSamples = MAX_SAMPLES;
+    raytracer::RenderProcessWrapper renderProcessWrapper(width, height, threads);
 
     Parser parser;
     parser.parseConfig(path.c_str());
-    renderer = parser.parseScene(width, height);
+    parser.parseScene(width, height, renderProcessWrapper);
 
     renderProcessWrapper.renderImageDisplay(1024);
 
