@@ -31,11 +31,15 @@ void raytracer::Editor::run()
 
     _rendererCamera = _renderer.camera;
     _renderer.camera = _EditorCamera;
+    render();
+    _displayImage();
 
     while (_isRunning) {
         handleEvents();
-        render();
-        _displayImage();
+        if (_rendererCamera.width != _renderer.camera.width) {
+            render();
+            _displayImage();
+        }
     }
 
     _EditorCamera = _renderer.camera;
@@ -110,31 +114,34 @@ void raytracer::Editor::handleKeyboardEvents(int event)
         changeResolution(_rendererCamera.width / decreaseRes, _rendererCamera.height / decreaseRes);
     }
     if (event == 15) {
-        _renderer.camera.rotate(Vector3D(-0.1, 0, 0));
+        _renderer.camera.rotate(Vector3D(-0.5, 0, 0));
         changeResolution(_rendererCamera.width / decreaseRes, _rendererCamera.height / decreaseRes);
     }
     if (event == 14) {
-        _renderer.camera.rotate(Vector3D(0.1, 0, 0));
+        _renderer.camera.rotate(Vector3D(0.5, 0, 0));
         changeResolution(_rendererCamera.width / decreaseRes, _rendererCamera.height / decreaseRes);
     }
     if (event == 13) {
-        _renderer.camera.rotate(Vector3D(0, 0, -0.1));
+        _renderer.camera.rotate(Vector3D(0, 0, -0.5));
         changeResolution(_rendererCamera.width / decreaseRes, _rendererCamera.height / decreaseRes);
     }
     if (event == 12) {
-        _renderer.camera.rotate(Vector3D(0, 0, 0.1));
+        _renderer.camera.rotate(Vector3D(0, 0, 0.5));
         changeResolution(_rendererCamera.width / decreaseRes, _rendererCamera.height / decreaseRes);
     }
     if (event == 11) {
-        _renderer.camera.rotate(Vector3D(0, -0.1, 0));
+        _renderer.camera.rotate(Vector3D(0, -0.5, 0));
         changeResolution(_rendererCamera.width / decreaseRes, _rendererCamera.height / decreaseRes);
     }
     if (event == 10) {
-        _renderer.camera.rotate(Vector3D(0, 0.1, 0));
+        _renderer.camera.rotate(Vector3D(0, 0.5, 0));
         changeResolution(_rendererCamera.width / decreaseRes, _rendererCamera.height / decreaseRes);
     }
     if (event == 0)
-        changeResolution(_rendererCamera.width, _rendererCamera.height);
+        if (_renderer.camera.width < _rendererCamera.width && _renderer.camera.height < _rendererCamera.height)
+            changeResolution(_renderer.camera.width + 20, _renderer.camera.height + 10);
+        else
+            changeResolution(_rendererCamera.width, _rendererCamera.height);
 }
 
 void raytracer::Editor::handleMouseEvents(int event)
