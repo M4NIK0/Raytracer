@@ -39,7 +39,7 @@ class Parser{
         void parseCamera(int width, int height, raytracer::RenderProcessWrapper &rendererWrapper);
         void parseScene(int width, int height, raytracer::RenderProcessWrapper &rendererWrapper);
     private:
-        libconfig::Config* cfg;
+        std::unique_ptr<libconfig::Config> cfg;
 };
 
 

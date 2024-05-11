@@ -6,7 +6,7 @@
 #include <fstream>
 
 Parser::Parser() {
-    cfg = new libconfig::Config();
+    cfg = std::make_unique<libconfig::Config>();
 }
 
 Parser::~Parser() {
