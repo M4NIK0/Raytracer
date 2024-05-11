@@ -9,9 +9,7 @@ Parser::Parser() {
     cfg = std::make_unique<libconfig::Config>();
 }
 
-Parser::~Parser() {
-    delete cfg;
-}
+Parser::~Parser() {}
 
 void Parser::parseConfig(const char* path) {
     std::ifstream infile(path);
