@@ -78,12 +78,25 @@ void raytracer::Editor::handleEvents()
 
 void raytracer::Editor::handleKeyboardEvents(int event)
 {
+    int decreaseRes = 4;
     if (event == 3) {
-        _renderer.camera.move(Vector3D(0, 0, -1));
-        _display.initImage(_renderer.camera.width, _renderer.camera.height);
+        _renderer.camera.move(Vector3D(0, 0, -0.1));
+        changeResolution(_rendererCamera.width / decreaseRes, _rendererCamera.height / decreaseRes);
+    }
+    if (event == 2) {
+        _renderer.camera.move(Vector3D(0, 0, 0.1));
+        changeResolution(_rendererCamera.width / decreaseRes, _rendererCamera.height / decreaseRes);
+    }
+    if (event == 4) {
+        _renderer.camera.move(Vector3D(-0.1, 0, 0));
+        changeResolution(_rendererCamera.width / decreaseRes, _rendererCamera.height / decreaseRes);
+    }
+    if (event == 5) {
+        _renderer.camera.move(Vector3D(0.1, 0, 0));
+        changeResolution(_rendererCamera.width / decreaseRes, _rendererCamera.height / decreaseRes);
     }
     if (event == 0)
-        _display.initImage(_renderer.camera.width, _renderer.camera.height);
+        changeResolution(_rendererCamera.width, _rendererCamera.height);
 }
 
 void raytracer::Editor::handleMouseEvents(int event)
@@ -121,6 +134,8 @@ void raytracer::Editor::changeResolution(int width, int height)
 {
     _renderer.camera.width = width;
     _renderer.camera.height = height;
+    _EditorData.width = width;
+    _EditorData.height = height;
     _display.initImage(width, height);
     _initImage();
 }
