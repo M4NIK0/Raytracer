@@ -11,7 +11,12 @@
 int main(int ac, char **av)
 {
     ParseArg parseArg;
-    parseArg.ParseArgument(ac, av);
+    try {
+        parseArg.ParseArgument(ac, av);
+    } catch (const std::exception &e) {
+        std::cerr << e.what() << std::endl;
+        return 84;
+    }
 
     std::string configFile = parseArg.getConfigFile();
     std::string outputFile = parseArg.getOutputFile();
