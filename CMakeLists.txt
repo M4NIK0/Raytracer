@@ -59,6 +59,7 @@ add_executable(raytracer src/main.cpp
         src/LibHandler/LibHandler.cpp
         src/Factory/Factory.cpp
         src/Parser/ParseArg.cpp
+        src/Render/Color.cpp
 )
 
 # Link SFML

@@ -16,7 +16,6 @@ namespace raytracer
     class Threads
     {
         public:
-            Threads();
             class Error : public std::exception
             {
                 public:
@@ -31,8 +30,8 @@ namespace raytracer
                 private:
                     std::string _message;
             };
+            Threads();
 
-            Threads(Renderer &renderer);
             ~Threads();
 
             void startThreads(size_t nbThreads, int chunkWidth, int chunkHeight, Renderer &renderer);

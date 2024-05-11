@@ -2,7 +2,6 @@
 #include "Objects/Primitives/Sphere.hpp"
 #include "Objects/Advanced/WavefontObject.hpp"
 #include "Render/Editor/Editor.hpp"
-#include "sfml/sfml.hpp"
 #include "Render/RenderProcessWrapper.hpp"
 #include "Output/PPMOutput.hpp"
 #include "Parser/Parser.hpp"

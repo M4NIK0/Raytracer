@@ -8,7 +8,7 @@
 #pragma once
 
 #include <libconfig.h++>
-#include "../sfml/sfml.hpp"
+#include "../Render/Color.hpp"
 #include "../Math/Point3D.hpp"
 #include "../Math/Ray3D.hpp"
 
