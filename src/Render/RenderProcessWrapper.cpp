@@ -181,3 +181,36 @@ void raytracer::RenderProcessWrapper::endWindow()
 {
     display.endWindow();
 }
+
+void raytracer::RenderProcessWrapper::initCamera(int sensibility, int exposure, Point3D position, Vector3D rotation)
+{
+    Camera camera(_width, _height);
+    camera.sensitivity = sensibility;
+    camera.exposure = exposure;
+
+    renderer.camera = camera;
+    renderer.camera.move(Vector3D(position.x, position.y, position.z));
+    renderer.camera.rotate(Vector3D(rotation.x, rotation.y, rotation.z));
+}
+
+void raytracer::RenderProcessWrapper::initRenderData(int chunkSizeX, int chunkSizeY, int maxSamples)
+{
+    renderer.renderData.chunkWidth = chunkSizeX;
+    renderer.renderData.chunkHeight = chunkSizeY;
+    renderer.renderData.maxSamples = maxSamples;
+}
+
+void raytracer::RenderProcessWrapper::addObject(std::shared_ptr<IObject> object)
+{
+    renderer.addObject(object);
+}
+
+void raytracer::RenderProcessWrapper::addLight(std::shared_ptr<ILight> light)
+{
+    renderer.addLight(light);
+}
+
+raytracer::Color raytracer::RenderProcessWrapper::getPixelColor(int x, int y)
+{
+    return renderer.renderData.renderBuffer[x][y];
+}

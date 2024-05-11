@@ -9,13 +9,13 @@
 #include "Render/RenderProcessWrapper.hpp"
 #include "Light/Objects/PointLight.hpp"
 
-#define WIDTH 1024
-#define HEIGHT 1024
+#define WIDTH 1280
+#define HEIGHT 720
 
-#define CHUNK_SIZE_X 16
-#define CHUNK_SIZE_Y 16
+#define CHUNK_SIZE_X 32
+#define CHUNK_SIZE_Y 32
 
-#define MAX_SAMPLES 1
+#define MAX_SAMPLES 2
 
 #include <chrono>
 #include "Render/Threads.hpp"
