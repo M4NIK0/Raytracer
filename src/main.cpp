@@ -39,8 +39,14 @@ int main(int ac, char **av)
     renderProcessWrapper.renderer.renderData.reflexionsRays = reflectionRays;
 
     Parser parser;
-    parser.parseConfig(configFile.c_str());
-    parser.parseScene(width, height, renderProcessWrapper);
+
+    try {
+        parser.parseConfig(configFile.c_str());
+        parser.parseScene(width, height, renderProcessWrapper);
+    } catch (const std::exception &e) {
+        std::cerr << e.what() << std::endl;
+        return 84;
+    }
 
     renderProcessWrapper.initRenderData(chunkSizeX, chunkSizeY, maxSamples);
 
