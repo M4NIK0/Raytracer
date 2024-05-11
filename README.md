@@ -10,9 +10,15 @@ The goal is to create a 3D scene with a camera and objects, and render it with r
 [Louis CHABRERIE](louis.chabrerie@epitech.eu) ([GitHub](https://github.com/M4NIK0)) - Raytracing specialist\
 [Léo DOBY](leo.doby@epitech.eu) ([GitHub](https://github.com/LeoDoby)) - Parsing master\
 [Arthur BICHARA](arthur.bichara@epitech.eu) ([GitHub](https://github.com/ArthurBchr)) - Editor enthusiast\
-[Ethan FLAK](ethan.flak@epitech.eu) ([GitHub](https://github.com/Eth22-Epitech)) - Math magician
+[Ethan FLAK](ethan.flak@epitech.eu) ([GitHub](https://github.com/Eth22-Epitech)) - Objects magician
 
 ## How to use
+
+### Dependencies
+
+You need to install the following libraries to compile the project:
+- SFML
+- libconfig++
 
 ### Compilation
 
