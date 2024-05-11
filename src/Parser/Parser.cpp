@@ -28,30 +28,18 @@ void Parser::parseObjects(raytracer::Renderer &renderer) {
         throw Parser::Error("Objects not found");
     libconfig::Setting& Objects = cfg->lookup("Objects");
 
+    Factory factory;
+
     for(int i = 0; i < Objects.getLength(); ++i) {
         libconfig::Setting& object = Objects[i];
 
         if (!object.exists("type"))
             throw Parser::Error("Object type not found");
         std::string type = object["type"];
-        if (type == "sphere") {
-            std::shared_ptr<raytracer::Sphere> sphere = std::make_shared<raytracer::Sphere>();
-            sphere->parseData(object);
-            renderer.addObject(sphere);
-        } else if (type == "plane") {
-            raytracer::Plane plane;
-            plane.parseData(object);
-            renderer.addObject(std::make_shared<raytracer::Plane>(plane));
-        } else if (type == "triangle") {
-            raytracer::Triangle triangle;
-            triangle.parseData(object);
-            renderer.addObject(std::make_shared<raytracer::Triangle>(triangle));
-        } else if (type == "OBJ") {
-            if (!object.exists("path"))
-                throw Parser::Error("path not found");
-            raytracer::WavefontObject wavefontObject(object["path"]);
-            wavefontObject.parseData(object);
-            renderer.addObject(std::make_shared<raytracer::WavefontObject>(wavefontObject));
+
+        std::shared_ptr<raytracer::IObject> obj = Factory::createObject(type, object);
+        if (obj != nullptr) {
+            renderer.addObject(obj);
         }
     }
 }
@@ -68,11 +56,11 @@ void Parser::parseLights(raytracer::Renderer &renderer)
         if (!light.exists("type"))
             throw Parser::Error("Light type not found");
         std::string type = light["type"];
-        if (type == "point") {
-            std::shared_ptr<raytracer::PointLight> pointLight = std::make_shared<raytracer::PointLight>();
-            pointLight->parseData(light);
-            renderer.addLight(pointLight);
-        } // else if plugins lights
+
+        std::shared_ptr<raytracer::ILight> obj = Factory::createLight(type, light);
+        if (obj != nullptr) {
+            renderer.addLight(obj);
+        }
     }
 }
 
