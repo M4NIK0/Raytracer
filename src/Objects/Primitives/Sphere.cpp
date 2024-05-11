@@ -238,17 +238,4 @@ void raytracer::Sphere::parseData(libconfig::Setting &config)
             throw Error("refraction_index must be a double");
         }
     }
-    std::cout << "glass " << _isGlass << std::endl;
-    std::cout << "refractionindex " << _refractionIndex << std::endl;
-    std::cout << "roughness " << _surfaceRoughness << std::endl;
-    std::cout << "absorption red " << _surfaceAbsorbtion.r << std::endl;
-    std::cout << "absorption green " << _surfaceAbsorbtion.g << std::endl;
-    std::cout << "absorption blue " << _surfaceAbsorbtion.b << std::endl;
-    std::cout << "relfexionindex " << _reflexionIndex << std::endl;
-    std::cout << "position x " << _position.x << std::endl;
-    std::cout << "position y " << _position.y << std::endl;
-    std::cout << "position z" << _position.z << std::endl;
-    std::cout << "radius " << _radius << std::endl;
-
-
 }
