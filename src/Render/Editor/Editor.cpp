@@ -29,11 +29,17 @@ void raytracer::Editor::run()
 {
     auto begin = std::chrono::steady_clock::now();
 
+    _rendererCamera = _renderer.camera;
+    _renderer.camera = _EditorCamera;
+
     while (_isRunning) {
         handleEvents();
         render();
         _displayImage();
     }
+
+    _EditorCamera = _renderer.camera;
+    _renderer.camera = _rendererCamera;
 }
 
 void raytracer::Editor::render()
