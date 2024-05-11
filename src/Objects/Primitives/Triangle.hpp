@@ -8,6 +8,7 @@
 #pragma once
 
 #include "../IObject.hpp"
+#include "../../Math/Matrix.hpp"
 
 namespace raytracer
 {
@@ -53,6 +54,8 @@ namespace raytracer
             void stepMotion() override;
 
             Point3D getCenter() const override;
+
+            void parseData(libconfig::Setting &config) override;
 
         private:
             Point3D _a;

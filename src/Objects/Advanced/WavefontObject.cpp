@@ -13,9 +13,14 @@ raytracer::WavefontObject::WavefontObject(const std::string &path, const Point3D
     _loadWavefont(path);
 
     move(Vector3D(position.x, position.y, position.z));
-    _boundingSphere.move(Vector3D(position.x, position.y, position.z));
 
     _surfaceAbsorbtion = surfaceAbsorbtion;
+    _surfaceAbsorbtion.normalize();
+}
+
+raytracer::WavefontObject::WavefontObject(const std::string &path)
+{
+    _loadWavefont(path);
 }
 
 raytracer::WavefontObject::WavefontObject() = default;
@@ -100,6 +105,7 @@ void raytracer::WavefontObject::move(Vector3D vec)
 {
     _position = _position + vec;
     _positionBackup = _position;
+    _boundingSphere.move(vec);
 
     for (auto &triangle : _triangles)
         triangle->move(vec);
@@ -107,6 +113,14 @@ void raytracer::WavefontObject::move(Vector3D vec)
 
 void raytracer::WavefontObject::rotate(Vector3D vec)
 {
+    for (auto &triangle : _triangles)
+    {
+        Point3D center = triangle->getCenter();
+        Point3D newCenter = Point3D::rotateAroundCenter(center, _position, vec.x, vec.y, vec.z);
+
+        triangle->move(newCenter - center);
+        triangle->rotate(vec);
+    }
 }
 
 bool raytracer::WavefontObject::getGlassState(const Point3D &point)
@@ -169,6 +183,7 @@ void raytracer::WavefontObject::initiateMotion(double time, size_t steps)
 
 void raytracer::WavefontObject::resetMotion()
 {
+    move(_positionBackup - _position);
     _position = _positionBackup;
 }
 
@@ -229,6 +244,10 @@ void raytracer::WavefontObject::_createBoundingSphere(std::vector<Point3D> &poin
     }
 
     _boundingSphere = Sphere(center, Point3D::distance(center, furthestPoint), Color());
+    _position = center;
+
+    Point3D nullPoint = {0, 0, 0};
+    move(nullPoint - center);
 }
 
 raytracer::Point3D raytracer::WavefontObject::_getPointFromLine(const std::string &line)
@@ -293,4 +312,77 @@ raytracer::Triangle raytracer::WavefontObject::_createTriangleFromLine(const std
     coordinates.push_back(formattedLine);
 
     return Triangle(points[std::stoi(coordinates[0]) - 1], points[std::stoi(coordinates[1]) - 1], points[std::stoi(coordinates[2]) - 1], Color());
+}
+
+void raytracer::WavefontObject::parseData(libconfig::Setting &config)
+{
+    try {
+        libconfig::Setting &position = config["position"];
+        Vector3D translate = {position["x"], position["y"], position["z"]};
+        move(translate);
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Error("position is missing");
+    } catch (libconfig::SettingTypeException &e) {
+        throw Error("position must be a vector of double");
+    }
+
+    try {
+        libconfig::Setting &color = config["color"];
+        _surfaceAbsorbtion.r = ((double)color[0]) / 255.0;
+        _surfaceAbsorbtion.g = ((double)color[1]) / 255.0;
+        _surfaceAbsorbtion.b = ((double)color[2]) / 255.0;
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Error("color not found");
+    } catch (libconfig::SettingTypeException &e) {
+        throw Error("color need to be an array of double");
+    }
+
+    try {
+        _surfaceRoughness = config["roughness"];
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Error("roughness is missing");
+    } catch (libconfig::SettingTypeException &e) {
+        throw Error("roughness must be a double");
+    }
+
+    try {
+        _reflexionIndex = config["reflexion"];
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Error("reflexion is missing");
+    } catch (libconfig::SettingTypeException &e) {
+        throw Error("reflexion must be a double");
+    }
+
+    try {
+        _translation = {config["translation"][0], config["translation"][1], config["translation"][2]};
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Error("translation not found");
+    } catch (libconfig::SettingTypeException &e) {
+        throw Error("translation must be an array of 3 double");
+    }
+
+    try {
+        _translationStep = {config["translationSpeed"][0], config["translationSpeed"][1], config["translationSpeed"][2]};
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Error("translationSpeed not found");
+    } catch (libconfig::SettingTypeException &e) {
+        throw Error("translationSpeed must be an array of 3 double");
+    }
+
+    try {
+        Vector3D rotation = {config["rotation"][0], config["rotation"][1], config["rotation"][2]};
+        rotate(rotation);
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Error("rotation not found");
+    } catch (libconfig::SettingTypeException &e) {
+        throw Error("rotation must be an array of 3 double");
+    }
+
+    try {
+        _rotationStep = {config["rotationSpeed"][0], config["rotationSpeed"][1], config["rotationSpeed"][2]};
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Error("rotationSpeed not found");
+    } catch (libconfig::SettingTypeException &e) {
+        throw Error("rotationSpeed must be an array of 3 double");
+    }
 }

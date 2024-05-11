@@ -11,6 +11,7 @@
 #include "../Primitives/Triangle.hpp"
 #include "../Primitives/Sphere.hpp"
 #include "../../Render/RenderPoint.hpp"
+#include "../../Math/Matrix.hpp"
 
 namespace raytracer
 {
@@ -18,6 +19,7 @@ namespace raytracer
     {
         public:
             WavefontObject();
+            WavefontObject(const std::string &path);
             WavefontObject(const std::string &path, const Point3D& position, Color surfaceAbsorbtion);
             ~WavefontObject() override;
 
@@ -54,6 +56,8 @@ namespace raytracer
             void resetMotion() override;
 
             void stepMotion() override;
+
+            void parseData(libconfig::Setting &config) override;
 
             Point3D getCenter() const override;
 

@@ -248,3 +248,8 @@ raytracer::Point3D raytracer::Cube::getCenter() const
 {
     return _position;
 }
+
+void raytracer::Cube::parseData(libconfig::Setting &config)
+{
+
+}

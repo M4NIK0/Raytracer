@@ -7,16 +7,15 @@
 
 #include "Threads.hpp"
 
-raytracer::Threads::Threads(Renderer &renderer) : _renderer(renderer) {}
+raytracer::Threads::Threads() = default;
 
 raytracer::Threads::~Threads() = default;
 
-void raytracer::Threads::startThreads(size_t nbThreads, int chunkWidth, int chunkHeight)
-{
-    _chunks = _renderer.getChunks(chunkWidth, chunkHeight);
+void raytracer::Threads::startThreads(size_t nbThreads, int chunkWidth, int chunkHeight, Renderer &renderer) {
+    _chunks = renderer.getChunks(chunkWidth, chunkHeight);
 
     for (size_t i = 0; i < nbThreads; i++) {
-        _threads.emplace_back([this]() {
+        _threads.emplace_back([this, &renderer]() {
             while (true) {
                 std::unique_lock<std::mutex> lock(_chunksMutex);
                 if (_chunks.empty()) {
@@ -25,7 +24,7 @@ void raytracer::Threads::startThreads(size_t nbThreads, int chunkWidth, int chun
                 Chunk chunk = _chunks.back();
                 _chunks.pop_back();
                 lock.unlock();
-                _renderer.renderChunk(chunk);
+                renderer.renderChunk(chunk);
             }
         });
     }
