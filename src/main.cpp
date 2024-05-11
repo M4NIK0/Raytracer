@@ -9,13 +9,13 @@
 #include "Render/RenderProcessWrapper.hpp"
 #include "Light/Objects/PointLight.hpp"
 
-#define WIDTH 720
-#define HEIGHT 720
+#define WIDTH 1024
+#define HEIGHT 1024
 
 #define CHUNK_SIZE_X 16
 #define CHUNK_SIZE_Y 16
 
-#define MAX_SAMPLES 2
+#define MAX_SAMPLES 1
 
 #include <chrono>
 #include "Render/Threads.hpp"
@@ -24,57 +24,33 @@
 int main()
 {
     raytracer::RenderProcessWrapper renderer(WIDTH, HEIGHT, 30);
-    renderer.renderer.camera.move(raytracer::Vector3D(0, 1, 2));
-    renderer.renderer.camera.rotate(raytracer::Vector3D(-10, 0, 0));
     renderer.renderer.camera.sensitivity = 250;
-    renderer.renderer.camera.exposure = 0.1;
+    renderer.renderer.camera.exposure = 1;
 
     renderer.renderer.renderData.chunkWidth = CHUNK_SIZE_X;
     renderer.renderer.renderData.chunkHeight = CHUNK_SIZE_Y;
     renderer.renderer.renderData.maxSamples = MAX_SAMPLES;
 
-    auto obj1 = std::make_shared<raytracer::Plane>(raytracer::Point3D(20, -1, 0), raytracer::Vector3D(0, 1, 0),
-                                                    raytracer::Color(1, 1, 1));
-    auto obj2 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0, 1, 0.5), 0.1,
-                                                    raytracer::Color(1, 0, 1));
-    auto obj3 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(0.5, 1.7, -4), 0.1,
-                                                    raytracer::Color(1, 1, 1));
-    auto obj4 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(-1.5, -0.3, -3), 0.7,
-                                                    raytracer::Color(1, 1, 1));
-    auto obj5 = std::make_shared<raytracer::Plane>(raytracer::Point3D(-6, 0, -5), raytracer::Vector3D(1, 1, 0), raytracer::Color(1, 1, 1));
-    auto obj6 = std::make_shared<raytracer::Sphere>(raytracer::Point3D(3, 0, -4), 1, raytracer::Color(0, 0, 0));
-    auto obj8 = std::make_shared<raytracer::WavefontObject>("untitled.obj", raytracer::Point3D(0, 1, -3), raytracer::Color(1, 0.25, 1));
+//    renderer.renderer.camera.move(raytracer::Vector3D(0, 10, 0));
+//    renderer.renderer.camera.rotate(raytracer::Vector3D(-90, 0, 0));
 
-    obj8->setReflexionIndex(0.5);
+    auto obj1 = std::make_shared<raytracer::Plane>(raytracer::Point3D(0, 0, 0), raytracer::Vector3D(0, 1, 0), raytracer::Color(1, 1, 1));
+    auto obj2 = std::make_shared<raytracer::WavefontObject>("./untitled.obj", raytracer::Point3D(0.5, 0.5, -2), raytracer::Color(1, 0.6, 0));
+//    auto obj2 = std::make_shared<raytracer::Triangle>(raytracer::Point3D(0, 0.2, -1), raytracer::Point3D(1, 0.2, -1), raytracer::Point3D(1, 0.2, -2), raytracer::Color(1, 0, 1));
+
+    obj2->rotate(raytracer::Vector3D(0, 45, 0));
+    obj2->rotate(raytracer::Vector3D(45, 0, 0));
+
 
     raytracer::Vector3D motion = raytracer::Vector3D(10, 0, 0);
     raytracer::Vector3D rotation = raytracer::Vector3D(0, 0, 0);
 
-//    obj2->setMotion(motion, rotation);
-    obj6->setReflexionIndex(1);
-
-    obj1->setReflexionIndex(0.5);
-
-
-    obj4->setGlassState(true);
-
     renderer.renderer.addObject(obj1);
     renderer.renderer.addObject(obj2);
-    renderer.renderer.addObject(obj3);
-    renderer.renderer.addObject(obj4);
-    renderer.renderer.addObject(obj5);
-    renderer.renderer.addObject(obj6);
-    renderer.renderer.addObject(obj8);
+//    renderer.renderer.addObject(obj8);
 
     renderer.renderer.addLight(
-            std::make_shared<raytracer::PointLight>(raytracer::Color(255, 0, 0), raytracer::Point3D(-5, 200, 50),
-                                                    40000));
-    renderer.renderer.addLight(
-            std::make_shared<raytracer::PointLight>(raytracer::Color(0, 255, 0), raytracer::Point3D(0, 200, 50),
-                                                    40000));
-    renderer.renderer.addLight(
-            std::make_shared<raytracer::PointLight>(raytracer::Color(0, 0, 255), raytracer::Point3D(5, 200, 50),
-                                                    40000));
+            std::make_shared<raytracer::PointLight>(raytracer::Color(255, 255, 255), raytracer::Point3D(-5, 200, 50), 60000));
 
     renderer.renderImageDisplay(1024);
 

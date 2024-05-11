@@ -107,6 +107,14 @@ void raytracer::WavefontObject::move(Vector3D vec)
 
 void raytracer::WavefontObject::rotate(Vector3D vec)
 {
+    for (auto &triangle : _triangles)
+    {
+        Point3D center = triangle->getCenter();
+        Point3D newCenter = Point3D::rotateAroundCenter(center, _position, vec.x, vec.y, vec.z);
+
+        triangle->move(newCenter - center);
+        triangle->rotate(vec);
+    }
 }
 
 bool raytracer::WavefontObject::getGlassState(const Point3D &point)
@@ -229,6 +237,10 @@ void raytracer::WavefontObject::_createBoundingSphere(std::vector<Point3D> &poin
     }
 
     _boundingSphere = Sphere(center, Point3D::distance(center, furthestPoint), Color());
+    _position = center;
+
+    Point3D nullPoint = {0, 0, 0};
+    move(nullPoint - center);
 }
 
 raytracer::Point3D raytracer::WavefontObject::_getPointFromLine(const std::string &line)
