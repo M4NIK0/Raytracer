@@ -47,7 +47,6 @@ void Parser::parseObjects(raytracer::Renderer &renderer) {
             triangle.parseData(object);
             renderer.addObject(std::make_shared<raytracer::Triangle>(triangle));
         }
-        }
     }
 }
 
