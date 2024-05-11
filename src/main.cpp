@@ -53,19 +53,20 @@ int main(int ac, char **av)
     bool cli = parseArg.isCli();
     bool ne = parseArg.isNe();
 
-    std::string path = "info.txt";
-
     raytracer::RenderProcessWrapper renderProcessWrapper(width, height, threads);
+    renderProcessWrapper.renderer.renderData.maxBounces = bounces;
+    renderProcessWrapper.renderer.renderData.diffuseRays = diffusionRays;
+    renderProcessWrapper.renderer.renderData.reflexionsRays = reflectionRays;
 
     Parser parser;
-    parser.parseConfig(path.c_str());
+    parser.parseConfig(configFile.c_str());
     parser.parseScene(width, height, renderProcessWrapper);
 
     renderProcessWrapper.initRenderData(chunkSizeX, chunkSizeY, maxSamples);
     renderProcessWrapper.renderImageDisplay(1024);
 
     // Create PPM Output
-    raytracer::PPMOutput output("./output.ppm", width, height);
+    raytracer::PPMOutput output(outputFile, width, height);
     for (int y = 0; y < height; y++)
     {
         for (int x = 0; x < width; x++)
