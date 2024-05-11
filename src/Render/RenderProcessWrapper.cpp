@@ -19,6 +19,9 @@ raytracer::RenderProcessWrapper::RenderProcessWrapper(int width, int height, siz
     {
         std::cout << "Light added" << std::endl;
     }
+
+    renderer.renderData.width = width;
+    renderer.renderData.height = height;
 }
 
 raytracer::RenderProcessWrapper::~RenderProcessWrapper() = default;

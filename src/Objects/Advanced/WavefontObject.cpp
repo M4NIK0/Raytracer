@@ -13,7 +13,6 @@ raytracer::WavefontObject::WavefontObject(const std::string &path, const Point3D
     _loadWavefont(path);
 
     move(Vector3D(position.x, position.y, position.z));
-    _boundingSphere.move(Vector3D(position.x, position.y, position.z));
 
     _surfaceAbsorbtion = surfaceAbsorbtion;
     _surfaceAbsorbtion.normalize();
@@ -106,6 +105,7 @@ void raytracer::WavefontObject::move(Vector3D vec)
 {
     _position = _position + vec;
     _positionBackup = _position;
+    _boundingSphere.move(vec);
 
     for (auto &triangle : _triangles)
         triangle->move(vec);
@@ -183,6 +183,7 @@ void raytracer::WavefontObject::initiateMotion(double time, size_t steps)
 
 void raytracer::WavefontObject::resetMotion()
 {
+    move(_positionBackup - _position);
     _position = _positionBackup;
 }
 
@@ -317,7 +318,8 @@ void raytracer::WavefontObject::parseData(libconfig::Setting &config)
 {
     try {
         libconfig::Setting &position = config["position"];
-        _position = {position[0], position[1], position[2]};
+        Vector3D translate = {position["x"], position["y"], position["z"]};
+        move(translate);
     } catch (libconfig::SettingNotFoundException &e) {
         throw Error("position is missing");
     } catch (libconfig::SettingTypeException &e) {
@@ -326,9 +328,9 @@ void raytracer::WavefontObject::parseData(libconfig::Setting &config)
 
     try {
         libconfig::Setting &color = config["color"];
-        _surfaceAbsorbtion.r = (255.0 - (double)color[0]) / 255.0;
-        _surfaceAbsorbtion.g = (255.0 - (double)color[1]) / 255.0;
-        _surfaceAbsorbtion.b = (255.0 - (double)color[2]) / 255.0;
+        _surfaceAbsorbtion.r = ((double)color[0]) / 255.0;
+        _surfaceAbsorbtion.g = ((double)color[1]) / 255.0;
+        _surfaceAbsorbtion.b = ((double)color[2]) / 255.0;
     } catch (libconfig::SettingNotFoundException &e) {
         throw Error("color not found");
     } catch (libconfig::SettingTypeException &e) {
@@ -336,46 +338,19 @@ void raytracer::WavefontObject::parseData(libconfig::Setting &config)
     }
 
     try {
-        _surfaceRoughness = config["surfaceRoughness"];
+        _surfaceRoughness = config["roughness"];
     } catch (libconfig::SettingNotFoundException &e) {
-        throw Error("surfaceRoughness is missing");
+        throw Error("roughness is missing");
     } catch (libconfig::SettingTypeException &e) {
-        throw Error("surfaceRoughness must be a double");
+        throw Error("roughness must be a double");
     }
 
     try {
-        libconfig::Setting &volumeAbsorbtion = config["volumeAbsorbtion"];
-        _volumeAbsorbtion = {volumeAbsorbtion[0], volumeAbsorbtion[1], volumeAbsorbtion[2]};
-        _volumeAbsorbtion.normalize();
+        _reflexionIndex = config["reflexion"];
     } catch (libconfig::SettingNotFoundException &e) {
-        throw Error("volumeAbsorbtion is missing");
+        throw Error("reflexion is missing");
     } catch (libconfig::SettingTypeException &e) {
-        throw Error("volumeAbsorbtion must be a vector of double");
-    }
-
-    try {
-        libconfig::Setting &emissionColor = config["emissionColor"];
-        _emissionColor = {emissionColor[0], emissionColor[1], emissionColor[2]};
-    } catch (libconfig::SettingNotFoundException &e) {
-        throw Error("emissionColor is missing");
-    } catch (libconfig::SettingTypeException &e) {
-        throw Error("emissionColor must be a vector of double");
-    }
-
-    try {
-        _reflexionIndex = config["reflexionIndex"];
-    } catch (libconfig::SettingNotFoundException &e) {
-        throw Error("reflexionIndex is missing");
-    } catch (libconfig::SettingTypeException &e) {
-        throw Error("reflexionIndex must be a double");
-    }
-
-    try {
-        _emissionIntensity = config["emissionIntensity"];
-    } catch (libconfig::SettingNotFoundException &e) {
-        throw Error("emissionIntensity is missing");
-    } catch (libconfig::SettingTypeException &e) {
-        throw Error("emissionIntensity must be a double");
+        throw Error("reflexion must be a double");
     }
 
     try {
@@ -395,7 +370,8 @@ void raytracer::WavefontObject::parseData(libconfig::Setting &config)
     }
 
     try {
-        _rotation = {config["rotation"][0], config["rotation"][1], config["rotation"][2]};
+        Vector3D rotation = {config["rotation"][0], config["rotation"][1], config["rotation"][2]};
+        rotate(rotation);
     } catch (libconfig::SettingNotFoundException &e) {
         throw Error("rotation not found");
     } catch (libconfig::SettingTypeException &e) {

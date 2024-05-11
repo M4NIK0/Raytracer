@@ -12,6 +12,7 @@
 #include "../Objects/Primitives/Plane.hpp"
 #include "../Objects/Primitives/Triangle.hpp"
 #include "../Objects/Advanced/WavefontObject.hpp"
+#include "../Render/RenderProcessWrapper.hpp"
 
 class Parser{
     public:
@@ -34,9 +35,9 @@ class Parser{
         void parseConfig(const char* path);
         void parseObjects(raytracer::Renderer &renderer);
         void parseLights(raytracer::Renderer &renderer);
-        raytracer::Camera parseCamera(int width, int height);
-        raytracer::Renderer parseScene(int width, int height);
-        raytracer::Renderer parseRenderer(int width, int height);
+        void parseCamera(int width, int height, raytracer::RenderProcessWrapper &rendererWrapper);
+        void parseScene(int width, int height, raytracer::RenderProcessWrapper &rendererWrapper);
+        void parseRenderer(int width, int height, raytracer::RenderProcessWrapper &rendererWrapper);
     private:
         libconfig::Config* cfg;
 };

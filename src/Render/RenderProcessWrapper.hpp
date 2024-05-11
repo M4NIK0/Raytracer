@@ -16,7 +16,7 @@ namespace raytracer
     class RenderProcessWrapper
     {
         public:
-            RenderProcessWrapper(Renderer &rd, size_t nbThreads);
+            RenderProcessWrapper(int width, int height, size_t nbThreads);
             ~RenderProcessWrapper();
 
             void renderImageDisplay(int windowSize = 800);
@@ -43,8 +43,8 @@ namespace raytracer
 
             raytracer::Color getPixelColor(int x, int y);
 
-        private:
             Renderer renderer;
+        private:
             Threads threads;
             sfml display;
 

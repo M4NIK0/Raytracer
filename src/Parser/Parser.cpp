@@ -76,7 +76,7 @@ void Parser::parseLights(raytracer::Renderer &renderer)
     }
 }
 
-raytracer::Camera Parser::parseCamera(int width, int height) {
+void Parser::parseCamera(int width, int height, raytracer::RenderProcessWrapper &rendererWrapper) {
     if (!cfg->exists("Camera"))
         throw Parser::Error("Camera not found");
     libconfig::Setting& camera = cfg->lookup("Camera");
@@ -103,21 +103,30 @@ raytracer::Camera Parser::parseCamera(int width, int height) {
     } catch (libconfig::SettingTypeException &e) {
         throw Parser::Error("sensitivity must be a double");
     }
-    return tmp;
+
+    raytracer::Vector3D rotation;
+    try {
+        rotation = raytracer::Vector3D(camera["rotation"][0], camera["rotation"][1], camera["rotation"][2]);
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Parser::Error("rotation not found");
+    } catch (libconfig::SettingTypeException &e) {
+        throw Parser::Error("rotation must be an array of 3 double");
+    }
+
+    rendererWrapper.initCamera(tmp.sensitivity, tmp.exposure, tmp.origin, rotation);
 }
 
-raytracer::Renderer Parser::parseRenderer(int width, int height) {
+void Parser::parseRenderer(int width, int height, raytracer::RenderProcessWrapper &rendererWrapper) {
     if (!cfg->exists("Renderer"))
         throw Parser::Error("Renderer not found");
     libconfig::Setting& renderer = cfg->lookup("Renderer");
-    raytracer::Camera camera = parseCamera(width, height);
+    parseCamera(width, height, rendererWrapper);
 
-    raytracer::Renderer render(camera);
-    render.renderData.width = width;
-    render.renderData.height = height;
+    rendererWrapper.renderer.renderData.width = width;
+    rendererWrapper.renderer.renderData.height = height;
     try {
-        render.renderData.diffuseRays = renderer["diffusion"].TypeInt64;
-        if (render.renderData.diffuseRays > 2048)
+        rendererWrapper.renderer.renderData.diffuseRays = renderer["diffusion"].TypeInt64;
+        if (rendererWrapper.renderer.renderData.diffuseRays > 2048)
             throw Parser::Error("diffusion must be between 0 and 2048");
     } catch (libconfig::SettingNotFoundException &e) {
         throw Parser::Error("diffusion not found");
@@ -126,8 +135,8 @@ raytracer::Renderer Parser::parseRenderer(int width, int height) {
     }
 
     try {
-        render.renderData.maxBounces = renderer["bounces"].TypeInt64;
-        if (render.renderData.maxBounces > 2048)
+        rendererWrapper.renderer.renderData.maxBounces = renderer["bounces"].TypeInt64;
+        if (rendererWrapper.renderer.renderData.maxBounces > 2048)
             throw Parser::Error("bounces must be between 0 and 2048");
     } catch (libconfig::SettingNotFoundException &e) {
         throw Parser::Error("bounces not found");
@@ -136,8 +145,8 @@ raytracer::Renderer Parser::parseRenderer(int width, int height) {
     }
 
     try {
-        render.renderData.reflexionsRays = renderer["reflexions"].TypeInt64;
-        if (render.renderData.reflexionsRays > 2048)
+        rendererWrapper.renderer.renderData.reflexionsRays = renderer["reflexions"].TypeInt64;
+        if (rendererWrapper.renderer.renderData.reflexionsRays > 2048)
             throw Parser::Error("reflexions must be between 0 and 2048");
     } catch (libconfig::SettingNotFoundException &e) {
         throw Parser::Error("reflexions not found");
@@ -146,8 +155,8 @@ raytracer::Renderer Parser::parseRenderer(int width, int height) {
     }
 
     try {
-        render.renderData.chunkHeight = renderer["chunkHeight"];
-        if (render.renderData.chunkHeight < 1 || render.renderData.chunkHeight > 2048)
+        rendererWrapper.renderer.renderData.chunkHeight = renderer["chunkHeight"];
+        if (rendererWrapper.renderer.renderData.chunkHeight < 1 || rendererWrapper.renderer.renderData.chunkHeight > 2048)
             throw Parser::Error("chunkHeight must be between 1 and 2048");
     } catch (libconfig::SettingNotFoundException &e) {
         throw Parser::Error("chunkHeight not found");
@@ -156,8 +165,8 @@ raytracer::Renderer Parser::parseRenderer(int width, int height) {
     }
 
     try {
-        render.renderData.chunkWidth = renderer["chunkWidth"];
-        if (render.renderData.chunkWidth < 1 || render.renderData.chunkWidth > 2048)
+        rendererWrapper.renderer.renderData.chunkWidth = renderer["chunkWidth"];
+        if (rendererWrapper.renderer.renderData.chunkWidth < 1 || rendererWrapper.renderer.renderData.chunkWidth > 2048)
             throw Parser::Error("chunkWidth must be between 1 and 2048");
     } catch (libconfig::SettingNotFoundException &e) {
         throw Parser::Error("chunkWidth not found");
@@ -166,20 +175,18 @@ raytracer::Renderer Parser::parseRenderer(int width, int height) {
     }
 
     try {
-        render.renderData.maxSamples = renderer["samples"];
-        if (render.renderData.maxSamples > 2048 || render.renderData.maxSamples < 1)
+        rendererWrapper.renderer.renderData.maxSamples = renderer["samples"];
+        if (rendererWrapper.renderer.renderData.maxSamples > 2048 || rendererWrapper.renderer.renderData.maxSamples < 1)
             throw Parser::Error("samples must be between 1 and 2048");
     } catch (libconfig::SettingNotFoundException &e) {
         throw Parser::Error("samples not found");
     } catch (libconfig::SettingTypeException &e) {
         throw Parser::Error("samples must be an int");
     }
-    return render;
 }
 
-raytracer::Renderer Parser::parseScene(int width, int height) {
-    raytracer::Renderer renderer = parseRenderer(width, height);
-    parseObjects(renderer);
-    parseLights(renderer);
-    return renderer;
+void Parser::parseScene(int width, int height, raytracer::RenderProcessWrapper &rendererWrapper) {
+    parseRenderer(width, height, rendererWrapper);
+    parseObjects(rendererWrapper.renderer);
+    parseLights(rendererWrapper.renderer);
 }
