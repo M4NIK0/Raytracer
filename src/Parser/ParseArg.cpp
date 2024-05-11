@@ -19,27 +19,59 @@ ParseArg::ParseArg(int ac, char **av) : _imageSize(800, 600), _chunkSize(16, 16)
         if (arg == "-h") {
             displayHelp(av[0]);
         } else if (arg == "-is" && i + 2 < ac) {
-            _imageSize = std::make_pair(std::stoi(av[++i]), std::stoi(av[++i]));
+            try {
+                _imageSize = std::make_pair(std::stoi(av[++i]), std::stoi(av[++i]));
+            } catch (std::exception &e) {
+                throw Error("-is argument must be followed by two integers");
+            }
         } else if (arg == "-cs" && i + 2 < ac) {
-            _chunkSize = std::make_pair(std::stoi(av[++i]), std::stoi(av[++i]));
+            try {
+                _chunkSize = std::make_pair(std::stoi(av[++i]), std::stoi(av[++i]));
+            } catch (std::exception &e) {
+                throw Error("-cs argument must be followed by two integers");
+            }
         } else if (arg == "-t" && i + 1 < ac) {
-            _threads = std::stoi(av[++i]);
+            try {
+                _threads = std::stoi(av[++i]);
+            } catch (std::exception &e) {
+                throw Error("-t argument must be followed by an integer");
+            }
         } else if (arg == "-ws" && i + 1 < ac) {
-            _windowSize = std::stoi(av[++i]);
+            try {
+                _windowSize = std::stoi(av[++i]);
+            } catch (std::exception &e) {
+                throw Error("-ws argument must be followed by an integer");
+            }
         } else if (arg == "-s" && i + 1 < ac) {
-            _samples = std::stoi(av[++i]);
+            try {
+                _samples = std::stoi(av[++i]);
+            } catch (std::exception &e) {
+                throw Error("-s argument must be followed by an integer");
+            }
         } else if (arg == "-b" && i + 1 < ac) {
-            _bounces = std::stoi(av[++i]);
+            try {
+                _bounces = std::stoi(av[++i]);
+            } catch (std::exception &e) {
+                throw Error("-b argument must be followed by an integer");
+            }
         } else if (arg == "-dr" && i + 1 < ac) {
-            _diffusionRays = std::stoi(av[++i]);
+            try {
+                _diffusionRays = std::stoi(av[++i]);
+            } catch (std::exception &e) {
+                throw Error("-dr argument must be followed by an integer");
+            }
         } else if (arg == "-rr" && i + 1 < ac) {
-            _reflectionRays = std::stoi(av[++i]);
+            try {
+                _reflectionRays = std::stoi(av[++i]);
+            } catch (std::exception &e) {
+                throw Error("-rr argument must be followed by an integer");
+            }
         } else if (arg == "-cli") {
             _cli = true;
         } else if (arg == "-ne") {
             _ne = true;
         } else {
-            throw Error("Unrecognized argument");
+            throw Error("Unrecognized argument: " + arg);
         }
     }
 }
