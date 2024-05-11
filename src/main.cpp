@@ -34,6 +34,8 @@ int main(int ac, char **av)
     renderer.camera.sensitivity = 250;
     renderer.camera.exposure = 0.1;
 
+    renderer.renderData.height = HEIGHT;
+    renderer.renderData.width = WIDTH;
     renderer.renderData.chunkWidth = CHUNK_SIZE_X;
     renderer.renderData.chunkHeight = CHUNK_SIZE_Y;
     renderer.renderData.maxSamples = MAX_SAMPLES;
@@ -41,8 +43,6 @@ int main(int ac, char **av)
     Parser parser;
     parser.parseConfig(path.c_str());
     renderer = parser.parseScene(width, height);
-
-    raytracer::Sphere sphere();
 
     raytracer::RenderProcessWrapper renderProcessWrapper(renderer, 4);
 

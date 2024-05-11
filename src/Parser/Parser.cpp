@@ -46,6 +46,12 @@ void Parser::parseObjects(raytracer::Renderer &renderer) {
             raytracer::Triangle triangle;
             triangle.parseData(object);
             renderer.addObject(std::make_shared<raytracer::Triangle>(triangle));
+        } else if (type == "OBJ") {
+            if (!object.exists("path"))
+                throw Parser::Error("path not found");
+            raytracer::WavefontObject wavefontObject(object["path"]);
+            wavefontObject.parseData(object);
+            renderer.addObject(std::make_shared<raytracer::WavefontObject>(wavefontObject));
         }
     }
 }

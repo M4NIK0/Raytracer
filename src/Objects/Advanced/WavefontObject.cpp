@@ -18,6 +18,11 @@ raytracer::WavefontObject::WavefontObject(const std::string &path, const Point3D
     _surfaceAbsorbtion = surfaceAbsorbtion;
 }
 
+raytracer::WavefontObject::WavefontObject(const std::string &path)
+{
+    _loadWavefont(path);
+}
+
 raytracer::WavefontObject::WavefontObject() = default;
 
 raytracer::WavefontObject::~WavefontObject() = default;
@@ -297,5 +302,98 @@ raytracer::Triangle raytracer::WavefontObject::_createTriangleFromLine(const std
 
 void raytracer::WavefontObject::parseData(libconfig::Setting &config)
 {
+    try {
+        libconfig::Setting &position = config["position"];
+        _position = {position[0], position[1], position[2]};
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Error("position is missing");
+    } catch (libconfig::SettingTypeException &e) {
+        throw Error("position must be a vector of double");
+    }
 
+    try {
+        libconfig::Setting &color = config["color"];
+        _surfaceAbsorbtion.r = (255.0 - (double)color[0]) / 255.0;
+        _surfaceAbsorbtion.g = (255.0 - (double)color[1]) / 255.0;
+        _surfaceAbsorbtion.b = (255.0 - (double)color[2]) / 255.0;
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Error("color not found");
+    } catch (libconfig::SettingTypeException &e) {
+        throw Error("color need to be an array of double");
+    }
+
+    try {
+        _surfaceRoughness = config["surfaceRoughness"];
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Error("surfaceRoughness is missing");
+    } catch (libconfig::SettingTypeException &e) {
+        throw Error("surfaceRoughness must be a double");
+    }
+
+    try {
+        libconfig::Setting &volumeAbsorbtion = config["volumeAbsorbtion"];
+        _volumeAbsorbtion = {volumeAbsorbtion[0], volumeAbsorbtion[1], volumeAbsorbtion[2]};
+        _volumeAbsorbtion.normalize();
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Error("volumeAbsorbtion is missing");
+    } catch (libconfig::SettingTypeException &e) {
+        throw Error("volumeAbsorbtion must be a vector of double");
+    }
+
+    try {
+        libconfig::Setting &emissionColor = config["emissionColor"];
+        _emissionColor = {emissionColor[0], emissionColor[1], emissionColor[2]};
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Error("emissionColor is missing");
+    } catch (libconfig::SettingTypeException &e) {
+        throw Error("emissionColor must be a vector of double");
+    }
+
+    try {
+        _reflexionIndex = config["reflexionIndex"];
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Error("reflexionIndex is missing");
+    } catch (libconfig::SettingTypeException &e) {
+        throw Error("reflexionIndex must be a double");
+    }
+
+    try {
+        _emissionIntensity = config["emissionIntensity"];
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Error("emissionIntensity is missing");
+    } catch (libconfig::SettingTypeException &e) {
+        throw Error("emissionIntensity must be a double");
+    }
+
+    try {
+        _translation = {config["translation"][0], config["translation"][1], config["translation"][2]};
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Error("translation not found");
+    } catch (libconfig::SettingTypeException &e) {
+        throw Error("translation must be an array of 3 double");
+    }
+
+    try {
+        _translationStep = {config["translationSpeed"][0], config["translationSpeed"][1], config["translationSpeed"][2]};
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Error("translationSpeed not found");
+    } catch (libconfig::SettingTypeException &e) {
+        throw Error("translationSpeed must be an array of 3 double");
+    }
+
+    try {
+        _rotation = {config["rotation"][0], config["rotation"][1], config["rotation"][2]};
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Error("rotation not found");
+    } catch (libconfig::SettingTypeException &e) {
+        throw Error("rotation must be an array of 3 double");
+    }
+
+    try {
+        _rotationStep = {config["rotationSpeed"][0], config["rotationSpeed"][1], config["rotationSpeed"][2]};
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Error("rotationSpeed not found");
+    } catch (libconfig::SettingTypeException &e) {
+        throw Error("rotationSpeed must be an array of 3 double");
+    }
 }

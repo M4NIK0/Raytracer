@@ -11,6 +11,7 @@
 #include "../Objects/Primitives/Sphere.hpp"
 #include "../Objects/Primitives/Plane.hpp"
 #include "../Objects/Primitives/Triangle.hpp"
+#include "../Objects/Advanced/WavefontObject.hpp"
 
 class Parser{
     public:

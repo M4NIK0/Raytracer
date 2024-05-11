@@ -18,6 +18,7 @@ namespace raytracer
     {
         public:
             WavefontObject();
+            WavefontObject(const std::string &path);
             WavefontObject(const std::string &path, const Point3D& position, Color surfaceAbsorbtion);
             ~WavefontObject() override;
 
@@ -55,6 +56,8 @@ namespace raytracer
 
             void stepMotion() override;
 
+            void parseData(libconfig::Setting &config) override;
+
             Point3D getCenter() const override;
 
         private:
@@ -87,7 +90,5 @@ namespace raytracer
 
             static Point3D _getPointFromLine(const std::string &line);
             static Triangle _createTriangleFromLine(const std::string &line, const std::vector<Point3D> &points);
-
-            void parseData(libconfig::Setting &config) override;
     };
 }
