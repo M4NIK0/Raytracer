@@ -32,6 +32,37 @@ namespace raytracer
             void displayScreen();
             void endWindow();
 
+            void initCamera(int sensibility, int exposure)
+            {
+                Camera camera(_width, _height);
+                camera.sensitivity = sensibility;
+                camera.exposure = exposure;
+
+                renderer.camera = camera;
+            }
+
+            void initRenderData(int chunkSizeX, int chunkSizeY, int maxSamples)
+            {
+                renderer.renderData.chunkWidth = chunkSizeX;
+                renderer.renderData.chunkHeight = chunkSizeY;
+                renderer.renderData.maxSamples = maxSamples;
+            }
+
+            void addObject(std::shared_ptr<IObject> object)
+            {
+                renderer.addObject(object);
+            }
+
+            void addLight(std::shared_ptr<ILight> light)
+            {
+                renderer.addLight(light);
+            }
+
+            raytracer::Color getPixelColor(int x, int y)
+            {
+                return renderer.renderData.renderBuffer[x][y];
+            }
+
         private:
             Renderer renderer;
             Threads threads;
