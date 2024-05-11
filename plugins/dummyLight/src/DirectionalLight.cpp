@@ -7,6 +7,9 @@
 
 #include "DirectionalLight.hpp"
 
-DirectionalLight::DirectionalLight() = default;
+raytracer::DirectionalLight::~DirectionalLight() = default;
 
-DirectionalLight::~DirectionalLight() = default;
+void raytracer::DirectionalLight::parseData(libconfig::Setting &config)
+{
+
+}

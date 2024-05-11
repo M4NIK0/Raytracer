@@ -5,9 +5,9 @@
 ** dummyLight
 */
 
-#include "../../include/ILight.hpp"
+#include "../include/ILight.hpp"
 #include "DirectionalLight.hpp"
 
-extern "C" arcade::ILight *getLight () {
-    return new DirectionalLight();
+extern "C" raytracer::ILight *getLight() {
+    return new raytracer::DirectionalLight();
 }
