@@ -77,3 +77,7 @@ Disable the graphical interface for headless execution
 
 - `-ne`\
 Disable preview editor
+
+
+- `-ws [n]`\
+Preview window size
