@@ -7,10 +7,10 @@ The goal is to create a 3D scene with a camera and objects, and render it with r
 
 ## The team
 
-[Louis CHABRERIE](louis.chabrerie@epitech.eu) ([GitHub](https://github.com/M4NIK0)) - Raytracing specialist\
-[Léo DOBY](leo.doby@epitech.eu) ([GitHub](https://github.com/LeoDoby)) - Parsing master\
-[Arthur BICHARA](arthur.bichara@epitech.eu) ([GitHub](https://github.com/ArthurBchr)) - Editor enthusiast\
-[Ethan FLAK](ethan.flak@epitech.eu) ([GitHub](https://github.com/Eth22-Epitech)) - Objects magician
+[Louis CHABRERIE](mailto:louis.chabrerie@epitech.eu) ([GitHub](https://github.com/M4NIK0)) - Raytracing specialist\
+[Léo DOBY](mailto:leo.doby@epitech.eu) ([GitHub](https://github.com/LeoDoby)) - Parsing master\
+[Arthur BICHARA](mailto:arthur.bichara@epitech.eu) ([GitHub](https://github.com/ArthurBchr)) - Editor enthusiast\
+[Ethan FLAK](mailto:ethan.flak@epitech.eu) ([GitHub](https://github.com/Eth22-Epitech)) - Objects magician
 
 ## How to use
 
