@@ -37,9 +37,11 @@ int main(int ac, char **av)
     renderProcessWrapper.renderer.renderData.diffuseRays = diffusionRays;
     renderProcessWrapper.renderer.renderData.reflexionsRays = reflectionRays;
 
+    std::vector<raytracer::LibHandler> libs;
+
     Parser parser;
     parser.parseConfig(configFile.c_str());
-    parser.parseScene(width, height, renderProcessWrapper);
+    parser.parseScene(width, height, renderProcessWrapper, libs);
 
     renderProcessWrapper.initRenderData(chunkSizeX, chunkSizeY, maxSamples);
 
@@ -69,6 +71,5 @@ int main(int ac, char **av)
         }
     }
     output.writeToFile();
-
     return 0;
 }
