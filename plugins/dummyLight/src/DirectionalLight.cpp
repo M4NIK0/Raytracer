@@ -37,3 +37,16 @@ void raytracer::DirectionalLight::parseData(libconfig::Setting &config)
         throw Error("intensity need to be a double");
     }
 }
+
+
+std::vector<raytracer::Ray3D> raytracer::DirectionalLight::getLightRays(const raytracer::Point3D &hitPoint)
+{
+    Ray3D ray;
+
+    ray.origin = hitPoint;
+    ray.direction = Vector3D()-_direction;
+
+    ray.direction.normalize();
+
+    return {ray};
+}

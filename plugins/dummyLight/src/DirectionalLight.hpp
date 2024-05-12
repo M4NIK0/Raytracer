@@ -31,7 +31,7 @@ namespace raytracer
             DirectionalLight(): _color({255, 255, 255}), _intensity(1) {_color.normalize();}
             ~DirectionalLight();
 
-            std::vector<Ray3D> getLightRays(const Point3D &hitPoint) override { return {{{INFINITY, INFINITY, INFINITY}, _direction}}; }
+            std::vector<Ray3D> getLightRays(const Point3D &hitPoint) override;
 
             Color getColor() override { return _color; }
 
