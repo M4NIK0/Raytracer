@@ -17,18 +17,19 @@ namespace raytracer
     class LibHandler
     {
         public:
-            LibHandler(std::string &path) : _path(path) {}
+            LibHandler() : _handle(nullptr) {}
+            LibHandler(std::string &path) : _path(path), _handle(nullptr) {}
             ~LibHandler();
 
             void setPath(const std::string &path) { _path = path; }
 
-            void openLib(void);
-            void closeLib(void);
+            void openLib();
+            void closeLib();
 
             bool checkSymbol(const std::string &symbol);
 
             template<typename T>
-            std::unique_ptr<T> getObject(std::string &symbol)
+            std::shared_ptr<T> getObject(std::string &symbol)
             {
                 return _getObject<T>(symbol);
             }
@@ -46,10 +47,10 @@ namespace raytracer
         private:
 
             std::string _path;
-            void *_handle;
+            void *_handle{};
 
             template<typename T>
-            std::unique_ptr<T> _getObject(std::string &symbol)
+            std::shared_ptr<T> _getObject(std::string &symbol)
             {
                 T *(*sym)() = reinterpret_cast<T *(*)()>(dlsym(_handle, symbol.c_str()));
                 const char *dlsym_error = dlerror();
@@ -58,7 +59,7 @@ namespace raytracer
                     throw raytracer::LibHandler::Error("Cannot load symbol:" + std::string(dlsym_error));
                 }
 
-                std::unique_ptr<T> obj(sym());
+                std::shared_ptr<T> obj(sym());
 
                 return obj;
             }

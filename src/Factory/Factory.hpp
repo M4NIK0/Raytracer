@@ -36,8 +36,8 @@ namespace raytracer
             Factory() = default;
             ~Factory() = default;
 
-            static std::shared_ptr<raytracer::ILight> createLight(const std::string& type, libconfig::Setting& config);
-            static std::shared_ptr<raytracer::IObject> createObject(const std::string& type, libconfig::Setting& config);
+            static std::shared_ptr<raytracer::ILight> createLight(const std::string& type, libconfig::Setting& config, std::vector<std::unique_ptr<raytracer::LibHandler>> &libs);
+            static std::shared_ptr<raytracer::IObject> createObject(const std::string& type, libconfig::Setting& config, std::vector<std::unique_ptr<raytracer::LibHandler>> &libs);
         };
 }
 

@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "../../../src/Light/ILight.hpp"
+#include "../include/ILight.hpp"
 
 namespace raytracer
 {
@@ -31,7 +31,7 @@ namespace raytracer
             DirectionalLight(): _color({255, 255, 255}), _intensity(1) {_color.normalize();}
             ~DirectionalLight();
 
-            std::vector<Ray3D> getLightRays(const Point3D &hitPoint) override { return {{{INFINITY, INFINITY, INFINITY}, _direction}}; }
+            std::vector<Ray3D> getLightRays(const Point3D &hitPoint) override;
 
             Color getColor() override { return _color; }
 
@@ -48,7 +48,6 @@ namespace raytracer
             void parseData(libconfig::Setting &config) override;
 
         private:
-            Point3D _position;
             Color _color;
             double _intensity;
             Vector3D _direction;

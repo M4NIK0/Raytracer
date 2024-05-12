@@ -7,10 +7,11 @@
 
 #pragma once
 
+#include <vector>
 #include <libconfig.h++>
-#include "../../include/Color/Color.hpp"
-#include "../../include/Math/Point3D.hpp"
-#include "../../include/Math/Ray3D.hpp"
+#include "Color/Color.hpp"
+#include "Math/Point3D.hpp"
+#include "Math/Ray3D.hpp"
 
 namespace raytracer
 {

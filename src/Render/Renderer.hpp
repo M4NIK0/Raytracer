@@ -9,7 +9,7 @@
 
 #include <chrono>
 #include "Camera.hpp"
-#include "Color.hpp"
+#include "../../include/Color/Color.hpp"
 #include "../Objects/IObject.hpp"
 #include "../Light/ILight.hpp"
 #include "RenderRay.hpp"
@@ -62,6 +62,9 @@ namespace raytracer
             static RenderRay getReflexionsLight(const RenderPoint &point, const RenderData &data, size_t bounces);
             static RenderRay getDiffuseLight(const RenderPoint &point, const RenderData &data, size_t bounces);
             static RenderRay getRefractionsLight(const RenderPoint &point, const RenderData &data, size_t bounces);
+
+            void clearObjects();
+            void clearLights();
 
             Camera camera;
             RenderData renderData = {};

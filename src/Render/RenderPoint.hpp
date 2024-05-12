@@ -11,7 +11,7 @@
 #include "../../include/Math/Point3D.hpp"
 #include "../../include/Math/Ray3D.hpp"
 #include "../Objects/IObject.hpp"
-#include "Color.hpp"
+#include "../../include/Color/Color.hpp"
 
 namespace raytracer
 {

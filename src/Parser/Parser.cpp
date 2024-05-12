@@ -27,7 +27,7 @@ void Parser::parseConfig(const char* path) {
     }
 }
 
-void Parser::parseObjects(raytracer::Renderer &renderer) {
+void Parser::parseObjects(raytracer::Renderer &renderer, std::vector<std::unique_ptr<raytracer::LibHandler>> &libs) {
     if (!cfg->exists("Objects"))
         throw Parser::Error("Objects not found");
     libconfig::Setting& Objects = cfg->lookup("Objects");
@@ -41,14 +41,14 @@ void Parser::parseObjects(raytracer::Renderer &renderer) {
             throw Parser::Error("Object type not found");
         std::string type = object["type"];
 
-        std::shared_ptr<raytracer::IObject> obj = raytracer::Factory::createObject(type, object);
+        std::shared_ptr<raytracer::IObject> obj = raytracer::Factory::createObject(type, object, libs);
         if (obj != nullptr) {
             renderer.addObject(obj);
         }
     }
 }
 
-void Parser::parseLights(raytracer::Renderer &renderer)
+void Parser::parseLights(raytracer::Renderer &renderer, std::vector<std::unique_ptr<raytracer::LibHandler>> &libs)
 {
     if (!cfg->exists("Lights"))
         throw Parser::Error("Lights not found");
@@ -61,7 +61,7 @@ void Parser::parseLights(raytracer::Renderer &renderer)
             throw Parser::Error("Light type not found");
         std::string type = light["type"];
 
-        std::shared_ptr<raytracer::ILight> obj = raytracer::Factory::createLight(type, light);
+        std::shared_ptr<raytracer::ILight> obj = raytracer::Factory::createLight(type, light, libs);
         if (obj != nullptr) {
             renderer.addLight(obj);
         }
@@ -108,8 +108,8 @@ void Parser::parseCamera(int width, int height, raytracer::RenderProcessWrapper 
     rendererWrapper.initCamera(tmp.sensitivity, tmp.exposure, tmp.origin, rotation);
 }
 
-void Parser::parseScene(int width, int height, raytracer::RenderProcessWrapper &rendererWrapper) {
+void Parser::parseScene(int width, int height, raytracer::RenderProcessWrapper &rendererWrapper, std::vector<std::unique_ptr<raytracer::LibHandler>> &libs) {
     parseCamera(width, height, rendererWrapper);
-    parseObjects(rendererWrapper.renderer);
-    parseLights(rendererWrapper.renderer);
+    parseObjects(rendererWrapper.renderer, libs);
+    parseLights(rendererWrapper.renderer, libs);
 }

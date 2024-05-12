@@ -14,7 +14,7 @@
 #include <vector>
 #include <iostream>
 #include <filesystem>
-#include "../Render/Color.hpp"
+#include "../../include/Color/Color.hpp"
 
 namespace raytracer
 {
