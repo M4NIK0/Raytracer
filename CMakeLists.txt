@@ -57,6 +57,8 @@ add_executable(raytracer src/main.cpp
         src/Factory/Factory.cpp
         src/Parser/ParseArg.cpp
         src/LibHandler/LibHandler.cpp
+        src/Objects/Primitives/Cone.hpp
+        src/Objects/Primitives/Cone.cpp
 )
 
 # Link SFML
