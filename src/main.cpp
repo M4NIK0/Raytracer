@@ -76,6 +76,11 @@ int main(int ac, char **av)
         renderProcessWrapper.renderImageCLI();
     }
 
+    renderProcessWrapper.renderer.clearObjects();
+    renderProcessWrapper.renderer.clearLights();
+
+    libs.clear();
+
     // Create PPM Output
     raytracer::PPMOutput output(outputFile, width, height);
     for (int y = 0; y < height; y++)
