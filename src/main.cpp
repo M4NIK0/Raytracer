@@ -43,7 +43,7 @@ int main(int ac, char **av)
 
     try {
         parser.parseConfig(configFile.c_str());
-        parser.parseScene(width, height, renderProcessWrapper);
+        parser.parseScene(width, height, renderProcessWrapper, libs);
     } catch (const std::exception &e) {
         std::cerr << e.what() << std::endl;
         return 84;
