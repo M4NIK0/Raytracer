@@ -11,19 +11,32 @@ std::shared_ptr<raytracer::ILight> raytracer::Factory::createLight(const std::st
         pointLight->parseData(config);
         return pointLight;
     } else {
+        std::string plugin = config["plugin"];
         try {
-            std::string plugin = config["plugin"];
-            std::string light = "getLight";
-            raytracer::LibHandler libHandler(plugin);
-            libHandler.openLib();
-            libHandler.getObject<raytracer::ILight>(light);
-            std::shared_ptr<raytracer::ILight> obj = libHandler.getObject<raytracer::ILight>(light);
-            obj->parseData(config);
-            std::cout << "Light created" << std::endl;
-            return obj;
+            plugin = std::string (config["plugin"]);
         } catch (std::exception &e) {
             throw Error("Cannot load plugin: " + std::string(e.what()));
         }
+        std::string light = "getLight";
+        raytracer::LibHandler libHandler(plugin);
+
+        try {
+            libHandler.openLib();
+        } catch (std::exception &e)
+        {
+            throw Error("Cannot load plugin: " + std::string(e.what()));
+        }
+
+        std::shared_ptr<raytracer::ILight> obj;
+        try {
+            obj = libHandler.getObject<raytracer::ILight>(light);
+        } catch (std::exception &e) {
+            throw Error("Cannot load plugin: " + std::string(e.what()));
+        }
+
+        obj->parseData(config);
+        std::cout << "Light created" << std::endl;
+        return obj;
     }
 }
 
