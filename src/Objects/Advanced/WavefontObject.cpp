@@ -327,6 +327,31 @@ void raytracer::WavefontObject::parseData(libconfig::Setting &config)
     }
 
     try {
+        Vector3D rotation = {config["rotation"][0], config["rotation"][1], config["rotation"][2]};
+        rotate(rotation);
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Error("rotation not found");
+    } catch (libconfig::SettingTypeException &e) {
+        throw Error("rotation must be an array of 3 double");
+    }
+
+    try {
+        _translation = {config["translationSpeed"][0], config["translationSpeed"][1], config["translationSpeed"][2]};
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Error("translationSpeed not found");
+    } catch (libconfig::SettingTypeException &e) {
+        throw Error("translationSpeed must be an array of 3 double");
+    }
+
+    try {
+        _rotation = {config["rotationSpeed"][0], config["rotationSpeed"][1], config["rotationSpeed"][2]};
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Error("rotationSpeed not found");
+    } catch (libconfig::SettingTypeException &e) {
+        throw Error("rotationSpeed must be an array of 3 double");
+    }
+
+    try {
         libconfig::Setting &color = config["color"];
         _surfaceAbsorbtion.r = ((double)color[0]) / 255.0;
         _surfaceAbsorbtion.g = ((double)color[1]) / 255.0;
@@ -340,11 +365,19 @@ void raytracer::WavefontObject::parseData(libconfig::Setting &config)
     }
 
     try {
-        _surfaceRoughness = config["roughness"];
+        _emissionIntensity = config["emissionIntensity"];
     } catch (libconfig::SettingNotFoundException &e) {
-        throw Error("roughness is missing");
+        throw Error("emissionIntensity not found");
     } catch (libconfig::SettingTypeException &e) {
-        throw Error("roughness must be a double");
+        throw Error("emissionIntensity must be a double");
+    }
+
+    try {
+        _emissionColor = {config["emissionColor"][0], config["emissionColor"][1], config["emissionColor"][2]};
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Error("emissionColor not found");
+    } catch (libconfig::SettingTypeException &e) {
+        throw Error("emissionColor must be an array of 3 double");
     }
 
     try {
@@ -353,38 +386,5 @@ void raytracer::WavefontObject::parseData(libconfig::Setting &config)
         throw Error("reflexion is missing");
     } catch (libconfig::SettingTypeException &e) {
         throw Error("reflexion must be a double");
-    }
-
-    try {
-        _translation = {config["translation"][0], config["translation"][1], config["translation"][2]};
-    } catch (libconfig::SettingNotFoundException &e) {
-        throw Error("translation not found");
-    } catch (libconfig::SettingTypeException &e) {
-        throw Error("translation must be an array of 3 double");
-    }
-
-    try {
-        _translationStep = {config["translationSpeed"][0], config["translationSpeed"][1], config["translationSpeed"][2]};
-    } catch (libconfig::SettingNotFoundException &e) {
-        throw Error("translationSpeed not found");
-    } catch (libconfig::SettingTypeException &e) {
-        throw Error("translationSpeed must be an array of 3 double");
-    }
-
-    try {
-        Vector3D rotation = {config["rotation"][0], config["rotation"][1], config["rotation"][2]};
-        rotate(rotation);
-    } catch (libconfig::SettingNotFoundException &e) {
-        throw Error("rotation not found");
-    } catch (libconfig::SettingTypeException &e) {
-        throw Error("rotation must be an array of 3 double");
-    }
-
-    try {
-        _rotationStep = {config["rotationSpeed"][0], config["rotationSpeed"][1], config["rotationSpeed"][2]};
-    } catch (libconfig::SettingNotFoundException &e) {
-        throw Error("rotationSpeed not found");
-    } catch (libconfig::SettingTypeException &e) {
-        throw Error("rotationSpeed must be an array of 3 double");
     }
 }

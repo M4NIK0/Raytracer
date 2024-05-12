@@ -190,24 +190,14 @@ void raytracer::Sphere::parseData(libconfig::Setting &config)
     }
 
     try {
-        _reflexionIndex = config["reflexion"];
-        if (_reflexionIndex < 0 || _reflexionIndex > 1)
-            throw Error("reflexion must be between 0 and 1");
+        libconfig::Setting& translation = config["translationSpeed"];
+        _translation = Vector3D(translation[0], translation[1], translation[2]);
     } catch (libconfig::SettingNotFoundException &e) {
-        throw Error("reflexion is missing");
+        throw Error("translationSpeed is missing");
     } catch (libconfig::SettingTypeException &e) {
-        throw Error("reflexion must be a double");
+        throw Error("translationSpeed must be a vector of double");
     }
 
-    try {
-        _surfaceRoughness = config["roughness"];
-        if (_surfaceRoughness < 0 || _surfaceRoughness > 1)
-            throw Error("roughness must be between 0 and 1");
-    } catch (libconfig::SettingNotFoundException &e) {
-        throw Error("roughness is missing");
-    } catch (libconfig::SettingTypeException &e) {
-        throw Error("roughness must be a double");
-    }
     try {
         libconfig::Setting& color = config["color"];
         _surfaceAbsorbtion.r = ((double)color[0]) / 255.0;
@@ -220,6 +210,33 @@ void raytracer::Sphere::parseData(libconfig::Setting &config)
     } catch (libconfig::SettingTypeException &e) {
         throw Error("color must be a vector of double");
     }
+
+    try {
+        _emissionIntensity = config["emissionIntensity"];
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Error("emissionIntensity not found");
+    } catch (libconfig::SettingTypeException &e) {
+        throw Error("emissionIntensity must be a double");
+    }
+
+    try {
+        _emissionColor = {config["emissionColor"][0], config["emissionColor"][1], config["emissionColor"][2]};
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Error("emissionColor not found");
+    } catch (libconfig::SettingTypeException &e) {
+        throw Error("emissionColor must be an array of 3 double");
+    }
+
+    try {
+        _reflexionIndex = config["reflexion"];
+        if (_reflexionIndex < 0 || _reflexionIndex > 1)
+            throw Error("reflexion must be between 0 and 1");
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Error("reflexion is missing");
+    } catch (libconfig::SettingTypeException &e) {
+        throw Error("reflexion must be a double");
+    }
+
     try {
         _isGlass = config["glass"];
     } catch (libconfig::SettingNotFoundException &e) {
@@ -229,13 +246,13 @@ void raytracer::Sphere::parseData(libconfig::Setting &config)
     }
     if (_isGlass) {
         try {
-            _refractionIndex = config["refraction_index"];
+            _refractionIndex = config["refractionIndex"];
             if (_refractionIndex < 1)
-                throw Error("refraction_index need to be > 1 when the object is glass");
+                throw Error("refractionIndex need to be > 1 when the object is glass");
         } catch (libconfig::SettingNotFoundException &e) {
-            throw Error("refraction_index is missing");
+            throw Error("refractionIndex is missing");
         } catch (libconfig::SettingTypeException &e) {
-            throw Error("refraction_index must be a double");
+            throw Error("refractionIndex must be a double");
         }
     }
 }
