@@ -185,9 +185,9 @@ void raytracer::RenderProcessWrapper::endWindow()
     display->endWindow();
 }
 
-void raytracer::RenderProcessWrapper::initCamera(int sensibility, int exposure, Point3D position, Vector3D rotation)
+void raytracer::RenderProcessWrapper::initCamera(int sensibility, int exposure, Point3D position, double fov, Vector3D rotation)
 {
-    Camera camera(_width, _height, 60.0);
+    Camera camera(_width, _height, fov);
     camera.sensitivity = sensibility;
     camera.exposure = exposure;
 

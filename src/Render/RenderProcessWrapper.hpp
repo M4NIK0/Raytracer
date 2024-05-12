@@ -33,7 +33,7 @@ namespace raytracer
             void displayScreen();
             void endWindow();
 
-            void initCamera(int sensibility, int exposure, Point3D position, Vector3D rotation);
+            void initCamera(int sensibility, int exposure, Point3D position, double fov, Vector3D rotation);
 
             void initRenderData(int chunkSizeX, int chunkSizeY, int maxSamples);
 

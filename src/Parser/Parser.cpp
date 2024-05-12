@@ -116,7 +116,7 @@ void Parser::parseCamera(int width, int height, raytracer::RenderProcessWrapper 
         throw Parser::Error("rotation must be an array of 3 double");
     }
 
-    rendererWrapper.initCamera(tmp.sensitivity, tmp.exposure, tmp.origin, rotation);
+    rendererWrapper.initCamera(tmp.sensitivity, tmp.exposure, tmp.origin, fov, rotation);
 }
 
 void Parser::parseScene(int width, int height, raytracer::RenderProcessWrapper &rendererWrapper, std::vector<std::unique_ptr<raytracer::LibHandler>> &libs) {
