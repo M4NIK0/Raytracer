@@ -37,6 +37,8 @@ int main(int ac, char **av)
     renderProcessWrapper.renderer.renderData.diffuseRays = diffusionRays;
     renderProcessWrapper.renderer.renderData.reflexionsRays = reflectionRays;
 
+    std::vector<raytracer::LibHandler> libs;
+
     Parser parser;
 
     try {
@@ -85,6 +87,5 @@ int main(int ac, char **av)
         }
     }
     output.writeToFile();
-
     return 0;
 }
