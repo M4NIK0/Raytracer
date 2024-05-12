@@ -177,8 +177,8 @@ void raytracer::WavefontObject::initiateMotion(double time, size_t steps)
     _translationStep = totalTranslation / steps;
     _rotationStep = totalRotation / steps;
 
-    _position = _position - totalTranslation / 2;
-    _rotation = _rotation - totalRotation / 2;
+    move(Vector3D() - (totalTranslation / 2));
+    rotate(Vector3D() - (totalRotation / 2));
 }
 
 void raytracer::WavefontObject::resetMotion()
@@ -189,8 +189,8 @@ void raytracer::WavefontObject::resetMotion()
 
 void raytracer::WavefontObject::stepMotion()
 {
-    _position = _position + _translationStep;
-    _rotation = _rotation + _rotationStep;
+    move(_translationStep);
+    rotate(_rotationStep);
 }
 
 raytracer::Point3D raytracer::WavefontObject::getCenter() const

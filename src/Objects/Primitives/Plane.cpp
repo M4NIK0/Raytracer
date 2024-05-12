@@ -136,7 +136,7 @@ void raytracer::Plane::initiateMotion(double time, size_t steps)
 
 void raytracer::Plane::resetMotion()
 {
-    _position = _positionBackup;
+
 }
 
 void raytracer::Plane::stepMotion()
@@ -166,22 +166,6 @@ void raytracer::Plane::parseData(libconfig::Setting &config)
         throw Error("normal not found");
     } catch (libconfig::SettingTypeException &e) {
         throw Error("normal must be an array of 3 double"); }
-
-    try {
-        _translation = {config["translation"][0], config["translation"][1], config["translation"][2]};
-    } catch (libconfig::SettingNotFoundException &e) {
-        throw Error("translation not found");
-    } catch (libconfig::SettingTypeException &e) {
-        throw Error("translation must be an array of 3 double");
-    }
-
-    try {
-        _translationStep = {config["translationSpeed"][0], config["translationSpeed"][1], config["translationSpeed"][2]};
-    } catch (libconfig::SettingNotFoundException &e) {
-        throw Error("translationSpeed not found");
-    } catch (libconfig::SettingTypeException &e) {
-        throw Error("translationSpeed must be an array of 3 double");
-    }
 
     try {
         _emissionColor = {config["emission"][0], config["emission"][1], config["emission"][2]};

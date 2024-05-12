@@ -154,7 +154,7 @@ void raytracer::Sphere::initiateMotion(double time, size_t steps)
 
 void raytracer::Sphere::resetMotion()
 {
-    _position = _positionBackup;
+
 }
 
 void raytracer::Sphere::stepMotion()

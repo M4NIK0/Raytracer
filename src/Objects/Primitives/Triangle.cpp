@@ -153,22 +153,25 @@ void raytracer::Triangle::setMotion(raytracer::Vector3D &translation, raytracer:
 
 void raytracer::Triangle::initiateMotion(double time, size_t steps)
 {
-    _translationStep = _translation / static_cast<double>(steps);
-    _rotationStep = _rotation / static_cast<double>(steps);
+    Vector3D totalTranslation = _translation * time;
+    Vector3D totalRotation = _rotation * time;
+
+    _translationStep = totalTranslation / steps;
+    _rotationStep = totalRotation / steps;
+
+    move(Vector3D()-(totalTranslation / 2));
+    rotate(Vector3D()-(totalRotation / 2));
 }
 
 void raytracer::Triangle::resetMotion()
 {
-    _a = _aBackup;
-    _b = _bBackup;
-    _c = _cBackup;
+
 }
 
 void raytracer::Triangle::stepMotion()
 {
-    _a = _a + _translationStep;
-    _b = _b + _translationStep;
-    _c = _c + _translationStep;
+    move(_translationStep);
+    rotate(_rotationStep);
 }
 
 raytracer::Point3D raytracer::Triangle::getCenter() const
