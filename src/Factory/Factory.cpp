@@ -40,7 +40,6 @@ std::shared_ptr<raytracer::ILight> raytracer::Factory::createLight(const std::st
         }
 
         obj->parseData(config);
-        std::cout << "create light" << std::endl;
         return obj;
     }
 }
