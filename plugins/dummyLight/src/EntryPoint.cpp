@@ -5,7 +5,7 @@
 ** dummyLight
 */
 
-#include "../include/ILight.hpp"
+#include "../../../src/Light/ILight.hpp"
 #include "DirectionalLight.hpp"
 
 extern "C" raytracer::ILight *getLight() {

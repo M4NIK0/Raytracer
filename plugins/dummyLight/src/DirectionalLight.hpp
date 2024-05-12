@@ -7,13 +7,27 @@
 
 #pragma once
 
-#include "../include/ILight.hpp"
+#include "../../../src/Light/ILight.hpp"
 
 namespace raytracer
 {
     class DirectionalLight : public ILight
     {
         public:
+            class Error : public std::exception
+            {
+            public:
+                Error(std::string const &message) noexcept
+                        : _message(message) {}
+
+                const char *what() const noexcept override
+                {
+                    return _message.c_str();
+                }
+
+            private:
+                std::string _message;
+            };
             DirectionalLight(): _color({255, 255, 255}), _intensity(1) {_color.normalize();}
             ~DirectionalLight();
 
@@ -34,6 +48,7 @@ namespace raytracer
             void parseData(libconfig::Setting &config) override;
 
         private:
+            Point3D _position;
             Color _color;
             double _intensity;
             Vector3D _direction;

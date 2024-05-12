@@ -13,12 +13,13 @@ std::shared_ptr<raytracer::ILight> raytracer::Factory::createLight(const std::st
     } else {
         try {
             std::string plugin = config["plugin"];
-            std::string light = "Light";
+            std::string light = "getLight";
             raytracer::LibHandler libHandler(plugin);
             libHandler.openLib();
             libHandler.getObject<raytracer::ILight>(light);
             std::shared_ptr<raytracer::ILight> obj = libHandler.getObject<raytracer::ILight>(light);
             obj->parseData(config);
+            std::cout << "Light created" << std::endl;
             return obj;
         } catch (std::exception &e) {
             throw Error("Cannot load plugin: " + std::string(e.what()));
