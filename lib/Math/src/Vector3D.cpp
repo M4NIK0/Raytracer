@@ -9,31 +9,27 @@
 
 raytracer::Vector3D raytracer::Vector3D::operator+(const raytracer::Vector3D &other) const
 {
-    return raytracer::Vector3D();
+    return Vector3D(x + other.x, y + other.y, z + other.z);
 }
 
 raytracer::Vector3D &raytracer::Vector3D::operator+=(const raytracer::Vector3D &other)
 {
-    this->x += other.x;
-    this->y += other.y;
-    this->z += other.z;
-
+    x += other.x;
+    y += other.y;
+    z += other.z;
     return *this;
 }
 
 raytracer::Vector3D raytracer::Vector3D::operator-(const raytracer::Vector3D &other) const
 {
-    Vector3D result = *this;
-    result -= other;
-    return result;
+    return Vector3D(x - other.x, y - other.y, z - other.z);
 }
 
 raytracer::Vector3D &raytracer::Vector3D::operator-=(const raytracer::Vector3D &other)
 {
-    this->x -= other.x;
-    this->y -= other.y;
-    this->z -= other.z;
-
+    x -= other.x;
+    y -= other.y;
+    z -= other.z;
     return *this;
 }
 
@@ -44,8 +40,9 @@ raytracer::Vector3D raytracer::Vector3D::operator*(const raytracer::Vector3D &ot
 
 raytracer::Vector3D &raytracer::Vector3D::operator*=(const raytracer::Vector3D &other)
 {
-    x *= other.x; y *= other.y; z *= other.z;
-
+    x *= other.x;
+    y *= other.y;
+    z *= other.z;
     return *this;
 }
 

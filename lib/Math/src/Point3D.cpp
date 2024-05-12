@@ -67,23 +67,23 @@ raytracer::Point3D raytracer::Point3D::rotateAroundCenter(Point3D &point, Point3
     // create rotation matrix
     Matrix rotationMatrixX;
     rotationMatrixX = {
-            {1, 0, 0},
-            {0, cos(rx), -sin(rx)},
-            {0, sin(rx), cos(rx)}
+        {1, 0, 0},
+        {0, cos(rx), -sin(rx)},
+        {0, sin(rx), cos(rx)}
     };
 
     Matrix rotationMatrixY;
     rotationMatrixY = {
-            {cos(ry), 0, sin(ry)},
-            {0, 1, 0},
-            {-sin(ry), 0, cos(ry)}
+        {cos(ry), 0, sin(ry)},
+        {0, 1, 0},
+        {-sin(ry), 0, cos(ry)}
     };
 
     Matrix rotationMatrixZ;
     rotationMatrixZ = {
-            {cos(rz), -sin(rz), 0},
-            {sin(rz), cos(rz), 0},
-            {0, 0, 1}
+        {cos(rz), -sin(rz), 0},
+        {sin(rz), cos(rz), 0},
+        {0, 0, 1}
     };
 
     // Cancel point translation
@@ -91,21 +91,21 @@ raytracer::Point3D raytracer::Point3D::rotateAroundCenter(Point3D &point, Point3
 
     // Rotate the point around the center
     newPoint = {
-            newPoint.x * rotationMatrixX[0][0] + newPoint.y * rotationMatrixX[0][1] + newPoint.z * rotationMatrixX[0][2],
-            newPoint.x * rotationMatrixX[1][0] + newPoint.y * rotationMatrixX[1][1] + newPoint.z * rotationMatrixX[1][2],
-            newPoint.x * rotationMatrixX[2][0] + newPoint.y * rotationMatrixX[2][1] + newPoint.z * rotationMatrixX[2][2]
+        newPoint.x * rotationMatrixX[0][0] + newPoint.y * rotationMatrixX[0][1] + newPoint.z * rotationMatrixX[0][2],
+        newPoint.x * rotationMatrixX[1][0] + newPoint.y * rotationMatrixX[1][1] + newPoint.z * rotationMatrixX[1][2],
+        newPoint.x * rotationMatrixX[2][0] + newPoint.y * rotationMatrixX[2][1] + newPoint.z * rotationMatrixX[2][2]
     };
 
     newPoint = {
-            newPoint.x * rotationMatrixY[0][0] + newPoint.y * rotationMatrixY[0][1] + newPoint.z * rotationMatrixY[0][2],
-            newPoint.x * rotationMatrixY[1][0] + newPoint.y * rotationMatrixY[1][1] + newPoint.z * rotationMatrixY[1][2],
-            newPoint.x * rotationMatrixY[2][0] + newPoint.y * rotationMatrixY[2][1] + newPoint.z * rotationMatrixY[2][2]
+        newPoint.x * rotationMatrixY[0][0] + newPoint.y * rotationMatrixY[0][1] + newPoint.z * rotationMatrixY[0][2],
+        newPoint.x * rotationMatrixY[1][0] + newPoint.y * rotationMatrixY[1][1] + newPoint.z * rotationMatrixY[1][2],
+        newPoint.x * rotationMatrixY[2][0] + newPoint.y * rotationMatrixY[2][1] + newPoint.z * rotationMatrixY[2][2]
     };
 
     newPoint = {
-            newPoint.x * rotationMatrixZ[0][0] + newPoint.y * rotationMatrixZ[0][1] + newPoint.z * rotationMatrixZ[0][2],
-            newPoint.x * rotationMatrixZ[1][0] + newPoint.y * rotationMatrixZ[1][1] + newPoint.z * rotationMatrixZ[1][2],
-            newPoint.x * rotationMatrixZ[2][0] + newPoint.y * rotationMatrixZ[2][1] + newPoint.z * rotationMatrixZ[2][2]
+        newPoint.x * rotationMatrixZ[0][0] + newPoint.y * rotationMatrixZ[0][1] + newPoint.z * rotationMatrixZ[0][2],
+        newPoint.x * rotationMatrixZ[1][0] + newPoint.y * rotationMatrixZ[1][1] + newPoint.z * rotationMatrixZ[1][2],
+        newPoint.x * rotationMatrixZ[2][0] + newPoint.y * rotationMatrixZ[2][1] + newPoint.z * rotationMatrixZ[2][2]
     };
 
     // Add the translation back
