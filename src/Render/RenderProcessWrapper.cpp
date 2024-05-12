@@ -8,7 +8,7 @@
 #include "RenderProcessWrapper.hpp"
 
 
-raytracer::RenderProcessWrapper::RenderProcessWrapper(int width, int height, size_t nbThreads): renderer(Renderer(Camera(width, height))), threads(Threads()), _width(width), _height(height), _nbThreads(nbThreads)
+raytracer::RenderProcessWrapper::RenderProcessWrapper(int width, int height, size_t nbThreads): renderer(Renderer(Camera(width, height, 60))), threads(Threads()), _width(width), _height(height), _nbThreads(nbThreads)
 {
     renderer.renderData.width = width;
     renderer.renderData.height = height;
@@ -187,7 +187,7 @@ void raytracer::RenderProcessWrapper::endWindow()
 
 void raytracer::RenderProcessWrapper::initCamera(int sensibility, int exposure, Point3D position, Vector3D rotation)
 {
-    Camera camera(_width, _height);
+    Camera camera(_width, _height, 60.0);
     camera.sensitivity = sensibility;
     camera.exposure = exposure;
 

@@ -59,7 +59,7 @@ std::shared_ptr<raytracer::IObject> raytracer::Factory::createObject(const std::
         triangle->parseData(config);
         return triangle;
     } else if (type == "OBJ") {
-        std::shared_ptr<raytracer::WavefontObject> wavefontObject = std::make_shared<raytracer::WavefontObject>(config["path"]);
+        std::shared_ptr<raytracer::WavefontObject> wavefontObject = std::make_shared<raytracer::WavefontObject>(config["modelPath"]);
         wavefontObject->parseData(config);
         return wavefontObject;
     } else {

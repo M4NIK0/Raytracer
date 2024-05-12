@@ -73,7 +73,18 @@ void Parser::parseCamera(int width, int height, raytracer::RenderProcessWrapper 
         throw Parser::Error("Camera not found");
     libconfig::Setting& camera = cfg->lookup("Camera");
 
-    raytracer::Camera tmp(width, height);
+    double fov;
+    try {
+        fov = camera["fov"];
+        if (fov <= 0 || fov >= 180)
+            throw Parser::Error("fov must be between 0 and 180");
+    } catch (libconfig::SettingNotFoundException &e) {
+        throw Parser::Error("fov not found");
+    } catch (libconfig::SettingTypeException &e) {
+        throw Parser::Error("fov must be a double");
+    }
+
+    raytracer::Camera tmp(width, height, fov);
     try {
         tmp.origin = raytracer::Vector3D(camera["position"][0], camera["position"][1], camera["position"][2]);
     } catch (libconfig::SettingNotFoundException &e) {
