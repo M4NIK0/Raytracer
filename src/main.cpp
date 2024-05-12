@@ -37,7 +37,7 @@ int main(int ac, char **av)
     renderProcessWrapper.renderer.renderData.diffuseRays = diffusionRays;
     renderProcessWrapper.renderer.renderData.reflexionsRays = reflectionRays;
 
-    std::vector<raytracer::LibHandler> libs;
+    std::vector<std::unique_ptr<raytracer::LibHandler>> libs;
 
     Parser parser;
 

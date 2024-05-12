@@ -27,7 +27,7 @@ void Parser::parseConfig(const char* path) {
     }
 }
 
-void Parser::parseObjects(raytracer::Renderer &renderer, std::vector<raytracer::LibHandler> &libs) {
+void Parser::parseObjects(raytracer::Renderer &renderer, std::vector<std::unique_ptr<raytracer::LibHandler>> &libs) {
     if (!cfg->exists("Objects"))
         throw Parser::Error("Objects not found");
     libconfig::Setting& Objects = cfg->lookup("Objects");
@@ -48,7 +48,7 @@ void Parser::parseObjects(raytracer::Renderer &renderer, std::vector<raytracer::
     }
 }
 
-void Parser::parseLights(raytracer::Renderer &renderer, std::vector<raytracer::LibHandler> &libs)
+void Parser::parseLights(raytracer::Renderer &renderer, std::vector<std::unique_ptr<raytracer::LibHandler>> &libs)
 {
     if (!cfg->exists("Lights"))
         throw Parser::Error("Lights not found");
@@ -108,7 +108,7 @@ void Parser::parseCamera(int width, int height, raytracer::RenderProcessWrapper 
     rendererWrapper.initCamera(tmp.sensitivity, tmp.exposure, tmp.origin, rotation);
 }
 
-void Parser::parseScene(int width, int height, raytracer::RenderProcessWrapper &rendererWrapper, std::vector<raytracer::LibHandler> &libs) {
+void Parser::parseScene(int width, int height, raytracer::RenderProcessWrapper &rendererWrapper, std::vector<std::unique_ptr<raytracer::LibHandler>> &libs) {
     parseCamera(width, height, rendererWrapper);
     parseObjects(rendererWrapper.renderer, libs);
     parseLights(rendererWrapper.renderer, libs);

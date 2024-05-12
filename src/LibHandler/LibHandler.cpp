@@ -19,7 +19,6 @@ raytracer::LibHandler::~LibHandler()
 
 void raytracer::LibHandler::closeLib(void)
 {
-    std::cout << "Closing lib" << std::endl;
     _closeLib();
 }
 
