@@ -40,8 +40,14 @@ int main(int ac, char **av)
     std::vector<raytracer::LibHandler> libs;
 
     Parser parser;
-    parser.parseConfig(configFile.c_str());
-    parser.parseScene(width, height, renderProcessWrapper, libs);
+
+    try {
+        parser.parseConfig(configFile.c_str());
+        parser.parseScene(width, height, renderProcessWrapper);
+    } catch (const std::exception &e) {
+        std::cerr << e.what() << std::endl;
+        return 84;
+    }
 
     renderProcessWrapper.initRenderData(chunkSizeX, chunkSizeY, maxSamples);
 
@@ -49,11 +55,21 @@ int main(int ac, char **av)
     {
         if (!ne)
         {
-            raytracer::Editor editor(renderProcessWrapper.renderer, windowSize);
-            editor.run();
+            try {
+                raytracer::Editor editor(renderProcessWrapper.renderer, windowSize);
+                editor.run();
+            } catch (const std::exception &e) {
+                std::cerr << e.what() << std::endl;
+                return 84;
+            }
         }
 
-        renderProcessWrapper.renderImageDisplay(windowSize);
+        try {
+            renderProcessWrapper.renderImageDisplay(windowSize);
+        } catch (const std::exception &e) {
+            std::cerr << e.what() << std::endl;
+            return 84;
+        }
     }
     else
     {

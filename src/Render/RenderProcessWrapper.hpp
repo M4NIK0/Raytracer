@@ -46,7 +46,7 @@ namespace raytracer
             Renderer renderer;
         private:
             Threads threads;
-            sfml display;
+            std::unique_ptr<sfml> display;
 
             int _width, _height;
             size_t _nbThreads;
