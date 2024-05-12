@@ -7,14 +7,15 @@
 
 #pragma once
 
-#include "../Objects/IObject.hpp"
+#include <chrono>
 #include "Camera.hpp"
-#include "../sfml/sfml.hpp"
+#include "../../include/Color/Color.hpp"
+#include "../Objects/IObject.hpp"
 #include "../Light/ILight.hpp"
 #include "RenderRay.hpp"
 #include "RenderPoint.hpp"
 #include "RenderData.hpp"
-#include <chrono>
+#include "Chunk.hpp"
 
 namespace raytracer
 {

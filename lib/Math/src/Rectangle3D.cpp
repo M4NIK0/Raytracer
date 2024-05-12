@@ -5,9 +5,12 @@
 ** raytracer
 */
 
-#include "Rectangle3D.hpp"
-#include "Matrix.hpp"
+#include "../include/Rectangle3D.hpp"
+#include "../include/Matrix.hpp"
 
+
+raytracer::Rectangle3D::Rectangle3D(raytracer::Point3D origin, raytracer::Vector3D bottom_side,
+                                    raytracer::Vector3D left_side) : origin(origin), bottom_side(bottom_side), left_side(left_side) {}
 raytracer::Rectangle3D::~Rectangle3D() = default;
 
 raytracer::Point3D raytracer::Rectangle3D::pointAt(double u, double v) const

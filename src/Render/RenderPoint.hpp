@@ -7,10 +7,11 @@
 
 #pragma once
 
-#include "../sfml/sfml.hpp"
-#include "../Math/Point3D.hpp"
-#include "../Math/Ray3D.hpp"
+#include <memory>
+#include "../../include/Math/Point3D.hpp"
+#include "../../include/Math/Ray3D.hpp"
 #include "../Objects/IObject.hpp"
+#include "../../include/Color/Color.hpp"
 
 namespace raytracer
 {

@@ -13,62 +13,10 @@
 
 #define FPS 60
 
+#include "../../include/Color/Color.hpp"
+
 namespace raytracer
 {
-    class Color {
-        public:
-            Color(double r = 0, double g = 0, double b = 0) : r(r), g(g), b(b) {}
-
-            double r;
-            double g;
-            double b;
-
-            Color operator+(const Color& other) const {
-                return {r + other.r, g + other.g, b + other.b};
-            }
-
-            Color operator*(const Color& other) const {
-                return {r * other.r, g * other.g, b * other.b};
-            }
-
-            Color operator*(double scalar) const {
-                return {r * scalar, g * scalar, b * scalar};
-            }
-
-            Color operator/(double scalar) const {
-                return {r / scalar, g / scalar, b / scalar};
-            }
-
-            Color operator-(const Color& other) const {
-                return {r - other.r, g - other.g, b - other.b};
-            }
-
-            Color operator+=(const Color& other) {
-                r += other.r;
-                g += other.g;
-                b += other.b;
-                return *this;
-            }
-
-            void cap() {
-                r = r > 255 ? 255 : r;
-                g = g > 255 ? 255 : g;
-                b = b > 255 ? 255 : b;
-
-                r = r < 0 ? 0 : r;
-                g = g < 0 ? 0 : g;
-                b = b < 0 ? 0 : b;
-            }
-
-            void normalize()
-            {
-                double size = sqrt(r * r + g * g + b * b);
-                r = (r / size);
-                g = (g / size);
-                b = (b / size);
-            }
-    };
-
     class IDisplay {
     public:
         virtual ~IDisplay() = default;

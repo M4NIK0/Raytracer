@@ -12,17 +12,34 @@
 #include "../Objects/Advanced/WavefontObject.hpp"
 #include "../Light/ILight.hpp"
 #include "../Light/Objects/PointLight.hpp"
+#include "../LibHandler/LibHandler.hpp"
 #include <libconfig.h++>
 #include <memory>
 
-class Factory {
-    public:
-        Factory() = default;
-        ~Factory() = default;
+namespace raytracer
+{
+    class Factory {
+        public:
+            class Error : public std::exception {
+                public:
+                    Error(std::string const &message) :
+                            _message(message) {};
 
-        static std::shared_ptr<raytracer::ILight> createLight(const std::string& type, libconfig::Setting& config);
-        static std::shared_ptr<raytracer::IObject> createObject(const std::string& type, libconfig::Setting& config);
-};
+                    const char *what() const noexcept override
+                    {
+                        return _message.c_str();
+                    }
+
+                private:
+                    std::string _message;
+            };
+            Factory() = default;
+            ~Factory() = default;
+
+            static std::shared_ptr<raytracer::ILight> createLight(const std::string& type, libconfig::Setting& config);
+            static std::shared_ptr<raytracer::IObject> createObject(const std::string& type, libconfig::Setting& config);
+        };
+}
 
 
 #endif //RAYTRACER_FACTORY_H

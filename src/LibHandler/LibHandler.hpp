@@ -12,7 +12,7 @@
 #include <iostream>
 #include <memory>
 
-namespace arcade
+namespace raytracer
 {
     class LibHandler
     {
@@ -55,7 +55,7 @@ namespace arcade
                 const char *dlsym_error = dlerror();
 
                 if (dlsym_error) {
-                    throw arcade::LibHandler::Error("Cannot load symbol:" + std::string(dlsym_error));
+                    throw raytracer::LibHandler::Error("Cannot load symbol:" + std::string(dlsym_error));
                 }
 
                 std::unique_ptr<T> obj(sym());
