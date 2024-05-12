@@ -9,7 +9,7 @@
 
 #include <chrono>
 #include "Camera.hpp"
-#include "Color.hpp"
+#include "../../include/Color/Color.hpp"
 #include "../Objects/IObject.hpp"
 #include "../Light/ILight.hpp"
 #include "RenderRay.hpp"

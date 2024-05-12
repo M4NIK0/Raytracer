@@ -13,7 +13,7 @@
 
 #define FPS 60
 
-#include "../Render/Color.hpp"
+#include "../../include/Color/Color.hpp"
 
 namespace raytracer
 {

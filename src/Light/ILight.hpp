@@ -8,7 +8,7 @@
 #pragma once
 
 #include <libconfig.h++>
-#include "../Render/Color.hpp"
+#include "../../include/Color/Color.hpp"
 #include "../../include/Math/Point3D.hpp"
 #include "../../include/Math/Ray3D.hpp"
 

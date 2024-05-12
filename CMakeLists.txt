@@ -6,6 +6,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic -O3")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wextra -pedantic -g3 -O0 -fno-omit-frame-pointer")
 
 add_subdirectory(lib/Math)
+add_subdirectory(lib/Color)
 
 # Find SFML
 find_package(SFML 2.5 COMPONENTS graphics window system REQUIRED)
@@ -55,10 +56,10 @@ add_executable(raytracer src/main.cpp
         src/Parser/Parser.hpp
         src/Factory/Factory.cpp
         src/Parser/ParseArg.cpp
-        src/Render/Color.cpp
         src/LibHandler/LibHandler.cpp
 )
 
 # Link SFML
 target_link_libraries(raytracer Math)
+target_link_libraries(raytracer Color)
 target_link_libraries(raytracer sfml-graphics sfml-window sfml-system config++)
