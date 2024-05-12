@@ -8,7 +8,7 @@
 #pragma once
 
 #include <libconfig.h++>
-#include "../Math/Ray3D.hpp"
+#include "../../include/Math/Ray3D.hpp"
 #include "../Render/Color.hpp"
 
 namespace raytracer

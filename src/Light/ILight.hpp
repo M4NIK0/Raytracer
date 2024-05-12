@@ -9,8 +9,8 @@
 
 #include <libconfig.h++>
 #include "../Render/Color.hpp"
-#include "../Math/Point3D.hpp"
-#include "../Math/Ray3D.hpp"
+#include "../../include/Math/Point3D.hpp"
+#include "../../include/Math/Ray3D.hpp"
 
 namespace raytracer
 {
