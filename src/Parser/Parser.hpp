@@ -34,10 +34,10 @@ class Parser{
         Parser();
         ~Parser();
         void parseConfig(const char* path);
-        void parseObjects(raytracer::Renderer &renderer, std::vector<raytracer::LibHandler> &libs);
-        void parseLights(raytracer::Renderer &renderer, std::vector<raytracer::LibHandler> &libs);
+        void parseObjects(raytracer::Renderer &renderer, std::vector<std::unique_ptr<raytracer::LibHandler>> &libs);
+        void parseLights(raytracer::Renderer &renderer, std::vector<std::unique_ptr<raytracer::LibHandler>> &libs);
         void parseCamera(int width, int height, raytracer::RenderProcessWrapper &rendererWrapper);
-        void parseScene(int width, int height, raytracer::RenderProcessWrapper &rendererWrapper, std::vector<raytracer::LibHandler> &libs);
+        void parseScene(int width, int height, raytracer::RenderProcessWrapper &rendererWrapper, std::vector<std::unique_ptr<raytracer::LibHandler>> &libs);
     private:
         std::unique_ptr<libconfig::Config> cfg;
 };

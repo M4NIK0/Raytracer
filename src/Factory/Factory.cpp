@@ -4,7 +4,7 @@
 
 #include "Factory.hpp"
 
-std::shared_ptr<raytracer::ILight> raytracer::Factory::createLight(const std::string& type, libconfig::Setting& config, std::vector<raytracer::LibHandler> &libs)
+std::shared_ptr<raytracer::ILight> raytracer::Factory::createLight(const std::string& type, libconfig::Setting& config, std::vector<std::unique_ptr<raytracer::LibHandler>> &libs)
 {
     if (type == "point") {
         std::shared_ptr<raytracer::PointLight> pointLight = std::make_shared<raytracer::PointLight>();
@@ -18,13 +18,13 @@ std::shared_ptr<raytracer::ILight> raytracer::Factory::createLight(const std::st
             throw Error("Cannot load plugin: " + std::string(e.what()));
         }
         std::string light = "getLight";
-        libs.emplace_back();
-        LibHandler &libHandler = libs.back();
+        libs.push_back(std::make_unique<raytracer::LibHandler>());
+        std::unique_ptr<LibHandler> &libHandler = libs.back();
 
-        libHandler.setPath(plugin);
+        libHandler->setPath(plugin);
 
         try {
-            libHandler.openLib();
+            libHandler->openLib();
         } catch (std::exception &e)
         {
             libs.pop_back();
@@ -33,7 +33,7 @@ std::shared_ptr<raytracer::ILight> raytracer::Factory::createLight(const std::st
 
         std::shared_ptr<raytracer::ILight> obj;
         try {
-            obj = libHandler.getObject<raytracer::ILight>(light);
+            obj = libHandler->getObject<raytracer::ILight>(light);
         } catch (std::exception &e) {
             libs.pop_back();
             throw Error("Cannot load plugin: " + std::string(e.what()));
@@ -44,7 +44,7 @@ std::shared_ptr<raytracer::ILight> raytracer::Factory::createLight(const std::st
     }
 }
 
-std::shared_ptr<raytracer::IObject> raytracer::Factory::createObject(const std::string& type, libconfig::Setting& config, std::vector<raytracer::LibHandler> &libs)
+std::shared_ptr<raytracer::IObject> raytracer::Factory::createObject(const std::string& type, libconfig::Setting& config, std::vector<std::unique_ptr<raytracer::LibHandler>> &libs)
 {
     if (type == "sphere") {
         std::shared_ptr<raytracer::Sphere> sphere = std::make_shared<raytracer::Sphere>();
@@ -70,13 +70,13 @@ std::shared_ptr<raytracer::IObject> raytracer::Factory::createObject(const std::
             throw Error("Cannot load plugin: " + std::string(e.what()));
         }
         std::string object = "getObject";
-        libs.emplace_back();
-        LibHandler &libHandler = libs.back();
+        libs.push_back(std::make_unique<LibHandler>());
+        std::unique_ptr<LibHandler> &libHandler = libs.back();
 
-        libHandler.setPath(plugin);
+        libHandler->setPath(plugin);
 
         try {
-            libHandler.openLib();
+            libHandler->openLib();
         } catch (std::exception &e)
         {
             libs.pop_back();
@@ -85,12 +85,11 @@ std::shared_ptr<raytracer::IObject> raytracer::Factory::createObject(const std::
 
         std::shared_ptr<raytracer::IObject> obj;
         try {
-            obj = libHandler.getObject<raytracer::IObject>(object);
+            obj = libHandler->getObject<raytracer::IObject>(object);
         } catch (std::exception &e) {
             libs.pop_back();
             throw Error("Cannot load plugin: " + std::string(e.what()));
         }
-
         obj->parseData(config);
         return obj;
     }

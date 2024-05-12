@@ -63,6 +63,9 @@ namespace raytracer
             static RenderRay getDiffuseLight(const RenderPoint &point, const RenderData &data, size_t bounces);
             static RenderRay getRefractionsLight(const RenderPoint &point, const RenderData &data, size_t bounces);
 
+            void clearObjects();
+            void clearLights();
+
             Camera camera;
             RenderData renderData = {};
     };

@@ -388,3 +388,13 @@ raytracer::RenderRay raytracer::Renderer::getRefractionsLight(const RenderPoint 
 
     return finalRay;
 }
+
+void raytracer::Renderer::clearObjects()
+{
+    renderData.objects.clear();
+}
+
+void raytracer::Renderer::clearLights()
+{
+    renderData.lights.clear();
+}

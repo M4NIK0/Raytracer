@@ -37,13 +37,13 @@ int main(int ac, char **av)
     renderProcessWrapper.renderer.renderData.diffuseRays = diffusionRays;
     renderProcessWrapper.renderer.renderData.reflexionsRays = reflectionRays;
 
-    std::vector<raytracer::LibHandler> libs;
+    std::vector<std::unique_ptr<raytracer::LibHandler>> libs;
 
     Parser parser;
 
     try {
         parser.parseConfig(configFile.c_str());
-        parser.parseScene(width, height, renderProcessWrapper);
+        parser.parseScene(width, height, renderProcessWrapper, libs);
     } catch (const std::exception &e) {
         std::cerr << e.what() << std::endl;
         return 84;
@@ -75,6 +75,11 @@ int main(int ac, char **av)
     {
         renderProcessWrapper.renderImageCLI();
     }
+
+    renderProcessWrapper.renderer.clearObjects();
+    renderProcessWrapper.renderer.clearLights();
+
+    libs.clear();
 
     // Create PPM Output
     raytracer::PPMOutput output(outputFile, width, height);
