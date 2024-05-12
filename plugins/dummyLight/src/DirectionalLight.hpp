@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "../../../src/Light/ILight.hpp"
+#include "../include/ILight.hpp"
 
 namespace raytracer
 {

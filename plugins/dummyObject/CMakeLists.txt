@@ -10,10 +10,10 @@ find_package(libconfig++ REQUIRED)
 
 add_library(dummyObject SHARED
         src/EntryPoint.cpp
-        src/DirectionalLight.cpp
         include/Math/Point3D.hpp
         include/Math/Ray3D.hpp
         include/Math/Vector3D.hpp
+        src/Sphere.cpp
 )
 
 target_link_libraries(dummyObject Math)

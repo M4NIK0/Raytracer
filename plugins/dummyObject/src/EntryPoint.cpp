@@ -5,9 +5,9 @@
 ** dummyLight
 */
 
-#include "../../../src/Light/ILight.hpp"
-#include "DirectionalLight.hpp"
+#include "../include/IObject.hpp"
+#include "Sphere.hpp"
 
-extern "C" raytracer::ILight *getObject() {
-    return new raytracer::DirectionalLight();
+extern "C" raytracer::IObject *getObject() {
+    return new raytracer::Sphere();
 }
