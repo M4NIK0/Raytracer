@@ -17,13 +17,13 @@ namespace raytracer
     class LibHandler
     {
         public:
-            LibHandler(std::string &path) : _path(path) {}
+            LibHandler() : _handle(nullptr) {}
             ~LibHandler();
 
             void setPath(const std::string &path) { _path = path; }
 
-            void openLib(void);
-            void closeLib(void);
+            void openLib();
+            void closeLib();
 
             bool checkSymbol(const std::string &symbol);
 
@@ -46,7 +46,7 @@ namespace raytracer
         private:
 
             std::string _path;
-            void *_handle;
+            void *_handle{};
 
             template<typename T>
             std::unique_ptr<T> _getObject(std::string &symbol)
