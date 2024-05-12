@@ -48,7 +48,6 @@ namespace raytracer
             void parseData(libconfig::Setting &config) override;
 
         private:
-            Point3D _position;
             Color _color;
             double _intensity;
             Vector3D _direction;

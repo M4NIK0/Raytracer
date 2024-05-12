@@ -12,15 +12,6 @@ raytracer::DirectionalLight::~DirectionalLight() = default;
 void raytracer::DirectionalLight::parseData(libconfig::Setting &config)
 {
     try {
-        libconfig::Setting &position = config["position"];
-        _position = raytracer::Point3D(position["x"], position["y"], position["z"]);
-    } catch (libconfig::SettingNotFoundException &e) {
-        throw Error("position not found");
-    } catch (libconfig::SettingTypeException &e) {
-        throw Error("position need to be an array of double");
-    }
-
-    try {
         _direction = raytracer::Vector3D(config["direction"]["x"], config["direction"]["y"], config["direction"]["z"]);
     } catch (libconfig::SettingNotFoundException &e) {
         throw Error("direction not found");
