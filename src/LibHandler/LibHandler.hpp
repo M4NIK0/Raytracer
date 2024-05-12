@@ -18,6 +18,7 @@ namespace raytracer
     {
         public:
             LibHandler() : _handle(nullptr) {}
+            LibHandler(std::string &path) : _path(path), _handle(nullptr) {}
             ~LibHandler();
 
             void setPath(const std::string &path) { _path = path; }
