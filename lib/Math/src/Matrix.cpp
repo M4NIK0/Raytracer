@@ -13,7 +13,7 @@ raytracer::Matrix::~Matrix() {}
 raytracer::Matrix raytracer::Matrix::operator*(const raytracer::Matrix &other) const
 {
     if (sizeY() != other.sizeX())
-    throw Error("Matrix::operator* : Invalid matrix size");
+        throw Error("Matrix::operator* : Invalid matrix size");
 
     Matrix result(sizeX(), other.sizeY());
 
@@ -30,10 +30,11 @@ raytracer::Matrix raytracer::Matrix::operator*(const raytracer::Matrix &other) c
     return result;
 }
 
+
 raytracer::Matrix raytracer::Matrix::operator+(const raytracer::Matrix &other) const
 {
     if (sizeX() != other.sizeX() || sizeY() != other.sizeY())
-    throw Error("Matrix::operator+ : Invalid matrix size");
+        throw Error("Matrix::operator+ : Invalid matrix size");
 
     Matrix result(sizeX(), sizeY());
 
@@ -49,7 +50,7 @@ raytracer::Matrix raytracer::Matrix::operator+(const raytracer::Matrix &other) c
 raytracer::Matrix raytracer::Matrix::operator-(const raytracer::Matrix &other) const
 {
     if (sizeX() != other.sizeX() || sizeY() != other.sizeY())
-    throw Error("Matrix::operator- : Invalid matrix size");
+        throw Error("Matrix::operator- : Invalid matrix size");
 
     Matrix result(sizeX(), sizeY());
 
@@ -78,7 +79,7 @@ raytracer::Matrix raytracer::Matrix::operator*(double value) const
 raytracer::Matrix raytracer::Matrix::operator/(double value) const
 {
     if (value == 0)
-    throw Error("Matrix::operator/ : Division by zero");
+        throw Error("Matrix::operator/ : Division by zero");
 
     Matrix result(sizeX(), sizeY());
 
@@ -119,7 +120,7 @@ raytracer::Matrix raytracer::Matrix::transpose()
 std::vector<double> &raytracer::Matrix::operator[](std::size_t index)
 {
     if (index >= sizeX())
-    throw Error("Matrix::operator[] : Index out of range");
+        throw Error("Matrix::operator[] : Index out of range");
 
     return matrix[index];
 }
@@ -147,9 +148,8 @@ void raytracer::Matrix::set(int x, int y, double value)
 raytracer::Matrix::Matrix(std::vector<std::vector<double>> &matrix) : matrix(matrix) {}
 
 
-raytracer::Matrix transposeMatrix(const raytracer::Matrix& matrix){
-
-    raytracer::Matrix transposed(matrix.sizeY(), matrix.sizeX());
+raytracer::Matrix transposeMatrix(const raytracer::Matrix& matrix) {
+    raytracer::Matrix transposed(3, 3);
     for (std::size_t i = 0; i < 3; i++) {
         for (std::size_t j = 0; j < 3; j++) {
             transposed.set(j, i, matrix.get(i, j));
