@@ -33,8 +33,6 @@ add_executable(raytracer src/main.cpp
         include/Math/Matrix.hpp
         src/Render/RenderPoint.cpp
         src/Render/RenderPoint.hpp
-        src/Objects/Primitives/Cube.hpp
-        src/Objects/Primitives/Cube.cpp
         src/Objects/Primitives/Plane.hpp
         src/Objects/Primitives/Plane.cpp
         src/Render/Chunk.hpp
