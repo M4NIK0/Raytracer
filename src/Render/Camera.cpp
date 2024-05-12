@@ -8,7 +8,7 @@
 #include "Camera.hpp"
 #include "../../include/Math/Matrix.hpp"
 
-raytracer::Camera::Camera(int width, int height) : origin(Point3D(0.5, 0.5, 1)), width(width), height(height), _screen({{0, 1, 0}, {1, 0, 0}, {0, -1, 0}})
+raytracer::Camera::Camera(int width, int height, double fov) : origin(Point3D(0.5, 0.5, 1)), width(width), height(height), _screen({{0, 1, 0}, {1, 0, 0}, {0, -1, 0}})
 {
     int maxSize = std::max(width, height);
     double realWidth = (double)width / (double)maxSize;
