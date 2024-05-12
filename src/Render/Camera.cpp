@@ -25,9 +25,6 @@ raytracer::Camera::Camera(int width, int height, double fov) : origin(Point3D(0.
 
     _screen.origin.z = origin.z - screenDistanceFromFOV;
 
-    std::cout << _screen.origin << std::endl;
-    std::cout << origin << std::endl;
-
     move(Vector3D(-0.5, -0.5, -1));
 }
 
