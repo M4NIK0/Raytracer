@@ -171,3 +171,21 @@ Disable preview editor
 
 - `-ws [n]`\
 Preview window size
+
+## Examples
+
+### Colored light
+
+![Colored light](images/colored_light.png)
+
+### OBJ management
+
+![Custom objects management](images/obj.png)
+
+### Reflections
+
+![Reflections](images/reflections.png)
+
+### Refraction
+
+![Refraction](images/refraction.png)
