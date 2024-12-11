@@ -6,11 +6,12 @@ Epitech project to make a raytracer program in C++.\
 The goal is to create a 3D scene with a camera and objects, and render it with raytracing methods.
 
 ## The team
-
-[Louis CHABRERIE](mailto:louis.chabrerie@epitech.eu) ([GitHub](https://github.com/M4NIK0)) - Raytracing specialist\
-[Léo DOBY](mailto:leo.doby@epitech.eu) ([GitHub](https://github.com/LeoDoby)) - Parsing master\
-[Arthur BICHARA](mailto:arthur.bichara@epitech.eu) ([GitHub](https://github.com/ArthurBchr)) - Editor enthusiast\
-[Ethan FLAK](mailto:ethan.flak@epitech.eu) ([GitHub](https://github.com/Eth22-Epitech)) - Objects magician
+| Name                                                                                         | Fields                |
+|----------------------------------------------------------------------------------------------|-----------------------|
+| [Louis CHABRERIE](mailto:louis.chabrerie@epitech.eu) ([GitHub](https://github.com/M4NIK0))   | Raytracing specialist |
+| [Léo DOBY](mailto:leo.doby@epitech.eu) ([GitHub](https://github.com/LeoDoby))                | Parsing master        |
+| [Arthur BICHARA](mailto:arthur.bichara@epitech.eu) ([GitHub](https://github.com/ArthurBchr)) | Editor enthusiast     |
+| [Ethan FLAK](mailto:ethan.flak@epitech.eu) ([GitHub](https://github.com/Eth22-Epitech))      | Objects magician      |
 
 ## How to use
 
@@ -20,7 +21,7 @@ You need to install the following libraries to compile the project:
 - SFML
 - libconfig++
 
-### Compilation
+### Build
 
 Using CMakelists.txt, you can compile the project with the following commands:
 
@@ -29,6 +30,93 @@ mkdir build
 cd build
 cmake ..
 make
+```
+
+### Config example
+
+```cfg
+Camera = {
+    fov = 120.0;
+    position = [0.0, -4.0, 0.0];
+    exposure = 10.0;
+    sensitivity = 30.0;
+    rotation = [90.0, 0.0, 0.0];
+};
+
+Objects = (
+    {
+        type = "sphere";
+        radius = 1.0;
+        position = [0.0, 0.0, 0.0];
+        translationSpeed = [0.0, 0.0, 0.0];
+        color = [255.0, 255.0, 255.0];
+        emissionIntensity = 0.0;
+        emissionColor = [0.0, 0.0, 0.0];
+        reflexion = 0.0;
+        glass = false;
+        refracionIndex = 1.0;
+    },
+    {
+        type = "sphere";
+        radius = 0.5;
+        position = [2.0, 2.0, -0.5];
+        translationSpeed = [0.0, 0.0, 0.0];
+        color = [255.0, 255.0, 255.0];
+        emissionIntensity = 0.0;
+        emissionColor = [0.0, 0.0, 0.0];
+        reflexion = 1.0;
+        glass = false;
+        refracionIndex = 1.0;
+    },
+    {
+        type = "sphere";
+        radius = 0.25;
+        position = [-0.5, -2.0, 0.5];
+        translationSpeed = [0.0, 0.0, 0.0];
+        color = [255.0, 255.0, 255.0];
+        emissionIntensity = 0.0;
+        emissionColor = [0.0, 0.0, 0.0];
+        reflexion = 0.0;
+        glass = true;
+        refractionIndex = 1.4;
+    },
+    {
+        type = "plane";
+        normal = [0.0, 0.0, 1.0];
+        position = [0.0, 0.0, -1.0];
+        color = [255.0, 255.0, 255.0];
+        emissionIntensity = 0.0;
+        emissionColor = [0.0, 0.0, 0.0];
+        reflexion = 0.0;
+    },
+);
+
+Lights = (
+    {
+        type = "point";
+        intensity = 800.0;
+        position = {x=0.0; y=0.0; z=10.0};
+        color = [255.0, 255.0, 255.0];
+    },
+    {
+        type = "point";
+        intensity = 5.0;
+        position = {x=1.0; y=-2.0; z=-0.5};
+        color = [255.0, 0.0, 0.0];
+    },
+    {
+        type = "point";
+        intensity = 5.0;
+        position = {x=-1.0; y=-2.0; z=-0.5};
+        color = [0.0, 255.0, 0.0];
+    },
+    {
+        type = "point";
+        intensity = 5.0;
+        position = {x=0.0; y=-2.0; z=0.5};
+        color = [0.0, 0.0, 255.0];
+    },
+);
 ```
 
 ### Execution
