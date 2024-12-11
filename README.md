@@ -3,7 +3,7 @@
 ## Blender 4.1
 
 Epitech project to make a raytracer program in C++.\
-The goal was to create a 3D scene with a camera and objects, and then render it with raytracing algorithms.\
+The goal was to create a 3D scene with a camera and objects, and then render it with raytracing algorithms.
 
 This repo is an archive of the whole project as it was presented in our 2nd year at Epitech.
 
