@@ -1,11 +1,18 @@
 # Raytracer
 
-## Blender 4.1
+## Why did i reopen the project?
+
+This project was reopened after almost 2 years of inactivity, to add a blackhole simulation to the rendering engine.\
+(at least Einstein's lenses, because it looks really cool and i want to play around with some complicated equations).
+
+## Blender 4.1 (Initial name of the team)
 
 Epitech project to make a raytracer program in C++.\
 The goal was to create a 3D scene with a camera and objects, and then render it with raytracing algorithms.
 
 This repo is an archive of the whole project as it was presented in our 2nd year at Epitech.
+
+# Original description (updated with new features)
 
 ## The team
 | Name                                                                                         | Fields                |
