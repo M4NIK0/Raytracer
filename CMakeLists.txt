@@ -1,16 +1,46 @@
-cmake_minimum_required(VERSION 3.28)
+cmake_minimum_required(VERSION 3.5)
 project(raytracer)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic -O3")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wextra -pedantic -g3 -O0 -fno-omit-frame-pointer")
 
+set(CPM_VERSION 0.39.0)
+
+if (NOT EXISTS ${CMAKE_CURRENT_BINARY_DIR}/cmake/CPM.cmake)
+    message(STATUS "Downloading CPM.cmake")
+    file(
+            DOWNLOAD
+            https://github.com/cpm-cmake/CPM.cmake/releases/download/v${CPM_VERSION}/CPM.cmake
+            ${CMAKE_CURRENT_BINARY_DIR}/cmake/CPM.cmake
+    )
+endif()
+
+include(${CMAKE_CURRENT_BINARY_DIR}/cmake/CPM.cmake)
+
+CPMAddPackage(
+        NAME sfml
+        GIT_REPOSITORY https://github.com/SFML/SFML.git
+        GIT_TAG "2.6.2"
+        OPTIONS
+        "SFML_INSTALL_PKGCONFIG_FILES OFF"
+        "SFML_BUILD_AUDIO OFF"
+        "SFML_BUILD_NETWORK OFF"
+)
+
+CPMAddPackage(
+        NAME sfml
+        GIT_REPOSITORY https://github.com/hyperrealm/libconfig.git
+        GIT_TAG "v1.8.2"
+)
+
 add_subdirectory(lib/Math)
 add_subdirectory(lib/Color)
 
-# Find SFML
-find_package(SFML 2.5 COMPONENTS graphics window system REQUIRED)
-find_package(libconfig++ REQUIRED)
+# Find SFML & libconfig++
+#find_package(SFML 2.5 COMPONENTS graphics window system REQUIRED)
+#find_package(libconfig++ REQUIRED)
+
 
 add_executable(raytracer src/main.cpp
         include/Math/Point3D.hpp
